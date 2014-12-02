@@ -107,8 +107,12 @@ summary.rcapper_zipf_init <- function(x, ...) {
 plot.rcapper_zipf_init <- function(x, ...) {
     
     object <- x
+    # extract the dataframe, rename variables for plotting purposes,
+    # dataframe should be minimum of 3 columns, however if user entered in two
+    # or more variables into zipf_init (param group_by) then need to facet_wrap
+    # the plot by these N variables
     df <- object$ratings
-    race_type <- as.symbol(names(df)[1])
+    names(df)[1] <- "race_type"
     
     # look at creating binwidths based on data
     # http://stats.stackexchange.com/questions/798/calculating-optimal-number-of-bins-in-a-histogram-for-n-where-n-ranges-from-30
