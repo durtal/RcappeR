@@ -1,0 +1,155 @@
+---
+title: "Initialise a Handicap - zipf_init"
+author: "RcappeR"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_document:
+        theme: united
+        toc: true
+        highlight: default
+vignette: >
+  %\VignetteIndexEntry{Initialise a Handicap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+This vignette walks through the use of `zipf_init`, which initialises a handicap using a collection of races, in this case the **gulfstream** dataset (used in [**Data Preparation**](data_preparation.html) vignettes).  There are certain steps necessary ahead of using `zipf_init`, these are covered in the **Data Preparation** vignette, but will be covered again here.
+
+## gulfstream Dataset
+
+Load the dataset:
+```{r}
+data(gulfstream)
+```
+
+The **gulfstream** dataset contains `r length(unique(paste(gulfstream$date, gulfstream$race, sep = "_")))` unique races, this is not a huge number, the more races the better.  A look at the structure of **gulfstream**.
+
+```{r}
+str(gulfstream)
+```
+
+# Handicapping preparation
+
+In order to use some of the more complex functions (`zipf_init`, `zipf_hcp`) a certain amount of preparation is required.  There are a number of variables needed for handicapping, these are:
+
+* unique race id (a way to distinguish different races)
+* race classes, or types
+* surface
+* distance
+* final times
+    + either times for all runners, or
+    + a winning time and a way to calculate final times (beaten seconds, or beaten lengths)
+* weight carried
+
+The variables above should be pretty common in a racing dataset that you wish to calculate ratings from.  In the **gulfstream** dataset we have all the above.  Individual final times for horses might be a hurdle, but lengths beaten is a much more common variable, and as covered in the [**Data Cleaning**](data_cleaning.html) vignette, the `conv_margins` can convert lengths beaten into final times.
+
+A unique race id is required in the **gulfstream** dataset, but this can be created by concatenating the `date` and `race` variables.  Obviously if a dataset contains races at more than one racecourse, it would be wise to include something about that: you can't have two races being run at the same track, on the same day at the same time.  Let's create a variable called `date_race`:
+
+```{r}
+gulfstream$date_race <- paste(gulfstream$date, gulfstream$race, sep = "_")
+```
+
+The above `date_race` variable was the only one missing from the above list, but before handicapping can begin we need to calculate margins between horses that take into account the following:
+
+* distance
+* surface
+* beaten margins
+* weight carried
+
+The best (imo) way to do this is to use the package `dplyr` which takes advantage of the `%>%` pipe function from `magrittr` to calculate the necessary variables.  The code below processes the gulfstream dataset, creating the necessary variables.  It is explained in more detail below the code, the functions used from **RcappeR** are `btn_sec`, `lbs_per_sec` and `diff_at_wgts`:
+
+```{r warning=FALSE, message=FALSE}
+library(dplyr)
+new_gulfstream <- gulfstream %>%
+    group_by(date_race) %>%
+    mutate(btn_sec = btn_sec(fintime),
+           scale = lbs_per_sec(dist = dist, surf = "dirt"),
+           btn_lbs = scale * btn_sec,
+           diff_wgts = diff_at_wgts(btn_lbs = btn_lbs, wgt_carried = wgt))
+```
+
+1. Load dplyr library
+    + `library(dplyr)`
+2. Use gulfstream dataset and store results back in gulfstream
+    + `gulfstream <- gulfstream %>%`
+3. Group races by the unique race ids (date_race)
+    + `group_by(date_race)`
+4. Create new variables within each group (each race)
+    + calculate margins (in seconds) between horses
+        + `btn_sec = btn_sec(fintime),`
+    + calculate lbs per second scale
+        + `scale = lbs_per_sec(dist = dist, surf = "dirt"),`
+    + calculate beaten lbs
+        + `btn_lbs = scale * btn_sec,`
+    + calculate difference at the weights (margins, and weight carried)
+        + `diff_at_wtgs(btn_lbs = btn_lbs, wgt_carried = wgt))`
+
+At this stage, the **gulfstream** dataset can be entered into `zipf_init`.  First a word about the methodology for initialising the handicap.
+
+## Handicapping methodology
+
+The handicapping methodology uses a version of race standardisation first explained by Simon Rowlands, Head of Research at Timeform, specifically using Zipfs Law (hence the names of this family of functions, see also `?zipf_race` and `?zipf_hcp`).
+
+Race standardisation looks at races of similar class/type and assesses the performance of one winner, by assessing the performance of winners in the different, but similar, races.  A more detailed explanation can be found in the [**Zipf Race**](zipf_race.html) vignette, which walks through a simple example using the `zipf_race` function, which is called by `zipf_init` (and `zipf_hcp`).
+
+## Initialising a handicap - zipf_init
+
+Race standardisation uses past ratings from similar types/classes of race to assess a new race, in initialising a handicap there are no past ratings.  So the `zipf_init` function group races together and assess performances using margins between horses - the `diff_wgts` variable created above.  This process builds a skeleton handicap, from which further handicapping can, and should, be undertaken.
+
+Below is a simple table explaining the various inputs to `zipf_init`:
+
+param | details | example input
+------|---------|---------
+races | a dataframe of races | `new_gulfstream`
+group\_by | name(s) of variables to group races by | `"race_type"` (could also include `value`)
+race\_id | name of variable to identify the unique races in the `races` dataframe | `"date_race"`
+btn\_var | name of variable containing margins between horses in `races` dataframe | `"diff_wgts"`
+.progress | plyr's progress bar, useful when using on large datasets (>20k rows) as the function takes time to run | "text"
+
+So:
+```{r echo=FALSE}
+start.time <- Sys.time()
+
+our_hcp <- zipf_init(races = new_gulfstream, group_by = "race_type", race_id = "date_race", btn_var = "diff_wgts")
+
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+```
+
+```{r eval=FALSE}
+our_hcp <- zipf_init(races = new_gulfstream, group_by = "race_type", race_id = "date_race", btn_var = "diff_wgts", .progress = "text")
+```
+
+This small example, handicapping `r length(unique(new_gulfstream$date_race))` races, split into `r length(unique(new_gulfstream$race_type))` different race types (`r unique(new_gulfstream$race_type)`), took `r time.taken` seconds.
+
+The output from `zipf_init` is a list (of class "rcapper\_zipf\_init"), there are print and summary methods for this class of object (though both do the same):
+
+```{r}
+our_hcp
+
+summary(our_hcp)
+```
+
+There is also a plot method, perhaps the most useful, which plots the distribution of ratings for each group, as we can see below the small samples in a couple of the race types shows the need for more races, or at least making sure groups are of a decent size.
+
+```{r fig.align='center'}
+plot(our_hcp)
+```
+
+The plot shows a distribution of ratings (in lbs) for the winners in the `r length(unique(new_gulfstream$date_race))` races in `new_gulfstream` dataset.  The mean will always be around 0, for all race types.  The next step is to assign a standard rating for a winner of this type/class of race.  These standards should reflect the difference in ability (in lbs) between the different race types, so a standard rating for Grade 1 winner is going to be far greater than that of a Maiden race, what these differences are is unknown - I am working on a solution to help find these differences.
+
+Possible solutions to this issue is to use ratings from other handicappers to help guide this process, for example, Timeform (including Timeform US) or Beyer class pars.
+
+Finally, `merge_zipf_init` function will merge the resulting ratings from `zipf_init` with the dataset used to calculate the ratings.  Finally print the first 20 rows, showing the variables created in this vignette and the zipf_rtg for runners:
+
+```{r}
+initial_hcp <- merge_zipf_init(zipf_list = our_hcp, races = new_gulfstream, btn_var = "diff_wgts")
+# Let's have a look at the first few rows of our skeleton handicap
+initial_hcp %>%
+    select(race_type, date_race, pos, fintime, btn_sec:zipf_rtg) %>%
+    head(15)
+```
