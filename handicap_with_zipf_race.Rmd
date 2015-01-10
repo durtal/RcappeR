@@ -1,0 +1,153 @@
+---
+title: "Handicapping using zipf_race"
+---
+
+```{r, echo=FALSE}
+library(RcappeR)
+```
+
+This vignette looks at the function `zipf_race`, which is the worker function for both `zipf_hcp` and `zipf_init`.  It employs a method of race standardisation that was first explained by Simon Rowlands [1], of renowned racing experts Timeform, and uses zipf's law.  A detailed explanation of the function will be shown, which should make it easier to see what `zipf_hcp` and `zipf_init` are doing.
+
+## example_race dataset
+
+The **example\_race** dataset contains two races and can be used to highlight `zipf_race`, load the dataset and do some necessary cleaning (see the [**Data Cleaning**](data_cleaning.html) vignette for details).  I will use the `dplyr` package to help reduce the amount of code.
+
+```{r message=FALSE, warning=FALSE}
+# load dplyr and example_race dataset
+library(dplyr)
+data(example_race)
+
+clean_df <- example_race %>%
+    mutate(race_id = paste(date, time, sep = "_"),
+           newtime = conv_times(times = wintime),
+           fintime = conv_margins(btn_l = btn_l, win_time = newtime),
+           btn_sec = fintime - newtime)
+```
+
+`zipf_race` requires two dataframes of two different races, the first is a race that requires handicapping, the second is a race that is to be used to handicap the first.  So races are to be split into seperate races:
+
+```{r}
+race_one <- filter(clean_df, race_id == "01/01/01_2:20")
+race_two <- filter(clean_df, race_id != "01/01/01_2:20")
+```
+
+## race_two
+
+In this example **race\_two** will be the race used to handicap **race\_one**, and so a bit more work is required for this race.  To show how `zipf_race` works arbitrary ratings are calculated for the performances of horses in this race, as such:
+
+```{r}
+race_two <- race_two %>%
+    mutate(scale = lbs_per_sec(dist, surf = "turf"),    # calculate lbs per second scale
+           btn_lbs = scale * btn_sec,                   # calculate beaten lbs
+           rating = 70 - btn_lbs)                       # calculate arbitrary ratings, winner gets 70
+```
+
+## race_one
+
+The race to be handicapped needs similar steps, that is beaten lbs is needed, so **race\_one** is processed:
+
+```{r}
+race_one <- race_one %>%
+    mutate(scale = lbs_per_sec(dist, surf = "turf"),
+           btn_lbs = scale * btn_sec)
+```
+
+Typically races will be run with horses carrying different weight, so a 'difference at the weights' calculation is required that takes weight carried into account (as well as beaten lbs), see [**Data Preparation**](data_preparation.html) for an example use of the `diff_at_wgts` function.
+
+# zipf_race
+
+The `zipf_race` function can now be used, it takes three (sometimes 4) parameters, below is a simple table explaining the various parameters for `zipf_race`, including the inputs that are to be entered from this vignette:
+
+param | details | example input
+------|---------|--------------
+race | dataframe of a race to be handicapped | `race_one`
+btn\_var | name of variable which contains margins between horses in _race_ | `"btn_lbs"`
+race\_2 | dataframe of race to be used to handicap _race_ | `race_two`
+rating | name of ratings variable (if applicable) in _race\_2_ | `"rating"`
+
+So `zipf_race` is called, and a rating for the winner of race_one is returned:
+
+```{r}
+output <- zipf_race(race = race_one, btn_var = "btn_lbs", race_2 = race_two, rating = "rating")
+```
+
+The winner of **race\_one** has earned a rating of `r output`
+
+## Under the hood of zipf_race
+
+To understand how `r output` was arrived at we can have a look under the hood at the `zipf_race` function.  There is a small amount of housework done early in the function:
+
+1. Create two vectors of - one for **race** dataframe, one for **race_2** - of **btn_var** and **rating**
+2. Remove NA values - function works on the assumption that dataframes are ordered by finishing position, so NAs should be last (non-finishers), big issue if they aren't.
+3. Make sure lengths of both vectors are the same, shorten the longest one if not.
+
+In the example in this vignette, recall from the table and function call above the params entered into the `zipf_race` function, these can be seen in Step One below:
+
+```{r}
+# Step One
+race_one_margins <- race_one[["btn_lbs"]]
+race_two_ratings <- race_two[["rating"]]
+
+# Step Two
+race_one_margins <- race_one_margins[!is.na(race_one_margins)]
+race_two_ratings <- race_two_ratings[!is.na(race_two_ratings)]
+
+# Step Three
+if(length(race_one_margins) != length(race_two_ratings)) {
+    if(length(race_one_margins) > length(race_two_ratings)) {
+        race_one_margins <- race_one_margins[1:length(race_two_ratings)]
+    } else {
+        race_two_ratings <- race_two_ratings[1:length(race_one_margins)]
+    }
+}
+```
+
+With the three steps above performed, there are now two vectors of equal length, one with **race** margins, the other with **race_2** ratings:
+
+```{r}
+race_one_margins
+race_two_ratings
+```
+
+The handicapping, using zipf's law, can begin in earnest now:
+
+4. Add the beaten margins from **race** to the ratings from **race_2**, resulting in a vector of new vector ratings for a winner.  So the beaten margin for position 2 in **race\_one\_margins** is added to the rating in position 2 in **race\_two\_ratings**
+
+```{r}
+(ratings <- race_two_ratings + race_one_margins)
+```
+
+5. Calculate a zipf factor (to weight the different positions)
+
+```{r}
+(zipf <- 1 / (1:length(ratings)))
+```
+
+6. Multiply each rating in **ratings** by zipf factor (weight each position)
+
+```{r}
+(ratings <- ratings * zipf)
+```
+
+7. Sum the **ratings** vector
+
+```{r}
+(total <- sum(ratings, na.rm = TRUE))
+```
+
+8. Calculate a winning rating by dividing **total** by the sum of **zipf**
+
+```{r}
+(winning_rating <- round(total / sum(zipf), 2))
+```
+
+Hopefully this explains the process a little more clearly.  `zipf_race` is used by `zipf_init` and `zipf_hcp`.
+
+## Brief words about zipf_hcp and zipf_init
+
+In `zipf_hcp` a race is handicapped using a dataset of races, so `zipf_race` is called for each unique race in that dataset.  It returns a list with various elements, one of which is a dataframe of ratings, each row consists of the id for a race in the dataset of races, and the rating returned by `zipf_race`.
+
+In `zipf_init`, it's use is a little different, because it initialises a handicap, so entering a single dataset, it groups races according to the users input, and assesses the performance of each race in each group by using the all races in the same group (including itself, which always returns a rating of 0).  This means it calls `zipf_hcp` and returns a list of various elements, one of which is a dataframe of ratings, each row belongs to one race in the single dataset, including a rating, the mean of all ratings returned by `zipf_hcp` for that one race.
+
+
+[1]: [Simon Rowlands article explaining the use of zipf's law](https://betting.betfair.com/horse-racing/bloggers/simon-rowlands/simon-rowlands-on-handicapping-060710.html)

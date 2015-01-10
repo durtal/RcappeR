@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>RcappeR</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -59,33 +59,6 @@
 	
 </style>
 
-
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
-td.sourceCode { padding-left: 5px; }
-pre, code { color: #cccccc; background-color: #303030; }
-code > span.kw { color: #f0dfaf; }
-code > span.dt { color: #dfdfbf; }
-code > span.dv { color: #dcdccc; }
-code > span.bn { color: #dca3a3; }
-code > span.fl { color: #c0bed1; }
-code > span.ch { color: #dca3a3; }
-code > span.st { color: #cc9393; }
-code > span.co { color: #7f9f7f; }
-code > span.ot { color: #efef8f; }
-code > span.al { color: #ffcfaf; }
-code > span.fu { color: #efef8f; }
-code > span.er { color: #c3bf9f; }
-</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
 
@@ -164,94 +137,14 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">RcappeR</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
-<table>
-<thead>
-<tr class="header">
-<th align="left">variable</th>
-<th align="left">details</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
-</tr>
-<tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
-</tr>
-<tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
-</tr>
-<tr class="even">
-<td align="left">dist</td>
-<td align="left">race distance</td>
-</tr>
-<tr class="odd">
-<td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
-</tr>
-<tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
-<td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
-</tr>
-<tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
-</tr>
-<tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
-</tr>
-<tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>A collection of tools to aid the analysis and handicapping of Thoroughbred Horse Racing.</p>
+<p>The package includes various functions to help with the cleaning and preparation of racing data, such as cleaning times, converting and calculating margins between horses. See <a href="functions.html">Functions</a> for a list of functions and links to their pages, and the vignettes <a href="data_cleaning.html">Data Cleaning</a> and <a href="data_prep.html">Data Preparation</a> that show a number of these functions being applied.</p>
+<p>Those functions help prepare data for the handicapping of a collection of races, for which there are a number of functions, such as calculating a lbs per second scale, difference at the weights, before calculating ratings using race standardisation and zipf’s law. See under the heading <strong>Handicapping</strong> on the <a href="functions.html">Functions</a> page for a list of functions, and the vignettes showing the use of <a href="handicap_with_zipf_race.html">Handicapping using zipf_race</a>, <a href="handicap_with_zipf_hcp.html">Handicapping using zipf_hcp</a> and <a href="initialise_a_handicap.html">Initialising a Handicap</a> in creating ratings.</p>
+<p>The package also contains a few datasets to show how to use the functions, though the functions should be quite flexible, performing useful tasks. The datasets include the lengths per second scale the BHA employ in calculating margins between horses (see <a href="bhascale.html">bhascale</a>), a couple of example races to show the cleaning functions (see <a href="example_race.html">example_race</a>), and a dataset of races run at Gulfstream Park in the US (see <a href="gulfstream.html">gulfstream</a>)</p>
 
 
 </div>

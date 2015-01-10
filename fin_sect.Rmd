@@ -1,0 +1,38 @@
+---
+title: "fin_sect"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Calculates finishing sectional, reverse engineers a Finishing Speed (see [fin_spd](fin_spd.html)) into a sectional time (in seconds)
+
+### Usage
+```{r eval=FALSE}
+fin_sect(fintime, dist, fin_spd, sect_dist)
+```
+
+### Arguments
+
+param | details
+------|-------
+fin_time | final time
+dist | race distance
+fin_spd | finishing speed
+sect_dist | closing sectional distance
+
+### Details
+
+The two distance parameters, **dist** and **sect_dist**, must be in the same units, furlongs, feet, metres, etc. While the **fin_time** parameter should be in seconds, and the **fin_spd** parameter should be a number around 100.
+
+Two articles by Simon Rowlands explaining Finishing Speeds (and sectionals) can be found:
+[An Introduction to Sectional Timing (Part 1)](https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_1)
+[An Introduction to Sectional Timing (Part 2)](https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_2)
+
+### Example Use
+
+We'll reverse engineer the example used in the [fin_spd](fin_spd.html) help page.  Which showed a horse running a race over 5 furlongs in 59 seconds, the closing sectional was 2 furlongs and the horse recorded a finishing speed of 102.61.
+
+```{r}
+fin_sect(fin_time = 59, dist = 5, fin_spd = 102.61, sect_dist = 2)
+```

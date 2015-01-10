@@ -1,0 +1,36 @@
+---
+title: "conv_wgt"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Converts weight from different formats/units of measure into lbs.
+
+### Usage
+```{r eval=FALSE}
+conv_wgt(wgt, regex = NULL, from = "st", round = 0)
+```
+
+### Arguments
+
+param | details
+------|-------
+wgt | vector of weights to be converted (see examples)
+regex | regular expression to split wgt by (if wgt is a character string representing stones and lbs)
+from | converts from different units of measure
+round | round to nearest digit
+
+### Details
+
+Converts a numeric weight from kilograms ("kg") to stones ("st") into lbs.  It also converts a character string of stones and lbs, ie. 9-4 representing 9 stone 7 lbs, into lbs using regex
+
+### Example Use
+
+```{r}
+wgts <- c("9-7", "9-0", "11-8")
+conv_wgt(wgt = wgts)
+
+wgts <- c(57, 58, 59)
+conv_wgt(wgt = wgts, from = "kg")
+```

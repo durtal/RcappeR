@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>lbs_per_sec</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,93 +164,47 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">lbs_per_sec</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>Returns a lbs per second scale taking into account race distance and surface</p>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lbs_per_sec</span>(dist, <span class="dt">surf =</span> <span class="st">&quot;turf&quot;</span>)</code></pre>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
 <table>
 <thead>
 <tr class="header">
-<th align="left">variable</th>
+<th align="left">param</th>
 <th align="left">details</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
-</tr>
-<tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
-</tr>
-<tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
-</tr>
-<tr class="even">
 <td align="left">dist</td>
-<td align="left">race distance</td>
+<td align="left">race distance (in furlongs, only races between 5 and 16)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
-</tr>
-<tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
-<td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
-</tr>
-<tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
-</tr>
-<tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
-</tr>
-<tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
+<td align="left">race surface, default is “turf”, other option is “dirt” (see details)</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>Uses a loess model to return a simple lbs per second scale. The <strong>dist</strong> parameter must be between 5 and 16, values outside this range will return NA. If the surface is fibresand, then use the “dirt” option for the <strong>surf</strong> parameter, if all-weather then use the “turf” option.</p>
+<p>Simple model comes from Bob Wilkins’ book <a href="http://www.amazon.co.uk/Bioenergetics-Racehorse-Ratings-Bob-Wilkins/dp/0956424309">Bioenergetics and Racehorse Ratings</a>. This function should eventually be replaced by a more complex/flexible model that takes into account the speed a horse ran its race.</p>
+</div>
+<div id="example-use" class="section level3">
+<h3>Example Use</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> <span class="dv">5</span>, <span class="dt">surf =</span> <span class="st">&quot;turf&quot;</span>)</code></pre>
+<pre><code>## [1] 29.74</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> <span class="dv">5</span>, <span class="dt">surf =</span> <span class="st">&quot;dirt&quot;</span>)</code></pre>
+<pre><code>## [1] 20.82</code></pre>
 </div>
 
 

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>data_cleaning</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/united.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+	/* padding for bootstrap navbar */
+	body {
+		padding-top: 50px;
+		padding-bottom: 40px;
+	}
+	@media (max-width: 979px) {
+		body {
+			padding-top: 0;
+		}
+	}
+
+	/* offset scroll position for anchor links (for fixed navbar) */
+	@media (min-width: 980px) {
+		.section h2 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+		.section h3 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+	}
+
+	p {
+		font-size: 13px;
+	}
+
+	/* don't use link color in navbar */
+	.dropdown-menu>li>a {
+		color: black;
+	}
+
+	/* some padding for disqus */
+	#disqus_thread {
+		margin-top: 45px;
+	}
+	
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #cccccc; background-color: #303030; }
+code > span.kw { color: #f0dfaf; }
+code > span.dt { color: #dfdfbf; }
+code > span.dv { color: #dcdccc; }
+code > span.bn { color: #dca3a3; }
+code > span.fl { color: #c0bed1; }
+code > span.ch { color: #dca3a3; }
+code > span.st { color: #cc9393; }
+code > span.co { color: #7f9f7f; }
+code > span.ot { color: #efef8f; }
+code > span.al { color: #ffcfaf; }
+code > span.fu { color: #efef8f; }
+code > span.er { color: #c3bf9f; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<button class="btn btn-navbar" type="button" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="http://durtal.github.io" class="brand">durtal.github.io</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li>
+						<a href="index.html">RcappeR home</a>
+					</li>
+					<li>
+						<a href="functions.html">Functions</a>
+					</li>
+					<li class="dropdown">
+						<a href="datasets" class="dropdown-toggle" data-toggle="dropdown">
+							Datasets <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="gulfstream.html">gulfstream</a>
+							</li>
+							<li>
+								<a href="bhascale.html">bhascale</a>
+							</li>
+							<li>
+								<a href="example_race.html">example_race</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="vignettes" class="dropdown-toggle" data-toggle="dropdown">
+							Vignettes <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="data_cleaning.html">Data Cleaning</a>
+							</li>
+							<li>
+								<a href="data_prep.html">Data Preparation</a>
+							</li>
+							<li>
+								<a href="handicap_with_zipf_race.html">(zipf_race)</a>
+							</li>
+    						<li>
+								<a href="handicap_with_zipf_hcp.html">Handicapping (zipf_hcp)</a>
+							</li>
+    						<li>
+								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
+							</li>                            
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="header">
+<h1 class="title">data_cleaning</h1>
+</div>
+
+
+<p>Data rarely comes ready for analysis, and whatever you call it, cleaning, tidying, munging, it is a very important part of the process. There are a number of helper functions in the <code>RcappeR</code> package that can help get data into a cleaner, more usable, format, some of these include:</p>
+<ul>
+<li>Converting race times from a character string to a numeric</li>
+<li>Converting beaten margins</li>
+<li>Calculating beaten margins</li>
+</ul>
+<p>This vignette will run through a few of them using a dummy dataset included in the package, this dataset contains fictional data to highlight the use of the functions, but hopefully the scope of their use will become apparent. There are likely many other cleaning tasks that are perhaps not present in the current version of <code>RcappeR</code>, if you have a demand for any, don’t hesitate to ask - either look me up on <a href="http://twitter.com/_RcappeR">twitter</a> or add an issue on <a href="https://github.com/durtal/RcappeR/issues">github</a>.</p>
+<p>Already, the dataset being used has been cleaned a little, ie. it’s in a nice neat dataframe. However some of the variables are in need of further polishing. The dataset can be seen below:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(example_race)
+(df &lt;-<span class="st"> </span>example_race)</code></pre>
+<pre><code>##        date time pos    horse wintime going code btn_l dist
+## 1  01/01/01 2:20   1 aardvark 1m39.99  good flat  0.00    8
+## 2  01/01/01 2:20   2   badger 1m39.99  good flat  0.25    8
+## 3  01/01/01 2:20   3      cat 1m39.99  good flat  0.75    8
+## 4  01/01/01 2:20   4      dog 1m39.99  good flat  1.00    8
+## 5  01/01/01 2:20   5    eagle 1m39.99  good flat  1.75    8
+## 6  01/01/01 2:20   6     frog 1m39.99  good flat  2.50    8
+## 7  01/01/01 2:20   7  giraffe 1m39.99  good flat  4.00    8
+## 8  01/01/01 2:20   8  hamster 1m39.99  good flat  6.00    8
+## 9  02/02/02 3:30   1   andrew 1:12.78  good flat  0.00    6
+## 10 02/02/02 3:30   2    barry 1:12.78  good flat  1.00    6
+## 11 02/02/02 3:30   3  charlie 1:12.78  good flat  1.50    6
+## 12 02/02/02 3:30   4    david 1:12.78  good flat  2.50    6
+## 13 02/02/02 3:30   5    eddie 1:12.78  good flat  5.00    6</code></pre>
+<p>The dataset contains two unique races, which can be identified by the <code>date</code> and <code>time</code> variables, but it is often a good idea to create a <code>race_id</code> variable to help identify the unique races and their runners. Simply concatenating the date and races’ start time should be sufficient:</p>
+<pre class="sourceCode r"><code class="sourceCode r">df$race_id &lt;-<span class="st"> </span><span class="kw">paste</span>(df$date, df$time, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)
+<span class="kw">unique</span>(df$race_id)</code></pre>
+<pre><code>## [1] &quot;01/01/01_2:20&quot; &quot;02/02/02_3:30&quot;</code></pre>
+<div id="race-times" class="section level2">
+<h2>Race Times</h2>
+<p>The winners’ time is available in the <code>wintime</code> variable, but are in character format, <code>1m39.99</code> and <code>1:12.78</code>, what is desired is a time in numeric format, in seconds. The <code>conv_times</code> function will convert these times (or similar), by splitting times up according to a regular expression, <code>&quot;[[:punct:]]\\s?|m\\s?|\\s+&quot;</code>, this should cover a healthy number of formats that races come in, the table below lists a few.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df$new_time &lt;-<span class="st"> </span><span class="kw">conv_times</span>(df$wintime)
+## the new times look like
+df$new_time</code></pre>
+<pre><code>##  [1] 99.99 99.99 99.99 99.99 99.99 99.99 99.99 99.99 72.78 72.78 72.78
+## [12] 72.78 72.78</code></pre>
+<p>The table below contains various formats of times that will be converted, but if times to be converted are not covered then the <code>regex</code> parameter in the <code>conv_times</code> function allows users to create unique regular expression.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">old time</th>
+<th align="left">regex used</th>
+<th align="left">splits old time</th>
+<th align="left">new time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">“1m39.99”</td>
+<td align="left">default</td>
+<td align="left">“1”, “39”, “99”</td>
+<td align="left">99.99</td>
+</tr>
+<tr class="even">
+<td align="left">“1 39.99”</td>
+<td align="left">default</td>
+<td align="left">“1”, “39”, “99”</td>
+<td align="left">99.99</td>
+</tr>
+<tr class="odd">
+<td align="left">“1-39.99”</td>
+<td align="left">default</td>
+<td align="left">“1”, “39”, “99”</td>
+<td align="left">99.99</td>
+</tr>
+<tr class="even">
+<td align="left">“1:39.99”</td>
+<td align="left">default</td>
+<td align="left">“1”, “39”, “99”</td>
+<td align="left">99.99</td>
+</tr>
+<tr class="odd">
+<td align="left">“1min 39.99”</td>
+<td align="left">“min |[[:punct:]]”</td>
+<td align="left">“1”, “39”, “99”</td>
+<td align="left">99.99</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="margins-between-horses" class="section level2">
+<h2>Margins between horses</h2>
+<div id="lengths" class="section level3">
+<h3>Lengths</h3>
+<p>The margins between horses are typically recorded in lengths, the <code>conv_margins</code> function can help convert margins into seconds, and calculate finishing times for each runner. The usage of the <code>conv_margins</code> function is shown below. In its simplest invocation it uses a scale of 5 lengths per second, the US convention, to calculate the difference in seconds between runners.</p>
+<p>A quick reminder of the lengths between our runners</p>
+<pre><code>##  [1] 0.00 0.25 0.75 1.00 1.75 2.50 4.00 6.00 0.00 1.00 1.50 2.50 5.00</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> df$btn_l)</code></pre>
+<pre><code>##  [1] 0.00 0.05 0.15 0.20 0.35 0.50 0.80 1.20 0.00 0.20 0.30 0.50 1.00</code></pre>
+<p>Entering the winners time into the <code>win_time</code> parameter, returned by the <code>conv_times</code> function above, it will convert the margins into individual times for runners.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> df$btn_l, <span class="dt">win_time =</span> df$new_time)</code></pre>
+<pre><code>##  [1]  99.99 100.04 100.14 100.19 100.34 100.49 100.79 101.19  72.78  72.98
+## [11]  73.08  73.28  73.78</code></pre>
+<p>The BHA changes the lengths per second scale according to the conditions of the race, conditions being the ground and the type of race (national hunt or flat). The <code>conditions</code> parameter allows an abbreviated version of these conditions to be entered, returning the scale employed by the BHA given the conditions. See <code>?bha_ls</code> and <code>?bhascale</code> for more details about the abbreviated conditions.</p>
+<pre class="sourceCode r"><code class="sourceCode r">## our races are flat races, and going is good or quicker, so conditions = &quot;f-gq&quot;
+<span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> df$btn_l, <span class="dt">win_time =</span> df$new_time, <span class="dt">conditions =</span> <span class="st">&quot;f-gq&quot;</span>)</code></pre>
+<pre><code>##  [1]  99.99 100.03 100.11 100.16 100.28 100.41 100.66 100.99  72.78  72.95
+## [11]  73.03  73.20  73.61</code></pre>
+<p>Finally, if margins between horses aren’t cumulative, but are the lengths between a runner and the horse in front, as opposed to the winner, then entering <code>FALSE</code> to the <code>cum_l</code> parameter will make the adjustment. <strong>However</strong>, to do this the races need to be split up, to prevent the losing margin from a runner in one race being added to the winner of another race. Here it is best to use the package <code>dplyr</code>, grouping by our <code>race_id</code>, and then calculating the beaten margins.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+df &lt;-<span class="st"> </span>df %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(race_id) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">ind_times =</span> <span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l, 
+                                      <span class="dt">cum_l =</span> <span class="ot">FALSE</span>, 
+                                      <span class="dt">win_time =</span> new_time))
+
+<span class="kw">select</span>(df, race_id, pos, wintime, new_time, btn_l, ind_times)</code></pre>
+<pre><code>## Source: local data frame [13 x 6]
+## Groups: race_id
+## 
+##          race_id pos wintime new_time btn_l ind_times
+## 1  01/01/01_2:20   1 1m39.99    99.99  0.00     99.99
+## 2  01/01/01_2:20   2 1m39.99    99.99  0.25    100.04
+## 3  01/01/01_2:20   3 1m39.99    99.99  0.75    100.19
+## 4  01/01/01_2:20   4 1m39.99    99.99  1.00    100.39
+## 5  01/01/01_2:20   5 1m39.99    99.99  1.75    100.74
+## 6  01/01/01_2:20   6 1m39.99    99.99  2.50    101.24
+## 7  01/01/01_2:20   7 1m39.99    99.99  4.00    102.04
+## 8  01/01/01_2:20   8 1m39.99    99.99  6.00    103.24
+## 9  02/02/02_3:30   1 1:12.78    72.78  0.00     72.78
+## 10 02/02/02_3:30   2 1:12.78    72.78  1.00     72.98
+## 11 02/02/02_3:30   3 1:12.78    72.78  1.50     73.28
+## 12 02/02/02_3:30   4 1:12.78    72.78  2.50     73.78
+## 13 02/02/02_3:30   5 1:12.78    72.78  5.00     74.78</code></pre>
+</div>
+<div id="seconds" class="section level3">
+<h3>Seconds</h3>
+<p>If times for individual runners already exist in a dataset, but margins in seconds are needed, the <code>btn_sec</code> function will do the work for you. It is a very simple function, which substracts the fastest time (<em>hopefully</em> the winner) from the other times. If applying to a dataset of a number of races, the <code>race_id</code> must be used again:</p>
+<pre class="sourceCode r"><code class="sourceCode r">df %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(race_id) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(<span class="dt">times =</span> ind_times))</code></pre>
+</div>
+</div>
+<div id="all-together-now" class="section level2">
+<h2>All Together Now</h2>
+<p>Using the <code>dplyr</code> for just the last task neednt be the case, instead of writing lines and lines of code, using the <code>$</code> to access variables that need cleaning, the cleaning can be chained together:</p>
+<pre class="sourceCode r"><code class="sourceCode r">example_race %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(date, time) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">race_id =</span> <span class="kw">paste</span>(date, time, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>),
+           <span class="dt">new_time =</span> <span class="kw">conv_times</span>(<span class="dt">times =</span> wintime),
+           <span class="dt">new_margins =</span> <span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l,
+                                      <span class="dt">cum_l =</span> <span class="ot">FALSE</span>,
+                                      <span class="dt">win_time =</span> new_time,
+                                      <span class="dt">conditions =</span> <span class="st">&quot;f-gq&quot;</span>)) %&gt;%
+<span class="st">    </span><span class="kw">select</span>(race_id, pos, horse, wintime, new_time, btn_l, new_margins)    </code></pre>
+<pre><code>## Source: local data frame [13 x 9]
+## Groups: date, time
+## 
+##        date time       race_id pos    horse wintime new_time btn_l
+## 1  01/01/01 2:20 01/01/01_2:20   1 aardvark 1m39.99    99.99  0.00
+## 2  01/01/01 2:20 01/01/01_2:20   2   badger 1m39.99    99.99  0.25
+## 3  01/01/01 2:20 01/01/01_2:20   3      cat 1m39.99    99.99  0.75
+## 4  01/01/01 2:20 01/01/01_2:20   4      dog 1m39.99    99.99  1.00
+## 5  01/01/01 2:20 01/01/01_2:20   5    eagle 1m39.99    99.99  1.75
+## 6  01/01/01 2:20 01/01/01_2:20   6     frog 1m39.99    99.99  2.50
+## 7  01/01/01 2:20 01/01/01_2:20   7  giraffe 1m39.99    99.99  4.00
+## 8  01/01/01 2:20 01/01/01_2:20   8  hamster 1m39.99    99.99  6.00
+## 9  02/02/02 3:30 02/02/02_3:30   1   andrew 1:12.78    72.78  0.00
+## 10 02/02/02 3:30 02/02/02_3:30   2    barry 1:12.78    72.78  1.00
+## 11 02/02/02 3:30 02/02/02_3:30   3  charlie 1:12.78    72.78  1.50
+## 12 02/02/02 3:30 02/02/02_3:30   4    david 1:12.78    72.78  2.50
+## 13 02/02/02 3:30 02/02/02_3:30   5    eddie 1:12.78    72.78  5.00
+## Variables not shown: new_margins (dbl)</code></pre>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>

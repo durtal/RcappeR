@@ -1,0 +1,38 @@
+---
+title: "fin_spd"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Calculates finishing speed percentages, an innovation by Simon Rowlands of Timeform.
+
+### Usage
+```{r eval=FALSE}
+fin_spd(fin_time, dist, sect_time, sect_dist)
+```
+
+### Arguments
+
+param | details
+------|-------
+fin_time | final time
+dist | race distance
+sect_time | closing sectional time
+sect_dist | closing sectional distance
+
+### Details
+
+Parameters must be in the same units, so time params **fin_time** and **sect_time** will be in seconds, while distance params **dist** and **sect_dist** will **both** be in furlongs, feet, metres, miles, etc.
+
+Two articles by Simon Rowlands explaining Finishing Speeds (and sectionals) can be found:
+[An Introduction to Sectional Timing (Part 1)](https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_1)
+[An Introduction to Sectional Timing (Part 2)](https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_2)
+
+### Example Use
+
+We'll calculate the finishing speed for a horse running in a 5 furlong race, the horse had a final time of 59 seconds, and ran the closing 2 furlongs in 23 seconds
+
+```{r}
+fin_spd(fin_time = 59, dist = 5, sect_time = 23, sect_dist = 2)
+```

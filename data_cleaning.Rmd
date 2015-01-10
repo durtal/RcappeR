@@ -2,18 +2,115 @@
 title: "data_cleaning"
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r, echo=FALSE}
+library(RcappeR)
+```
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Data rarely comes ready for analysis, and whatever you call it, cleaning, tidying, munging, it is a very important part of the process.  There are a number of helper functions in the `RcappeR` package that can help get data into a cleaner, more usable, format, some of these include:
+
+- Converting race times from a character string to a numeric
+- Converting beaten margins
+- Calculating beaten margins
+
+This vignette will run through a few of them using a dummy dataset included in the package, this dataset contains fictional data to highlight the use of the functions, but hopefully the scope of their use will become apparent.  There are likely many other cleaning tasks that are perhaps not present in the current version of `RcappeR`, if you have a demand for any, don't hesitate to ask - either look me up on [twitter](http://twitter.com/_RcappeR) or add an issue on [github](https://github.com/durtal/RcappeR/issues).
+
+Already, the dataset being used has been cleaned a little, ie. it's in a nice neat dataframe.  However some of the variables are in need of further polishing.  The dataset can be seen below:
 
 ```{r}
-summary(cars)
+data(example_race)
+(df <- example_race)
 ```
 
-You can also embed plots, for example:
+The dataset contains two unique races, which can be identified by the `date` and `time` variables, but it is often a good idea to create a `race_id` variable to help identify the unique races and their runners.  Simply concatenating the date and races' start time should be sufficient:
 
-```{r, echo=FALSE}
-plot(cars)
+```{r}
+df$race_id <- paste(df$date, df$time, sep = "_")
+unique(df$race_id)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Race Times
+
+The winners' time is available in the `wintime` variable, but are in character format, ``r unique(df$wintime)[1]`` and ``r unique(df$wintime)[2]``, what is desired is a time in numeric format, in seconds.  The `conv_times` function will convert these times (or similar), by splitting times up according to a regular expression, `"[[:punct:]]\\s?|m\\s?|\\s+"`, this should cover a healthy number of formats that races come in, the table below lists a few.
+
+```{r}
+df$new_time <- conv_times(df$wintime)
+## the new times look like
+df$new_time
+```
+
+The table below contains various formats of times that will be converted, but if times to be converted are not covered then the `regex` parameter in the `conv_times` function allows users to
+create unique regular expression.
+
+old time | regex used | splits old time | new time
+---------|-------|--------|---------
+"1m39.99" | default | "1", "39", "99" | 99.99
+"1 39.99" | default | "1", "39", "99" | 99.99
+"1-39.99" | default | "1", "39", "99" | 99.99
+"1:39.99" | default | "1", "39", "99" | 99.99
+"1min 39.99" | "min |[[:punct:]]" | "1", "39", "99" | 99.99
+
+## Margins between horses
+
+### Lengths
+The margins between horses are typically recorded in lengths, the `conv_margins` function can help convert margins into seconds, and calculate finishing times for each runner.  The usage of the `conv_margins` function is shown below.  In its simplest invocation it uses a scale of 5 lengths per second, the US convention, to calculate the difference in seconds between runners.
+
+A quick reminder of the lengths between our runners
+```{r echo=FALSE}
+df$btn_l
+```
+
+```{r}
+conv_margins(btn_l = df$btn_l)
+```
+
+Entering the winners time into the `win_time` parameter, returned by the `conv_times` function above, it will convert the margins into individual times for runners.
+
+```{r}
+conv_margins(btn_l = df$btn_l, win_time = df$new_time)
+```
+
+The BHA changes the lengths per second scale according to the conditions of the race, conditions being the ground and the type of race (national hunt or flat).  The `conditions` parameter allows an abbreviated version of these conditions to be entered, returning the scale employed by the BHA given the conditions.  See `?bha_ls` and `?bhascale` for more details about the abbreviated conditions.
+
+```{r}
+## our races are flat races, and going is good or quicker, so conditions = "f-gq"
+conv_margins(btn_l = df$btn_l, win_time = df$new_time, conditions = "f-gq")
+```
+
+Finally, if margins between horses aren't cumulative, but are the lengths between a runner and the horse in front, as opposed to the winner, then entering `FALSE` to the `cum_l` parameter will make the adjustment.  **However**, to do this the races need to be split up, to prevent the losing margin from a runner in one race being added to the winner of another race.  Here it is best to use the package `dplyr`, grouping by our `race_id`, and then calculating the beaten margins.
+
+```{r warning=FALSE, message=FALSE}
+library(dplyr)
+df <- df %>%
+    group_by(race_id) %>%
+    mutate(ind_times = conv_margins(btn_l = btn_l, 
+                                      cum_l = FALSE, 
+                                      win_time = new_time))
+
+select(df, race_id, pos, wintime, new_time, btn_l, ind_times)
+```
+
+### Seconds
+
+If times for individual runners already exist in a dataset, but margins in seconds are needed, the `btn_sec` function will do the work for you.  It is a very simple function, which substracts the fastest time (_hopefully_ the winner) from the other times.  If applying to a dataset of a number of races, the `race_id` must be used again:
+
+```{r eval=FALSE}
+df %>%
+    group_by(race_id) %>%
+    mutate(btn_sec = btn_sec(times = ind_times))
+```
+
+## All Together Now
+
+Using the `dplyr` for just the last task neednt be the case, instead of writing lines and lines of code, using the `$` to access variables that need cleaning, the cleaning can be chained together:
+
+```{r}
+example_race %>%
+    group_by(date, time) %>%
+    mutate(race_id = paste(date, time, sep = "_"),
+           new_time = conv_times(times = wintime),
+           new_margins = conv_margins(btn_l = btn_l,
+                                      cum_l = FALSE,
+                                      win_time = new_time,
+                                      conditions = "f-gq")) %>%
+    select(race_id, pos, horse, wintime, new_time, btn_l, new_margins)    
+```

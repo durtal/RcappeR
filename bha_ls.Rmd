@@ -1,0 +1,58 @@
+---
+title: "bha_ls"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Return lengths per second scale employed by the BHA when they calculate lengths beaten.  Use it to convert the lengths back into seconds, see also [bhascale](bhascale.html)
+
+### Usage
+```{r eval=FALSE}
+bha_ls(conditions = NULL)
+```
+
+### Arguments
+
+param | details
+------|-------
+conditions | abbreviated concatenation of race conditions, ie. the type of race (_flat_ or _national hunt_) and the official going.
+
+### Conditions
+
+To view the scales and corresponding abbreviations (for the **conditions** param) leave the function blank, ie.
+
+```{r eval=FALSE}
+bha_ls()
+```
+
+race type | going | scale | conditions
+----------|-------|-------|-----------
+flat | good or quicker | 6.0 | f-gq
+flat | good, good to soft | 5.5 | f-ggs
+flat | good to soft, good | 5.5 | f-gsg
+flat | good to soft | 5.5 | f-gs
+flat | good to soft, soft | 5.5 | f-gss
+flat | soft, good to soft | 5.0 | f-sgs
+flat | soft or slower | 5.0 | f-ss
+flat | all weather | 6.0 | f-aw
+flat | fibresand | 5.0 | f-fs
+national hunt | good or quicker | 5.0 | nh-gq
+national hunt | good, good to soft | 4.5 | nh-ggs
+national hunt | good to soft, good | 4.5 | nh-gsg
+national hunt | good to soft | 4.5 | nh-gs
+national hunt | good to soft, soft | 4.5 | nh-gss
+national hunt | soft, good to soft | 4.0 | nh-sgs
+national hunt | soft or slower | 4.0 | nh-ss
+national hunt | all weather | 5.0 | nh-aw
+national hunt | fibresand | 4.0 | nh-fs
+
+[Link to PDF](http://www.britishhorseracing.com/wp-content/uploads/2014/04/Lengths-Per-Second-Scale-Tables.pdf) with the BHA lengths per second scale.
+
+### Example Use
+
+A "National Hunt" race run on "good to soft, soft" ground
+
+```{r}
+bha_ls(conditions = "nh-gss")
+```

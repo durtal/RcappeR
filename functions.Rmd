@@ -2,18 +2,50 @@
 title: "functions"
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The collection of functions range from the very simple, cleaning tasks that could be required regularly, to the more complex handicapping functions.  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+The four sections below split the functions into groups, but it is more likely that the functions will be used one after another as horse racing data is cleaned and prepared ahead of handicapping.
 
-```{r}
-summary(cars)
-```
+### Cleaning
 
-You can also embed plots, for example:
+Cleaning functions attempt to, surprise, surprise, clean racing data, from racing times, to weight, see the [Data Cleaning](data_cleaning.html) vignette to see a few of them in use.
 
-```{r, echo=FALSE}
-plot(cars)
-```
+function | what's it for | help
+---------|---------------|-------
+conv\_times | converts times in character format (such as "1m39.99") into a time in seconds | [help](conv_times.html)
+conv\_margins | converts margins between horses from lengths into seconds | [help](conv_margins.html)
+conv\_wgt | converts weights from character format of stones-lbs, or from numeric format from kg to lbs | [help](conv_wgt.html)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Preparation
+
+Preparation functions aim to prepare data for either handicapping or further analysis, see the [Data Preparation](data_prep.html) and [zipf\_race](zipf_race.html) vignettes to see a few of these functions in use.
+
+function | what's it for | help
+---------|---------------|------
+btn\_sec | calculates the margin (in seconds) between horses | [help](btn_sec.html)
+fin\_spd | calculates finishing speed percentages using sectionals | [help](fin_spd.html)
+fin\_sect | calculates finishing sectionals using finishing speeds | [help](fin_sect.html)
+lbs\_per\_sec | lbs per second scale | [help](lbs_per_sec.html)
+rnrs\_btn | calculates percentage of runners beaten | [help](rnrs_btn.html)
+bha\_ls | returns BHA lengths per second scale | [help](bha_ls.html)
+
+### Handicapping
+
+These functions typically require a number of the functions above to be used, to get data into a format that the functions below can deal with.
+
+function | what's it for | help
+---------|---------------|------
+diff\_at\_wgts | calculates the difference at the weights | [help](diff_at_wgts.html)
+zipf\_race | handicaps a single race using one race | [help](zipf_race.html)
+zipf\_hcp | handicaps a single race using many races | [help](zipf_hcp.html)
+zipf\_init | initialises a handicap using many races | [help](zipf_init.html)
+
+### Misc
+
+These functions provide assistance for potential tasks.
+
+function | what's it for | help
+---------|---------------|-----
+theme\_rcapper | a custom ggplot theme | [help](theme_rcapper.html)
+mean\_rating | helper function to be used as a parameter in the `boot` function from the **boot** package | [help](mean_rating.html)
+merge\_zipf\_init | merges list returned by [zipf_init](zipf_init.html) and the dataframe entered into that function | [help](merge_zipf_init.html)

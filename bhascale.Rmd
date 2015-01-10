@@ -2,18 +2,23 @@
 title: "bhascale"
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The **bhascale** dataset contains data for the lengths per second scale used by the BHA ([source](http://www.britishhorseracing.com/wp-content/uploads/2014/04/Lengths-Per-Second-Scale-Tables.pdf)) when determining the margins beaten.  This dataset is called by the [bha_ls](bha_ls.html) function when converting margins between horses from lengths back into seconds.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(RcappeR)
+```
 
 ```{r}
-summary(cars)
+data(bhascale)
 ```
 
-You can also embed plots, for example:
+The dataset has `r dim(bhascale)[1]` rows and `r dim(bhascale)[2]` columns.
 
-```{r, echo=FALSE}
-plot(cars)
-```
+### Variables
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+variable | details
+---------|--------
+race_type | type, or class, of race, (ie. "clm", "mdn clm", etc)
+going | official going
+scale | lengths per second scale
+conditions | abbreviated race conditions

@@ -1,0 +1,40 @@
+---
+title: "conv_margins"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Converts margins, between the winner of a race and the horses behind, from lengths into seconds
+
+### Usage
+```{r eval=FALSE}
+conv_margins(btn_l, cum_l = TRUE, win_time = NULL, conditions = NULL)
+```
+
+### Arguments
+
+param | details
+------|-------
+btn\_l | beaten lengths (numeric)
+cum\_l | indicates whether btn\_l is cumulative, default TRUE
+win\_time | winners time, optional param, if entered the function returns individual times for each runner
+conditions | race conditions that influence the BHA lengths per second scale to be used
+
+### Details
+
+As default, the lengths per second scale used is the US convention of 5 lengths per second.  However, if the race was run under the jurisdiciton of the BHA, then entering an abbreviation of the races' conditions will apply the lengths per second scale employed by the BHA.  See also [bha_ls](bha_ls.html) and [bhascale](bhascale.html)
+
+### Example Use
+
+```{r}
+btn_l <- c(0, 0.2, 0.5, 1, 1.5)
+
+conv_margins(btn_l = btn_l)
+
+conv_margins(btn_l = btn_l, cum_l = FALSE)
+
+conv_margins(btn_l = btn_l, win_time = 59)
+
+conv_margins(btn_l = btn_l, win_time = 59, conditions = "f-gq")
+```

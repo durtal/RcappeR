@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>fin_sect</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,93 +164,54 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">fin_sect</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>Calculates finishing sectional, reverse engineers a Finishing Speed (see <a href="fin_spd.html">fin_spd</a>) into a sectional time (in seconds)</p>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fin_sect</span>(fintime, dist, fin_spd, sect_dist)</code></pre>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
 <table>
 <thead>
 <tr class="header">
-<th align="left">variable</th>
+<th align="left">param</th>
 <th align="left">details</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
-</tr>
-<tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
-</tr>
-<tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
+<td align="left">fin_time</td>
+<td align="left">final time</td>
 </tr>
 <tr class="even">
 <td align="left">dist</td>
 <td align="left">race distance</td>
 </tr>
 <tr class="odd">
-<td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
+<td align="left">fin_spd</td>
+<td align="left">finishing speed</td>
 </tr>
 <tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
-<td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
-</tr>
-<tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
-</tr>
-<tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
-</tr>
-<tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
+<td align="left">sect_dist</td>
+<td align="left">closing sectional distance</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>The two distance parameters, <strong>dist</strong> and <strong>sect_dist</strong>, must be in the same units, furlongs, feet, metres, etc. While the <strong>fin_time</strong> parameter should be in seconds, and the <strong>fin_spd</strong> parameter should be a number around 100.</p>
+<p>Two articles by Simon Rowlands explaining Finishing Speeds (and sectionals) can be found: <a href="https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_1">An Introduction to Sectional Timing (Part 1)</a> <a href="https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_2">An Introduction to Sectional Timing (Part 2)</a></p>
+</div>
+<div id="example-use" class="section level3">
+<h3>Example Use</h3>
+<p>We’ll reverse engineer the example used in the <a href="fin_spd.html">fin_spd</a> help page. Which showed a horse running a race over 5 furlongs in 59 seconds, the closing sectional was 2 furlongs and the horse recorded a finishing speed of 102.61.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fin_sect</span>(<span class="dt">fin_time =</span> <span class="dv">59</span>, <span class="dt">dist =</span> <span class="dv">5</span>, <span class="dt">fin_spd =</span> <span class="fl">102.61</span>, <span class="dt">sect_dist =</span> <span class="dv">2</span>)</code></pre>
+<pre><code>## [1] 23</code></pre>
 </div>
 
 

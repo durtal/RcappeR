@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>Handicapping using zipf_race</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/united.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+	/* padding for bootstrap navbar */
+	body {
+		padding-top: 50px;
+		padding-bottom: 40px;
+	}
+	@media (max-width: 979px) {
+		body {
+			padding-top: 0;
+		}
+	}
+
+	/* offset scroll position for anchor links (for fixed navbar) */
+	@media (min-width: 980px) {
+		.section h2 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+		.section h3 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+	}
+
+	p {
+		font-size: 13px;
+	}
+
+	/* don't use link color in navbar */
+	.dropdown-menu>li>a {
+		color: black;
+	}
+
+	/* some padding for disqus */
+	#disqus_thread {
+		margin-top: 45px;
+	}
+	
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #cccccc; background-color: #303030; }
+code > span.kw { color: #f0dfaf; }
+code > span.dt { color: #dfdfbf; }
+code > span.dv { color: #dcdccc; }
+code > span.bn { color: #dca3a3; }
+code > span.fl { color: #c0bed1; }
+code > span.ch { color: #dca3a3; }
+code > span.st { color: #cc9393; }
+code > span.co { color: #7f9f7f; }
+code > span.ot { color: #efef8f; }
+code > span.al { color: #ffcfaf; }
+code > span.fu { color: #efef8f; }
+code > span.er { color: #c3bf9f; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<button class="btn btn-navbar" type="button" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="http://durtal.github.io" class="brand">durtal.github.io</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li>
+						<a href="index.html">RcappeR home</a>
+					</li>
+					<li>
+						<a href="functions.html">Functions</a>
+					</li>
+					<li class="dropdown">
+						<a href="datasets" class="dropdown-toggle" data-toggle="dropdown">
+							Datasets <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="gulfstream.html">gulfstream</a>
+							</li>
+							<li>
+								<a href="bhascale.html">bhascale</a>
+							</li>
+							<li>
+								<a href="example_race.html">example_race</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="vignettes" class="dropdown-toggle" data-toggle="dropdown">
+							Vignettes <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="data_cleaning.html">Data Cleaning</a>
+							</li>
+							<li>
+								<a href="data_prep.html">Data Preparation</a>
+							</li>
+							<li>
+								<a href="handicap_with_zipf_race.html">(zipf_race)</a>
+							</li>
+    						<li>
+								<a href="handicap_with_zipf_hcp.html">Handicapping (zipf_hcp)</a>
+							</li>
+    						<li>
+								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
+							</li>                            
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="header">
+<h1 class="title">Handicapping using zipf_race</h1>
+</div>
+
+
+<p>This vignette looks at the function <code>zipf_race</code>, which is the worker function for both <code>zipf_hcp</code> and <code>zipf_init</code>. It employs a method of race standardisation that was first explained by Simon Rowlands [1], of renowned racing experts Timeform, and uses zipf’s law. A detailed explanation of the function will be shown, which should make it easier to see what <code>zipf_hcp</code> and <code>zipf_init</code> are doing.</p>
+<div id="example_race-dataset" class="section level2">
+<h2>example_race dataset</h2>
+<p>The <strong>example_race</strong> dataset contains two races and can be used to highlight <code>zipf_race</code>, load the dataset and do some necessary cleaning (see the <a href="data_cleaning.html"><strong>Data Cleaning</strong></a> vignette for details). I will use the <code>dplyr</code> package to help reduce the amount of code.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load dplyr and example_race dataset</span>
+<span class="kw">library</span>(dplyr)
+<span class="kw">data</span>(example_race)
+
+clean_df &lt;-<span class="st"> </span>example_race %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">race_id =</span> <span class="kw">paste</span>(date, time, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>),
+           <span class="dt">newtime =</span> <span class="kw">conv_times</span>(<span class="dt">times =</span> wintime),
+           <span class="dt">fintime =</span> <span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l, <span class="dt">win_time =</span> newtime),
+           <span class="dt">btn_sec =</span> fintime -<span class="st"> </span>newtime)</code></pre>
+<p><code>zipf_race</code> requires two dataframes of two different races, the first is a race that requires handicapping, the second is a race that is to be used to handicap the first. So races are to be split into seperate races:</p>
+<pre class="sourceCode r"><code class="sourceCode r">race_one &lt;-<span class="st"> </span><span class="kw">filter</span>(clean_df, race_id ==<span class="st"> &quot;01/01/01_2:20&quot;</span>)
+race_two &lt;-<span class="st"> </span><span class="kw">filter</span>(clean_df, race_id !=<span class="st"> &quot;01/01/01_2:20&quot;</span>)</code></pre>
+</div>
+<div id="race_two" class="section level2">
+<h2>race_two</h2>
+<p>In this example <strong>race_two</strong> will be the race used to handicap <strong>race_one</strong>, and so a bit more work is required for this race. To show how <code>zipf_race</code> works arbitrary ratings are calculated for the performances of horses in this race, as such:</p>
+<pre class="sourceCode r"><code class="sourceCode r">race_two &lt;-<span class="st"> </span>race_two %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(dist, <span class="dt">surf =</span> <span class="st">&quot;turf&quot;</span>),    <span class="co"># calculate lbs per second scale</span>
+           <span class="dt">btn_lbs =</span> scale *<span class="st"> </span>btn_sec,                   <span class="co"># calculate beaten lbs</span>
+           <span class="dt">rating =</span> <span class="dv">70</span> -<span class="st"> </span>btn_lbs)                       <span class="co"># calculate arbitrary ratings, winner gets 70</span></code></pre>
+</div>
+<div id="race_one" class="section level2">
+<h2>race_one</h2>
+<p>The race to be handicapped needs similar steps, that is beaten lbs is needed, so <strong>race_one</strong> is processed:</p>
+<pre class="sourceCode r"><code class="sourceCode r">race_one &lt;-<span class="st"> </span>race_one %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(dist, <span class="dt">surf =</span> <span class="st">&quot;turf&quot;</span>),
+           <span class="dt">btn_lbs =</span> scale *<span class="st"> </span>btn_sec)</code></pre>
+<p>Typically races will be run with horses carrying different weight, so a ‘difference at the weights’ calculation is required that takes weight carried into account (as well as beaten lbs), see <a href="data_preparation.html"><strong>Data Preparation</strong></a> for an example use of the <code>diff_at_wgts</code> function.</p>
+</div>
+<div id="zipf_race" class="section level1">
+<h1>zipf_race</h1>
+<p>The <code>zipf_race</code> function can now be used, it takes three (sometimes 4) parameters, below is a simple table explaining the various parameters for <code>zipf_race</code>, including the inputs that are to be entered from this vignette:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">param</th>
+<th align="left">details</th>
+<th align="left">example input</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">race</td>
+<td align="left">dataframe of a race to be handicapped</td>
+<td align="left"><code>race_one</code></td>
+</tr>
+<tr class="even">
+<td align="left">btn_var</td>
+<td align="left">name of variable which contains margins between horses in <em>race</em></td>
+<td align="left"><code>&quot;btn_lbs&quot;</code></td>
+</tr>
+<tr class="odd">
+<td align="left">race_2</td>
+<td align="left">dataframe of race to be used to handicap <em>race</em></td>
+<td align="left"><code>race_two</code></td>
+</tr>
+<tr class="even">
+<td align="left">rating</td>
+<td align="left">name of ratings variable (if applicable) in <em>race_2</em></td>
+<td align="left"><code>&quot;rating&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>So <code>zipf_race</code> is called, and a rating for the winner of race_one is returned:</p>
+<pre class="sourceCode r"><code class="sourceCode r">output &lt;-<span class="st"> </span><span class="kw">zipf_race</span>(<span class="dt">race =</span> race_one, <span class="dt">btn_var =</span> <span class="st">&quot;btn_lbs&quot;</span>, <span class="dt">race_2 =</span> race_two, <span class="dt">rating =</span> <span class="st">&quot;rating&quot;</span>)</code></pre>
+<p>The winner of <strong>race_one</strong> has earned a rating of 65.85</p>
+<div id="under-the-hood-of-zipf_race" class="section level2">
+<h2>Under the hood of zipf_race</h2>
+<p>To understand how 65.85 was arrived at we can have a look under the hood at the <code>zipf_race</code> function. There is a small amount of housework done early in the function:</p>
+<ol style="list-style-type: decimal">
+<li>Create two vectors of - one for <strong>race</strong> dataframe, one for <strong>race_2</strong> - of <strong>btn_var</strong> and <strong>rating</strong></li>
+<li>Remove NA values - function works on the assumption that dataframes are ordered by finishing position, so NAs should be last (non-finishers), big issue if they aren’t.</li>
+<li>Make sure lengths of both vectors are the same, shorten the longest one if not.</li>
+</ol>
+<p>In the example in this vignette, recall from the table and function call above the params entered into the <code>zipf_race</code> function, these can be seen in Step One below:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Step One</span>
+race_one_margins &lt;-<span class="st"> </span>race_one[[<span class="st">&quot;btn_lbs&quot;</span>]]
+race_two_ratings &lt;-<span class="st"> </span>race_two[[<span class="st">&quot;rating&quot;</span>]]
+
+<span class="co"># Step Two</span>
+race_one_margins &lt;-<span class="st"> </span>race_one_margins[!<span class="kw">is.na</span>(race_one_margins)]
+race_two_ratings &lt;-<span class="st"> </span>race_two_ratings[!<span class="kw">is.na</span>(race_two_ratings)]
+
+<span class="co"># Step Three</span>
+if(<span class="kw">length</span>(race_one_margins) !=<span class="st"> </span><span class="kw">length</span>(race_two_ratings)) {
+    if(<span class="kw">length</span>(race_one_margins) &gt;<span class="st"> </span><span class="kw">length</span>(race_two_ratings)) {
+        race_one_margins &lt;-<span class="st"> </span>race_one_margins[<span class="dv">1</span>:<span class="kw">length</span>(race_two_ratings)]
+    } else {
+        race_two_ratings &lt;-<span class="st"> </span>race_two_ratings[<span class="dv">1</span>:<span class="kw">length</span>(race_one_margins)]
+    }
+}</code></pre>
+<p>With the three steps above performed, there are now two vectors of equal length, one with <strong>race</strong> margins, the other with <strong>race_2</strong> ratings:</p>
+<pre class="sourceCode r"><code class="sourceCode r">race_one_margins</code></pre>
+<pre><code>## [1] 0.00 0.84 2.52 3.36 5.88</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">race_two_ratings</code></pre>
+<pre><code>## [1] 70.000 65.144 62.716 57.860 45.720</code></pre>
+<p>The handicapping, using zipf’s law, can begin in earnest now:</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Add the beaten margins from <strong>race</strong> to the ratings from <strong>race_2</strong>, resulting in a vector of new vector ratings for a winner. So the beaten margin for position 2 in <strong>race_one_margins</strong> is added to the rating in position 2 in <strong>race_two_ratings</strong></li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">(ratings &lt;-<span class="st"> </span>race_two_ratings +<span class="st"> </span>race_one_margins)</code></pre>
+<pre><code>## [1] 70.000 65.984 65.236 61.220 51.600</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Calculate a zipf factor (to weight the different positions)</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">(zipf &lt;-<span class="st"> </span><span class="dv">1</span> /<span class="st"> </span>(<span class="dv">1</span>:<span class="kw">length</span>(ratings)))</code></pre>
+<pre><code>## [1] 1.0000000 0.5000000 0.3333333 0.2500000 0.2000000</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Multiply each rating in <strong>ratings</strong> by zipf factor (weight each position)</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">(ratings &lt;-<span class="st"> </span>ratings *<span class="st"> </span>zipf)</code></pre>
+<pre><code>## [1] 70.00000 32.99200 21.74533 15.30500 10.32000</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Sum the <strong>ratings</strong> vector</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">(total &lt;-<span class="st"> </span><span class="kw">sum</span>(ratings, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre>
+<pre><code>## [1] 150.3623</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Calculate a winning rating by dividing <strong>total</strong> by the sum of <strong>zipf</strong></li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">(winning_rating &lt;-<span class="st"> </span><span class="kw">round</span>(total /<span class="st"> </span><span class="kw">sum</span>(zipf), <span class="dv">2</span>))</code></pre>
+<pre><code>## [1] 65.85</code></pre>
+<p>Hopefully this explains the process a little more clearly. <code>zipf_race</code> is used by <code>zipf_init</code> and <code>zipf_hcp</code>.</p>
+</div>
+<div id="brief-words-about-zipf_hcp-and-zipf_init" class="section level2">
+<h2>Brief words about zipf_hcp and zipf_init</h2>
+<p>In <code>zipf_hcp</code> a race is handicapped using a dataset of races, so <code>zipf_race</code> is called for each unique race in that dataset. It returns a list with various elements, one of which is a dataframe of ratings, each row consists of the id for a race in the dataset of races, and the rating returned by <code>zipf_race</code>.</p>
+<p>In <code>zipf_init</code>, it’s use is a little different, because it initialises a handicap, so entering a single dataset, it groups races according to the users input, and assesses the performance of each race in each group by using the all races in the same group (including itself, which always returns a rating of 0). This means it calls <code>zipf_hcp</code> and returns a list of various elements, one of which is a dataframe of ratings, each row belongs to one race in the single dataset, including a rating, the mean of all ratings returned by <code>zipf_hcp</code> for that one race.</p>
+<p>[1]: <a href="https://betting.betfair.com/horse-racing/bloggers/simon-rowlands/simon-rowlands-on-handicapping-060710.html">Simon Rowlands article explaining the use of zipf’s law</a></p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>

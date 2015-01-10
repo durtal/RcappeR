@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>data_prep</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/united.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+	/* padding for bootstrap navbar */
+	body {
+		padding-top: 50px;
+		padding-bottom: 40px;
+	}
+	@media (max-width: 979px) {
+		body {
+			padding-top: 0;
+		}
+	}
+
+	/* offset scroll position for anchor links (for fixed navbar) */
+	@media (min-width: 980px) {
+		.section h2 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+		.section h3 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+	}
+
+	p {
+		font-size: 13px;
+	}
+
+	/* don't use link color in navbar */
+	.dropdown-menu>li>a {
+		color: black;
+	}
+
+	/* some padding for disqus */
+	#disqus_thread {
+		margin-top: 45px;
+	}
+	
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #cccccc; background-color: #303030; }
+code > span.kw { color: #f0dfaf; }
+code > span.dt { color: #dfdfbf; }
+code > span.dv { color: #dcdccc; }
+code > span.bn { color: #dca3a3; }
+code > span.fl { color: #c0bed1; }
+code > span.ch { color: #dca3a3; }
+code > span.st { color: #cc9393; }
+code > span.co { color: #7f9f7f; }
+code > span.ot { color: #efef8f; }
+code > span.al { color: #ffcfaf; }
+code > span.fu { color: #efef8f; }
+code > span.er { color: #c3bf9f; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<button class="btn btn-navbar" type="button" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="http://durtal.github.io" class="brand">durtal.github.io</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li>
+						<a href="index.html">RcappeR home</a>
+					</li>
+					<li>
+						<a href="functions.html">Functions</a>
+					</li>
+					<li class="dropdown">
+						<a href="datasets" class="dropdown-toggle" data-toggle="dropdown">
+							Datasets <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="gulfstream.html">gulfstream</a>
+							</li>
+							<li>
+								<a href="bhascale.html">bhascale</a>
+							</li>
+							<li>
+								<a href="example_race.html">example_race</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="vignettes" class="dropdown-toggle" data-toggle="dropdown">
+							Vignettes <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="data_cleaning.html">Data Cleaning</a>
+							</li>
+							<li>
+								<a href="data_prep.html">Data Preparation</a>
+							</li>
+							<li>
+								<a href="handicap_with_zipf_race.html">(zipf_race)</a>
+							</li>
+    						<li>
+								<a href="handicap_with_zipf_hcp.html">Handicapping (zipf_hcp)</a>
+							</li>
+    						<li>
+								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
+							</li>                            
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="header">
+<h1 class="title">data_prep</h1>
+</div>
+
+
+<p>Simple, but often necessary, cleaning has been covered in the <a href="data_cleaning.html"><strong>Data Cleaning</strong></a> vignette, this vignette will look to more tools to help prepare a dataset for handicapping, as well as some preliminary analysis.</p>
+<div id="gulfstream-dataset" class="section level2">
+<h2>gulfstream Dataset</h2>
+<p>The dataset used is included in the package, called <strong>gulfstream</strong>, and contains a good number of races run over the 6 and 8 furlong dirt course at Gulfstream Park in the US. To load the dataset, and inspect its structure (see <code>?gulfstream</code> for details about the variables):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)
+<span class="kw">str</span>(gulfstream)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    2863 obs. of  17 variables:
+##  $ date     : chr  &quot;01/01/13&quot; &quot;01/01/13&quot; &quot;01/01/13&quot; &quot;01/01/13&quot; ...
+##  $ race     : int  1 1 1 1 1 1 1 1 2 2 ...
+##  $ race_type: chr  &quot;mdn clm&quot; &quot;mdn clm&quot; &quot;mdn clm&quot; &quot;mdn clm&quot; ...
+##  $ dist     : int  6 6 6 6 6 6 6 6 6 6 ...
+##  $ surf     : chr  &quot;dirt&quot; &quot;dirt&quot; &quot;dirt&quot; &quot;dirt&quot; ...
+##  $ value    : int  17500 17500 17500 17500 17500 17500 17500 17500 17500 17500 ...
+##  $ going    : chr  &quot;fast&quot; &quot;fast&quot; &quot;fast&quot; &quot;fast&quot; ...
+##  $ trainer  : chr  &quot;nicholas gonzalez&quot; &quot;anthony pecoraro&quot; &quot;edwin t broome&quot; &quot;edward plesa jr&quot; ...
+##  $ jockey   : chr  &quot;jermaine bridgmohan&quot; &quot;joseph rocco jr&quot; &quot;gabriel saez&quot; &quot;elvis trujillo&quot; ...
+##  $ j_clm    : int  0 0 0 0 5 0 7 0 0 0 ...
+##  $ age      : int  3 3 3 3 3 3 3 3 3 3 ...
+##  $ wgt      : int  122 122 122 122 117 122 115 122 122 122 ...
+##  $ gate     : int  6 1 8 7 5 2 4 3 2 4 ...
+##  $ pos      : int  1 2 3 4 5 6 7 8 1 2 ...
+##  $ horse    : chr  &quot;don&#39;tgetmestarted&quot; &quot;dream of scipio&quot; &quot;beltram&quot; &quot;gold bitten tiger&quot; ...
+##  $ fintime  : num  72.4 74.2 74.5 74.7 74.7 ...
+##  $ sect_4f  : num  47 47.1 47.4 48.4 47.4 ...</code></pre>
+<p>The dataset is already quite clean, but there are a few functions available in the <code>RcappeR</code> package to work with the data. First a look at the necessary steps ahead of handicapping using either <code>zipf_init</code> or <code>zipf_hcp</code>.</p>
+</div>
+<div id="handicapping-preparation" class="section level1">
+<h1>Handicapping preparation</h1>
+<p>In order to use some of the more complex functions (<code>zipf_init</code>, <code>zipf_hcp</code>) a certain amount of preparation is required. There are a number of variables needed for handicapping, these are:</p>
+<ul>
+<li>unique race id (a way to distinguish different races)</li>
+<li>race classes, or types</li>
+<li>surface</li>
+<li>distance</li>
+<li>final times
+<ul>
+<li>either times for all runners, or</li>
+<li>a winning time and a way to calculate final times (beaten seconds, or beaten lengths)</li>
+</ul></li>
+<li>weight carried</li>
+</ul>
+<p>The variables above should be pretty common in a racing dataset that you wish to calculate ratings from. In the <strong>gulfstream</strong> dataset we have all the above. Individual final times for horses might be a hurdle, but lengths beaten is a much more common variable, and as covered in the <a href="data_cleaning.html"><strong>Data Cleaning</strong></a> vignette, the <code>conv_margins</code> can convert lengths beaten into final times.</p>
+<p>A unique race id is required in the <strong>gulfstream</strong> dataset, but this can be created by concatenating the <code>date</code> and <code>race</code> variables. Obviously if a dataset contains races at more than one racecourse, it would be wise to include something about that: you can’t have two races being run at the same track, on the same day at the same time. Let’s create a variable called <code>date_race</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">gulfstream$date_race &lt;-<span class="st"> </span><span class="kw">paste</span>(gulfstream$date, gulfstream$race, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)</code></pre>
+<p>The above <code>date_race</code> variable was the only one missing from the above list, but before handicapping can begin we need to calculate margins between horses that take into account the following:</p>
+<ul>
+<li>distance</li>
+<li>surface</li>
+<li>beaten margins</li>
+<li>weight carried</li>
+</ul>
+<p>The best (imo) way to do this is to use the package <code>dplyr</code> which takes advantage of the <code>%&gt;%</code> pipe function from <code>magrittr</code> to calculate the necessary variables. The code below processes the gulfstream dataset, creating the necessary variables. It is explained in more detail below the code, the functions used from <code>RcappeR</code> are <code>btn_sec</code>, <code>lbs_per_sec</code> and <code>diff_at_wgts</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(date_race) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(fintime),
+           <span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> dist, <span class="dt">surf =</span> <span class="st">&quot;dirt&quot;</span>),
+           <span class="dt">btn_lbs =</span> scale *<span class="st"> </span>btn_sec,
+           <span class="dt">diff_wgts =</span> <span class="kw">diff_at_wgts</span>(<span class="dt">btn_lbs =</span> btn_lbs, <span class="dt">wgt_carried =</span> wgt))</code></pre>
+<ol style="list-style-type: decimal">
+<li>Load dplyr library
+<ul>
+<li><code>library(dplyr)</code></li>
+</ul></li>
+<li>Use gulfstream dataset and store results back in gulfstream
+<ul>
+<li><code>gulfstream &lt;- gulfstream %&gt;%</code></li>
+</ul></li>
+<li>Group races by the unique race ids (date_race)
+<ul>
+<li><code>group_by(date_race)</code></li>
+</ul></li>
+<li>Create new variables within each group (each race)
+<ul>
+<li>calculate margins (in seconds) between horses
+<ul>
+<li><code>btn_sec = btn_sec(fintime),</code></li>
+</ul></li>
+<li>calculate lbs per second scale
+<ul>
+<li><code>scale = lbs_per_sec(dist = dist, surf = &quot;dirt&quot;),</code></li>
+</ul></li>
+<li>calculate beaten lbs
+<ul>
+<li><code>btn_lbs = scale * btn_sec,</code></li>
+</ul></li>
+<li>calculate difference at the weights (margins, and weight carried)
+<ul>
+<li><code>diff_at_wtgs(btn_lbs = btn_lbs, wgt_carried = wgt))</code></li>
+</ul></li>
+</ul></li>
+</ol>
+<p>At this stage handicapping can begin by using the <code>zipf_init</code> function, see <a href="initialise_handicap.html"><strong>Initialising a Handicap</strong></a> vignette. Ahead of using <code>zipf_race</code> and <code>zipf_hcp</code> users will perform the same steps as above, but with a dataset containing a single race (so no need for <em>group_by</em>) that needs to be handicapped, the code shows the theoretical steps for one race.</p>
+<pre class="sourceCode r"><code class="sourceCode r">one_race &lt;-<span class="st"> </span>one_race %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(fintime),
+           <span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> dist, <span class="dt">surf =</span> <span class="st">&quot;dirt&quot;</span>),
+           <span class="dt">btn_lbs =</span> scale *<span class="st"> </span>btn_sec,
+           <span class="dt">diff_wgts =</span> <span class="kw">diff_at_wgts</span>(<span class="dt">btn_lbs =</span> btn_lbs, <span class="dt">wgt_carried =</span> wgt))</code></pre>
+</div>
+<div id="preliminary-analysis" class="section level1">
+<h1>Preliminary Analysis</h1>
+<div id="beaten-margins" class="section level2">
+<h2>Beaten margins</h2>
+<p>Unlike the dataset used in the <strong>Data Cleaning</strong> vignette we have individual times for all runners, but no margins in seconds. The <code>btn_sec</code> function can calculate margins between horses, necessary when handicapping races. If a dataset only has one race then it can be used as such:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">btn_sec</span>(<span class="dt">times =</span> fintimes)</code></pre>
+<p>However, as the <strong>gulfstream</strong> dataset contains many different races, the <code>date_race</code> is needed to identify the unique races, otherwise <code>btn_sec</code> would calculate the margins between the fastest time in the dataset and each of the 2863 rows. Margins between the leader after 4 furlongs can also be calculated.</p>
+<pre class="sourceCode r"><code class="sourceCode r">gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(date_race) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(<span class="dt">times =</span> fintime),   ## behind winner at the finish
+           <span class="dt">bhd_ldr_sect =</span> <span class="kw">btn_sec</span>(<span class="dt">times =</span> sect_4f))  ## behind leader at the 4 furlong sectional</code></pre>
+</div>
+<div id="finishing-speeds" class="section level2">
+<h2>Finishing Speeds</h2>
+<p>Finishing Speed is an innovation by Simon Rowlands of Timeform, find more details in posts by Simon, <a href="https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_1">Part 1</a> and <a href="https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_2">Part 2</a>. In short it compares the finishing speed of a horse to its average race speed; a finishing speed of 100 means the horse showed the same speed over the finishing sectional as it did the entire race; lower than 100 and the horse finished slower; higher, faster.</p>
+<p>In the dataset there are individual times for all horses after 4 furlongs in their race, variable <code>sect_4f</code>, and their final time, <code>fintime</code>. The <code>fin_spd</code> function needs the time for the closing sectional, as well as the closing sectional distance - which is the race distance minus 4 (furlongs).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate the closing sectional time</span>
+gulfstream$sect_time &lt;-<span class="st"> </span>gulfstream$fintime -<span class="st"> </span>gulfstream$sect_4f
+<span class="co"># using the new sect_time variable and other data in the dataset</span>
+gulfstream$fin_spd &lt;-<span class="st"> </span><span class="kw">fin_spd</span>(<span class="dt">fin_time =</span> gulfstream$fintime, 
+                              <span class="dt">dist =</span> gulfstream$dist, 
+                              <span class="dt">sect_time =</span> gulfstream$sect_time, 
+                              <span class="dt">sect_dist =</span> gulfstream$dist -<span class="st"> </span><span class="dv">4</span>)</code></pre>
+<p>The following plot shows our newly created finishing speed variable plotted on the y axis against the times horses recorded over the opening 4f. Horses over the 8f dirt course finish their closing sectional (4 furlongs) faster than horses running the 6f dirt course do their closing sectional (2 furlongs).</p>
+<p><img src="data_prep_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>Using the <code>dplyr</code> package it is easy to calculate par Finishing Speeds for each finishing position, from which further analysis can be carried out (though it won’t be here). Winners, unsurprisingly, have higher finishing speeds than those in behind. Focusing on just 6 furlong races</p>
+<pre class="sourceCode r"><code class="sourceCode r">gulfstream %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(dist ==<span class="st"> </span><span class="dv">6</span>) %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(pos) %&gt;%
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">par_fs =</span> <span class="kw">mean</span>(fin_spd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+              <span class="dt">sd_fs =</span> <span class="kw">sd</span>(fin_spd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre>
+<pre><code>## Source: local data frame [12 x 3]
+## 
+##    pos   par_fs    sd_fs
+## 1    1 93.39885 1.958643
+## 2    2 93.01724 1.856771
+## 3    3 92.87006 2.105937
+## 4    4 92.64583 2.288841
+## 5    5 92.09872 2.515336
+## 6    6 91.59947 2.435111
+## 7    7 90.94614 2.921147
+## 8    8 90.32937 3.871889
+## 9    9 90.48742 3.579857
+## 10  10 90.90111 2.830579
+## 11  11 89.64792 2.830938
+## 12  12 88.15417 2.863220</code></pre>
+</div>
+<div id="runners-beaten" class="section level2">
+<h2>Runners Beaten</h2>
+<p>Draw analysis is often a quick and dirty way of eliminating runners, but analysis often just looks at raw counts, winners vs loses. The <code>rnrs_btn</code> function calculates the percentage of runners beaten, which obviously benefits from looking at <strong>ALL</strong> runners in a race, rather than just the winners. Once again we need the <code>date_race</code> variable and the <code>dplyr</code> package to isolate individual races.</p>
+<pre class="sourceCode r"><code class="sourceCode r">gulfstream %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(date_race) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">pct_btn =</span> <span class="kw">rnrs_btn</span>(<span class="dt">pos =</span> pos)) %&gt;%
+<span class="st">    </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(gate) %&gt;%
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">pct_btn =</span> <span class="kw">mean</span>(pct_btn, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre>
+<pre><code>## Source: local data frame [14 x 2]
+## 
+##    gate   pct_btn
+## 1     1 0.5421846
+## 2     2 0.5277538
+## 3     3 0.5145231
+## 4     4 0.5281538
+## 5     5 0.4698769
+## 6     6 0.4742947
+## 7     7 0.5166780
+## 8     8 0.4701747
+## 9     9 0.4806135
+## 10   10 0.4694495
+## 11   11 0.4150704
+## 12   12 0.4226667
+## 13   13 0.4600000
+## 14   14 0.6166667</code></pre>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>

@@ -1,19 +1,30 @@
 ---
 title: "zipf_race"
 ---
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
+```{r echo=FALSE}
+library(RcappeR)
 ```
 
-You can also embed plots, for example:
+Assess the performance (ie. handicap) of a winner of a race using race standardisation; which uses the performances of runners in a different, but similar, race.  This function is called by both [zipf_hcp](zipf_hcp.html) and [zipf_init](zipf_init.html), see the [Handicapping using zipf_race](handicap_with_zipf_race.html) vignette for a detailed explanation.
 
-```{r, echo=FALSE}
-plot(cars)
+### Usage
+```{r eval=FALSE}
+zipf_race(race, btn_var, race_2, rating)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Arguments
+
+param | details
+------|-------
+race | dataframe of a race to handicap
+btn\_var | name of variable in **race** that contains the margins (in lbs) between the horses
+race\_2 | dataframe of a second race, that is to be used to handicap **race**
+rating | name of ratings variable (if applicable) in race\_2
+
+### Details
+
+The method of race standardisation used was first explained by Simon Rowlands, of Timeform, and uses Zipfs Law.  See the [Handicapping using zipf_race](handicap_with_zipf_race.html) vignette for a detailed explanation.  
+
+In short the difference at the weights (see [diff_at_wgts](diff_at_wgts.html)) from **race** is added to the **rating** in **race\_2**, creating a vector of possible ratings for the winner of **race**.  This is where Zipfs Law plays its part, as these ratings are weighted according to the corresponding finishing position, placing more significance on the possible ratings using the horses toward the front of the field.
+
+An article by Simon Rowlands explaining his use of Zipfs Law and race standardisation can be found [here](https://betting.betfair.com/horse-racing/bloggers/simon-rowlands/simon-rowlands-on-handicapping-060710.html)

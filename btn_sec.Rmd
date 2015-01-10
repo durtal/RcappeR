@@ -1,0 +1,31 @@
+---
+title: "btn_sec"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Calculates the margins (in seconds) between the winner of a race (the fastest time) and the horses who finished behind.
+
+### Usage
+```{r eval=FALSE}
+btn_sec(times)
+```
+
+### Arguments
+
+param | details
+------|-------
+times | vector of times recorded by each runner
+
+### Details
+
+The function substracts the lowest/fastest time from the rest.
+
+### Example Use
+
+```{r}
+times <- c(59, 59.5, 59.65, 60, 60.5)
+
+btn_sec(times = times)
+```

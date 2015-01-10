@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>conv_wgt</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,93 +164,56 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">conv_wgt</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>Converts weight from different formats/units of measure into lbs.</p>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_wgt</span>(wgt, <span class="dt">regex =</span> <span class="ot">NULL</span>, <span class="dt">from =</span> <span class="st">&quot;st&quot;</span>, <span class="dt">round =</span> <span class="dv">0</span>)</code></pre>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
 <table>
 <thead>
 <tr class="header">
-<th align="left">variable</th>
+<th align="left">param</th>
 <th align="left">details</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
-</tr>
-<tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
-</tr>
-<tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
-</tr>
-<tr class="even">
-<td align="left">dist</td>
-<td align="left">race distance</td>
-</tr>
-<tr class="odd">
-<td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
-</tr>
-<tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
 <td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
+<td align="left">vector of weights to be converted (see examples)</td>
 </tr>
 <tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
+<td align="left">regex</td>
+<td align="left">regular expression to split wgt by (if wgt is a character string representing stones and lbs)</td>
 </tr>
 <tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
+<td align="left">from</td>
+<td align="left">converts from different units of measure</td>
 </tr>
 <tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
+<td align="left">round</td>
+<td align="left">round to nearest digit</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>Converts a numeric weight from kilograms (“kg”) to stones (“st”) into lbs. It also converts a character string of stones and lbs, ie. 9-4 representing 9 stone 7 lbs, into lbs using regex</p>
+</div>
+<div id="example-use" class="section level3">
+<h3>Example Use</h3>
+<pre class="sourceCode r"><code class="sourceCode r">wgts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;9-7&quot;</span>, <span class="st">&quot;9-0&quot;</span>, <span class="st">&quot;11-8&quot;</span>)
+<span class="kw">conv_wgt</span>(<span class="dt">wgt =</span> wgts)</code></pre>
+<pre><code>## [1] 133 126 162</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">wgts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">57</span>, <span class="dv">58</span>, <span class="dv">59</span>)
+<span class="kw">conv_wgt</span>(<span class="dt">wgt =</span> wgts, <span class="dt">from =</span> <span class="st">&quot;kg&quot;</span>)</code></pre>
+<pre><code>## [1] 126 128 130</code></pre>
 </div>
 
 

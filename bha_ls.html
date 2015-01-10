@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>bha_ls</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,93 +164,163 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">bha_ls</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>Return lengths per second scale employed by the BHA when they calculate lengths beaten. Use it to convert the lengths back into seconds, see also <a href="bhascale.html">bhascale</a></p>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bha_ls</span>(<span class="dt">conditions =</span> <span class="ot">NULL</span>)</code></pre>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
 <table>
 <thead>
 <tr class="header">
-<th align="left">variable</th>
+<th align="left">param</th>
 <th align="left">details</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
-</tr>
-<tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
-</tr>
-<tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
-</tr>
-<tr class="even">
-<td align="left">dist</td>
-<td align="left">race distance</td>
-</tr>
-<tr class="odd">
-<td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
-</tr>
-<tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
-<td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
-</tr>
-<tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
-</tr>
-<tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
-</tr>
-<tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
+<td align="left">conditions</td>
+<td align="left">abbreviated concatenation of race conditions, ie. the type of race (<em>flat</em> or <em>national hunt</em>) and the official going.</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="conditions" class="section level3">
+<h3>Conditions</h3>
+<p>To view the scales and corresponding abbreviations (for the <strong>conditions</strong> param) leave the function blank, ie.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bha_ls</span>()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">race type</th>
+<th align="left">going</th>
+<th align="left">scale</th>
+<th align="left">conditions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">flat</td>
+<td align="left">good or quicker</td>
+<td align="left">6.0</td>
+<td align="left">f-gq</td>
+</tr>
+<tr class="even">
+<td align="left">flat</td>
+<td align="left">good, good to soft</td>
+<td align="left">5.5</td>
+<td align="left">f-ggs</td>
+</tr>
+<tr class="odd">
+<td align="left">flat</td>
+<td align="left">good to soft, good</td>
+<td align="left">5.5</td>
+<td align="left">f-gsg</td>
+</tr>
+<tr class="even">
+<td align="left">flat</td>
+<td align="left">good to soft</td>
+<td align="left">5.5</td>
+<td align="left">f-gs</td>
+</tr>
+<tr class="odd">
+<td align="left">flat</td>
+<td align="left">good to soft, soft</td>
+<td align="left">5.5</td>
+<td align="left">f-gss</td>
+</tr>
+<tr class="even">
+<td align="left">flat</td>
+<td align="left">soft, good to soft</td>
+<td align="left">5.0</td>
+<td align="left">f-sgs</td>
+</tr>
+<tr class="odd">
+<td align="left">flat</td>
+<td align="left">soft or slower</td>
+<td align="left">5.0</td>
+<td align="left">f-ss</td>
+</tr>
+<tr class="even">
+<td align="left">flat</td>
+<td align="left">all weather</td>
+<td align="left">6.0</td>
+<td align="left">f-aw</td>
+</tr>
+<tr class="odd">
+<td align="left">flat</td>
+<td align="left">fibresand</td>
+<td align="left">5.0</td>
+<td align="left">f-fs</td>
+</tr>
+<tr class="even">
+<td align="left">national hunt</td>
+<td align="left">good or quicker</td>
+<td align="left">5.0</td>
+<td align="left">nh-gq</td>
+</tr>
+<tr class="odd">
+<td align="left">national hunt</td>
+<td align="left">good, good to soft</td>
+<td align="left">4.5</td>
+<td align="left">nh-ggs</td>
+</tr>
+<tr class="even">
+<td align="left">national hunt</td>
+<td align="left">good to soft, good</td>
+<td align="left">4.5</td>
+<td align="left">nh-gsg</td>
+</tr>
+<tr class="odd">
+<td align="left">national hunt</td>
+<td align="left">good to soft</td>
+<td align="left">4.5</td>
+<td align="left">nh-gs</td>
+</tr>
+<tr class="even">
+<td align="left">national hunt</td>
+<td align="left">good to soft, soft</td>
+<td align="left">4.5</td>
+<td align="left">nh-gss</td>
+</tr>
+<tr class="odd">
+<td align="left">national hunt</td>
+<td align="left">soft, good to soft</td>
+<td align="left">4.0</td>
+<td align="left">nh-sgs</td>
+</tr>
+<tr class="even">
+<td align="left">national hunt</td>
+<td align="left">soft or slower</td>
+<td align="left">4.0</td>
+<td align="left">nh-ss</td>
+</tr>
+<tr class="odd">
+<td align="left">national hunt</td>
+<td align="left">all weather</td>
+<td align="left">5.0</td>
+<td align="left">nh-aw</td>
+</tr>
+<tr class="even">
+<td align="left">national hunt</td>
+<td align="left">fibresand</td>
+<td align="left">4.0</td>
+<td align="left">nh-fs</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.britishhorseracing.com/wp-content/uploads/2014/04/Lengths-Per-Second-Scale-Tables.pdf">Link to PDF</a> with the BHA lengths per second scale.</p>
+</div>
+<div id="example-use" class="section level3">
+<h3>Example Use</h3>
+<p>A “National Hunt” race run on “good to soft, soft” ground</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bha_ls</span>(<span class="dt">conditions =</span> <span class="st">&quot;nh-gss&quot;</span>)</code></pre>
+<pre><code>## [1] 4.5</code></pre>
 </div>
 
 

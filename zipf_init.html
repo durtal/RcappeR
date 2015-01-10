@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>zipf_init</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,93 +164,57 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">zipf_init</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>Initialises a handicap by splitting a dataframe of races into groups of similar class/type, then for each race in the group it calculates a rating using the remaining races in the group. The result is a skeleton handicap from which further handicapping/analysis can be performed. See the <a href="handicap_with_zipf_race.html">Handicapping using zipf_race</a> vignette for a detailed explanation of the use of Zipfs Law, and also <a href="initialise_a_handicap.html">Initialising a Handicap</a> to see <strong>zipf_hcp</strong> in use.</p>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">zipf_init</span>(races, group_by, race_id, btn_var, <span class="dt">.progress =</span> <span class="st">&quot;none&quot;</span>)</code></pre>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
 <table>
 <thead>
 <tr class="header">
-<th align="left">variable</th>
+<th align="left">param</th>
 <th align="left">details</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
+<td align="left">races</td>
+<td align="left">dataframe of races</td>
 </tr>
 <tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
+<td align="left">group_by</td>
+<td align="left">name of variable(s) to group races found in <strong>races</strong>, eg. for US races perhaps group all Claiming races together, all Stakes races, etc, in UK group all Class 4 races, all Listed races, etc.</td>
 </tr>
 <tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
+<td align="left">race_id</td>
+<td align="left">name of variable to split <strong>races</strong> up by so each split is one race</td>
 </tr>
 <tr class="even">
-<td align="left">dist</td>
-<td align="left">race distance</td>
+<td align="left">btn_var</td>
+<td align="left">name of variable in <strong>races</strong> that contains the margins (in lbs) between the horses</td>
 </tr>
 <tr class="odd">
-<td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
-</tr>
-<tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
-<td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
-</tr>
-<tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
-</tr>
-<tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
-</tr>
-<tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
+<td align="left">.progress</td>
+<td align="left"><strong>plyr</strong>’s progress bar, default is “none”, options inc. “text”, “time”, “tk” or “win”</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>Related to <a href="zipf_race.html">zipf_race</a> and <a href="zipf_hcp.html">zipf_hcp</a>, this function will initialise a handicap. It will split a dataframe of races into groups according to the <strong>group_by</strong> param, these groups should be races of similar class/type (so runners are of a similar ability), most (all?) racing jurisdictions employ a type of classification. For each race (identified by the <strong>race_id</strong> param), in each group, the winner is assigned a rating based on the other races in the same group.</p>
+<p>A list is returned consisting of:</p>
+<ul>
+<li><strong>counts</strong> a dataframe of counts per <strong>group_by</strong></li>
+<li><strong>ratings</strong> dataframe of ratings, with 3 variables, <em>group_by</em>, <em>race_id</em> and <em>zipf_rtg</em>.</li>
+</ul>
+<p>An article by Simon Rowlands explaining his use of Zipfs Law and race standardisation can be found <a href="https://betting.betfair.com/horse-racing/bloggers/simon-rowlands/simon-rowlands-on-handicapping-060710.html">here</a></p>
 </div>
 
 

@@ -10,7 +10,7 @@
 
 
 
-<title>gulfstream</title>
+<title>conv_margins</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,93 +164,60 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">gulfstream</h1>
+<h1 class="title">conv_margins</h1>
 </div>
 
 
-<p>The <strong>gulfstream</strong> dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
-<p>The dataset has 2863 rows and 17 columns.</p>
-<div id="variables" class="section level3">
-<h3>Variables</h3>
+<p>Converts margins, between the winner of a race and the horses behind, from lengths into seconds</p>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_margins</span>(btn_l, <span class="dt">cum_l =</span> <span class="ot">TRUE</span>, <span class="dt">win_time =</span> <span class="ot">NULL</span>, <span class="dt">conditions =</span> <span class="ot">NULL</span>)</code></pre>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
 <table>
 <thead>
 <tr class="header">
-<th align="left">variable</th>
+<th align="left">param</th>
 <th align="left">details</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">date</td>
-<td align="left">date of race (format is character “dd/mm/yy”)</td>
+<td align="left">btn_l</td>
+<td align="left">beaten lengths (numeric)</td>
 </tr>
 <tr class="even">
-<td align="left">race</td>
-<td align="left">race number</td>
+<td align="left">cum_l</td>
+<td align="left">indicates whether btn_l is cumulative, default TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">race_type</td>
-<td align="left">type, or class, of race, (ie. “clm”, “mdn clm”, etc)</td>
+<td align="left">win_time</td>
+<td align="left">winners time, optional param, if entered the function returns individual times for each runner</td>
 </tr>
 <tr class="even">
-<td align="left">dist</td>
-<td align="left">race distance</td>
-</tr>
-<tr class="odd">
-<td align="left">surf</td>
-<td align="left">surface (“turf”, or “dirt”)</td>
-</tr>
-<tr class="even">
-<td align="left">value</td>
-<td align="left">race value (or purse)</td>
-</tr>
-<tr class="odd">
-<td align="left">going</td>
-<td align="left">official going</td>
-</tr>
-<tr class="even">
-<td align="left">trainer</td>
-<td align="left">trainer of horse</td>
-</tr>
-<tr class="odd">
-<td align="left">jockey</td>
-<td align="left">jockey</td>
-</tr>
-<tr class="even">
-<td align="left">j_clm</td>
-<td align="left">jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)</td>
-</tr>
-<tr class="odd">
-<td align="left">age</td>
-<td align="left">age of horse</td>
-</tr>
-<tr class="even">
-<td align="left">wgt</td>
-<td align="left">weight carried</td>
-</tr>
-<tr class="odd">
-<td align="left">gate</td>
-<td align="left">starting gate</td>
-</tr>
-<tr class="even">
-<td align="left">pos</td>
-<td align="left">finishing position</td>
-</tr>
-<tr class="odd">
-<td align="left">horse</td>
-<td align="left">horse</td>
-</tr>
-<tr class="even">
-<td align="left">fintime</td>
-<td align="left">final time</td>
-</tr>
-<tr class="odd">
-<td align="left">sect_4f</td>
-<td align="left">sectional time recorded over first four furlongs</td>
+<td align="left">conditions</td>
+<td align="left">race conditions that influence the BHA lengths per second scale to be used</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>As default, the lengths per second scale used is the US convention of 5 lengths per second. However, if the race was run under the jurisdiciton of the BHA, then entering an abbreviation of the races’ conditions will apply the lengths per second scale employed by the BHA. See also <a href="bha_ls.html">bha_ls</a> and <a href="bhascale.html">bhascale</a></p>
+</div>
+<div id="example-use" class="section level3">
+<h3>Example Use</h3>
+<pre class="sourceCode r"><code class="sourceCode r">btn_l &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">1.5</span>)
+
+<span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l)</code></pre>
+<pre><code>## [1] 0.00 0.04 0.10 0.20 0.30</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l, <span class="dt">cum_l =</span> <span class="ot">FALSE</span>)</code></pre>
+<pre><code>## [1] 0.00 0.04 0.14 0.34 0.64</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l, <span class="dt">win_time =</span> <span class="dv">59</span>)</code></pre>
+<pre><code>## [1] 59.00 59.04 59.10 59.20 59.30</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l, <span class="dt">win_time =</span> <span class="dv">59</span>, <span class="dt">conditions =</span> <span class="st">&quot;f-gq&quot;</span>)</code></pre>
+<pre><code>## [1] 59.00 59.03 59.08 59.17 59.25</code></pre>
 </div>
 
 

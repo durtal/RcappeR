@@ -1,19 +1,35 @@
 ---
 title: "zipf_init"
 ---
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
+```{r echo=FALSE}
+library(RcappeR)
 ```
 
-You can also embed plots, for example:
+Initialises a handicap by splitting a dataframe of races into groups of similar class/type, then for each race in the group it calculates a rating using the remaining races in the group.  The result is a skeleton handicap from which further handicapping/analysis can be performed.  See the [Handicapping using zipf_race](handicap_with_zipf_race.html) vignette for a detailed explanation of the use of Zipfs Law, and also [Initialising a Handicap](initialise_a_handicap.html) to see **zipf\_hcp** in use.
 
-```{r, echo=FALSE}
-plot(cars)
+### Usage
+```{r eval=FALSE}
+zipf_init(races, group_by, race_id, btn_var, .progress = "none")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Arguments
+
+param | details
+------|-------
+races | dataframe of races
+group\_by | name of variable(s) to group races found in **races**, eg. for US races perhaps group all Claiming races together, all Stakes races, etc, in UK group all Class 4 races, all Listed races, etc.
+race\_id | name of variable to split **races** up by so each split is one race
+btn\_var | name of variable in **races** that contains the margins (in lbs) between the horses
+.progress | **plyr**'s progress bar, default is "none", options inc. "text", "time", "tk" or "win"
+
+### Details
+
+Related to [zipf_race](zipf_race.html) and [zipf_hcp](zipf_hcp.html), this function will initialise a handicap.  It will split a dataframe of races into groups according to the **group\_by** param, these groups should be races of similar class/type (so runners are of a similar ability), most (all?) racing jurisdictions employ a type of classification.  For each race (identified by the **race\_id** param), in each group, the winner is assigned a rating based on the other races in the same group.
+
+A list is returned consisting of:
+
+* **counts** a dataframe of counts per **group\_by**
+* **ratings** dataframe of ratings, with 3 variables, _group\_by_, _race\_id_ and _zipf\_rtg_.
+
+
+An article by Simon Rowlands explaining his use of Zipfs Law and race standardisation can be found [here](https://betting.betfair.com/horse-racing/bloggers/simon-rowlands/simon-rowlands-on-handicapping-060710.html)

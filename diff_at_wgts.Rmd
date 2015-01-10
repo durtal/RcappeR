@@ -1,0 +1,25 @@
+---
+title: "diff_at_wgts"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Calculates the difference at the weights, taking into account the number of lbs behind the winner a horse finished, and the weight the horse carried compared to the winner.  See the [Data Preparation](data_prep.html), [zipf_race](zipf_race.html) and [zipf_hcp](zipf_hcp.html) vignettes
+
+### Usage
+```{r eval=FALSE}
+diff_at_wgts(btn_lbs, wgt_carried)
+```
+
+### Arguments
+
+param | details
+------|-------
+btn_lbs | beaten lbs between runners
+wgt_carried | weight carried (in lbs)
+
+### Details
+
+This function requires a bit of preparation using other functions in the package, typically [btn_sec](btn_sec.html) and [lbs_per_sec](lbs_per_sec.html), but if data needs to be cleaned then others too.
+

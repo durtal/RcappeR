@@ -2,18 +2,28 @@
 title: "example_race"
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The **example_race** dataset contains fictional data for two races.  The dataset is included in order to show the usage of a number of functions.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(RcappeR)
+```
 
 ```{r}
-summary(cars)
+data(example_race)
 ```
 
-You can also embed plots, for example:
+The dataset has `r dim(example_race)[1]` rows and `r dim(example_race)[2]` columns.
 
-```{r, echo=FALSE}
-plot(cars)
-```
+### Variables
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+variable | details
+---------|--------
+date | date of race
+time | time race started
+pos | finishing position
+horse | horse
+wintime | winners time
+going | official going
+code | flat race
+btn_l | beaten lengths
+dist | race distance

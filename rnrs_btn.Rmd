@@ -1,0 +1,41 @@
+---
+title: "rnrs_btn"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Calculates percentage of runners beaten
+
+### Usage
+```{r eval=FALSE}
+rnrs_btn(pos)
+```
+
+### Arguments
+
+param | details
+------|-------
+pos | finishing positions
+
+### Details
+
+This is best used with the power of the **dplyr** package, to calculate the percentage of runners beaten across numerous races in the same dataframe.
+
+### Example Use
+
+The [gulfstream](gulfstream.html) dataset included in the package can show the usage of this function best.  That dataset contains races over 6 and 8 furlongs, on dirt and turf.  We'll assess the percentage of runners beaten according to starting gate (post position, draw, etc), for races over the 6 furlong dirt course.
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+data(gulfstream)
+
+gulfstream %>%
+    filter(dist == 6, surf == "dirt") %>%
+    group_by(date, race) %>%
+    mutate(pct_btn = rnrs_btn(pos)) %>%
+    ungroup() %>%
+    group_by(gate) %>%
+    summarise(pct_btn = mean(pct_btn))
+```

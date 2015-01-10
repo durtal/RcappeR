@@ -1,0 +1,35 @@
+---
+title: "lbs_per_sec"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Returns a lbs per second scale taking into account race distance and surface
+
+### Usage
+```{r eval=FALSE}
+lbs_per_sec(dist, surf = "turf")
+```
+
+### Arguments
+
+param | details
+------|-------
+dist | race distance (in furlongs, only races between 5 and 16)
+surf | race surface, default is "turf", other option is "dirt" (see details)
+
+### Details
+
+Uses a loess model to return a simple lbs per second scale.  The **dist** parameter must be between 5 and 16, values outside this range will return NA.  If the surface is fibresand, then use the "dirt" option for the **surf** parameter, if all-weather then use the "turf" option.  
+
+Simple model comes from Bob Wilkins' book [Bioenergetics and Racehorse Ratings](http://www.amazon.co.uk/Bioenergetics-Racehorse-Ratings-Bob-Wilkins/dp/0956424309).  This function should eventually be replaced by a more complex/flexible model that takes into account the speed a horse ran its race.
+
+### Example Use
+
+
+```{r}
+lbs_per_sec(dist = 5, surf = "turf")
+
+lbs_per_sec(dist = 5, surf = "dirt")
+```

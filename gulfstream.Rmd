@@ -2,18 +2,36 @@
 title: "gulfstream"
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The **gulfstream** dataset contains data for a collection of races that were run at Gulfstream Park (US) in 2013.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(RcappeR)
+```
 
 ```{r}
-summary(cars)
+data(gulfstream)
 ```
 
-You can also embed plots, for example:
+The dataset has `r dim(gulfstream)[1]` rows and `r dim(gulfstream)[2]` columns.
 
-```{r, echo=FALSE}
-plot(cars)
-```
+### Variables
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+variable | details
+---------|--------
+date | date of race (format is character "dd/mm/yy")
+race | race number
+race_type | type, or class, of race, (ie. "clm", "mdn clm", etc)
+dist | race distance
+surf | surface ("turf", or "dirt")
+value | race value (or purse)
+going | official going
+trainer | trainer of horse
+jockey | jockey
+j_clm | jockey claim (and weight, in lbs, taken off horse due to inexperience of jockey)
+age | age of horse
+wgt | weight carried
+gate | starting gate
+pos | finishing position
+horse | horse
+fintime | final time
+sect_4f | sectional time recorded over first four furlongs

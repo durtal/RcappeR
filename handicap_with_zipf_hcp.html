@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>Handicapping using zipf_hcp</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/united.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+	/* padding for bootstrap navbar */
+	body {
+		padding-top: 50px;
+		padding-bottom: 40px;
+	}
+	@media (max-width: 979px) {
+		body {
+			padding-top: 0;
+		}
+	}
+
+	/* offset scroll position for anchor links (for fixed navbar) */
+	@media (min-width: 980px) {
+		.section h2 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+		.section h3 {
+			padding-top: 52px;
+			margin-top: -52px;
+		}
+	}
+
+	p {
+		font-size: 13px;
+	}
+
+	/* don't use link color in navbar */
+	.dropdown-menu>li>a {
+		color: black;
+	}
+
+	/* some padding for disqus */
+	#disqus_thread {
+		margin-top: 45px;
+	}
+	
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #cccccc; background-color: #303030; }
+code > span.kw { color: #f0dfaf; }
+code > span.dt { color: #dfdfbf; }
+code > span.dv { color: #dcdccc; }
+code > span.bn { color: #dca3a3; }
+code > span.fl { color: #c0bed1; }
+code > span.ch { color: #dca3a3; }
+code > span.st { color: #cc9393; }
+code > span.co { color: #7f9f7f; }
+code > span.ot { color: #efef8f; }
+code > span.al { color: #ffcfaf; }
+code > span.fu { color: #efef8f; }
+code > span.er { color: #c3bf9f; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<button class="btn btn-navbar" type="button" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="http://durtal.github.io" class="brand">durtal.github.io</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li>
+						<a href="index.html">RcappeR home</a>
+					</li>
+					<li>
+						<a href="functions.html">Functions</a>
+					</li>
+					<li class="dropdown">
+						<a href="datasets" class="dropdown-toggle" data-toggle="dropdown">
+							Datasets <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="gulfstream.html">gulfstream</a>
+							</li>
+							<li>
+								<a href="bhascale.html">bhascale</a>
+							</li>
+							<li>
+								<a href="example_race.html">example_race</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="vignettes" class="dropdown-toggle" data-toggle="dropdown">
+							Vignettes <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="data_cleaning.html">Data Cleaning</a>
+							</li>
+							<li>
+								<a href="data_prep.html">Data Preparation</a>
+							</li>
+							<li>
+								<a href="handicap_with_zipf_race.html">(zipf_race)</a>
+							</li>
+    						<li>
+								<a href="handicap_with_zipf_hcp.html">Handicapping (zipf_hcp)</a>
+							</li>
+    						<li>
+								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
+							</li>                            
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="header">
+<h1 class="title">Handicapping using zipf_hcp</h1>
+</div>
+
+
+<p>This vignette walks through the use of <code>zipf_hcp</code>, which can be used to handicap a single race by using a dataset of similar, but different races. In this case we will use part of the <strong>gulfstream</strong> dataset (used in the <a href="data_preparation.html"><strong>Data Preparation</strong></a> and <a href="initialise_handicap.html"><strong>Initialise a Handicap</strong></a> vignettes)</p>
+<div id="gulfstream-dataset" class="section level2">
+<h2>gulfstream Dataset</h2>
+<p>Load the dataset:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(gulfstream)</code></pre>
+<p>First, subset a single race from the dataset, we’ll use the first race in the dataset, we also want to remove that race from the gulfstream dataset (for this vignette). As shown in other vignettes, a unique race id is useful, so we’ll create that variable, <code>date_race</code>, first:</p>
+<pre class="sourceCode r"><code class="sourceCode r">gulfstream$date_race &lt;-<span class="st"> </span><span class="kw">paste</span>(gulfstream$date, gulfstream$race, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)
+<span class="kw">head</span>(gulfstream$date_race)</code></pre>
+<pre><code>## [1] &quot;01/01/13_1&quot; &quot;01/01/13_1&quot; &quot;01/01/13_1&quot; &quot;01/01/13_1&quot; &quot;01/01/13_1&quot;
+## [6] &quot;01/01/13_1&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># subset the race</span>
+race &lt;-<span class="st"> </span><span class="kw">subset</span>(gulfstream, date_race ==<span class="st"> &quot;01/01/13_1&quot;</span>)
+gulfstream &lt;-<span class="st"> </span><span class="kw">subset</span>(gulfstream, date_race !=<span class="st"> &quot;01/01/13_1&quot;</span>)</code></pre>
+<p>To handicap our <code>race</code> we want to only look at races of similar type/class, so further subsetting of the <strong>gulfstream</strong> dataset is needed. Our class of race in <code>race</code> is mdn clm</p>
+<pre class="sourceCode r"><code class="sourceCode r">gulfstream &lt;-<span class="st"> </span><span class="kw">subset</span>(gulfstream, race_type ==<span class="st"> &quot;mdn clm&quot;</span>)</code></pre>
+<p>At this point we need to create some arbitrary ratings for the races in <strong>gulfstream</strong>, this is done below purely to serve as an example, I have included the code in this vignette, it is not important for the use of <code>zipf_hcp</code> but could be useful to see. It is not useful as the correct use of <code>zipf_hcp</code> will call on a dataset that has existing ratings, rather than quickly manufactured ratings, where winners have an arbitrary mean rating of 80.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load dplyr</span>
+<span class="kw">library</span>(dplyr)
+<span class="co"># prepare gulfstream dataset for use of zipf_init</span>
+gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(date_race) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(fintime),
+           <span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> dist, <span class="dt">surf =</span> <span class="st">&quot;dirt&quot;</span>),
+           <span class="dt">btn_lbs =</span> scale *<span class="st"> </span>btn_sec,
+           <span class="dt">diff_wgts =</span> <span class="kw">diff_at_wgts</span>(<span class="dt">btn_lbs =</span> btn_lbs, <span class="dt">wgt_carried =</span> wgt))
+<span class="co"># call zipf_init</span>
+our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_init</span>(<span class="dt">races =</span> gulfstream, <span class="dt">group_by =</span> <span class="st">&quot;race_type&quot;</span>, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>)
+<span class="co"># merge dataframe</span>
+gulfstream &lt;-<span class="st"> </span><span class="kw">merge_zipf_init</span>(<span class="dt">zipf_list =</span> our_hcp, <span class="dt">races =</span> gulfstream, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>)
+<span class="co"># at the moment ratings for winners have a mean of 0, make this mean about 80 by simply adding 80 to zipf_rtg variable</span>
+gulfstream$zipf_rtg &lt;-<span class="st"> </span>gulfstream$zipf_rtg +<span class="st"> </span><span class="dv">80</span></code></pre>
+</div>
+<div id="handicapping-preparation" class="section level2">
+<h2>Handicapping preparation</h2>
+<p>Preparation of our <code>race</code> is now required ahead of using <code>zipf_hcp</code> and the <strong>gulfstream</strong> dataset and the ratings therein. The preparation of a race so it is ready to be handicapped is covered in the <a href="data_preparation.html"><strong>Data Preparation</strong></a> and <a href="initialise_handicap.html"><strong>Initialise a Handicap</strong></a> vignettes. There are a number of variables needed for handicapping a single race, these are:</p>
+<ul>
+<li>race classes, or types</li>
+<li>surface</li>
+<li>distance</li>
+<li>final times
+<ul>
+<li>either times for all runners, or</li>
+<li>a winning time and a way to calculate final times (beaten seconds, or beaten lengths)</li>
+</ul></li>
+<li>weight carried</li>
+</ul>
+<p>The variables above should be pretty common in a racing dataset that you wish to calculate ratings from. In the <strong>gulfstream</strong> dataset we have all the above. Individual final times for horses might be a hurdle, but lengths beaten is a much more common variable, and as covered in the <a href="data_cleaning.html"><strong>Data Cleaning</strong></a> vignette, the <code>conv_margins</code> can convert lengths beaten into final times.</p>
+<p>We now need to use the variables listed above to calculate a <strong>difference at the weights</strong> assessment, this takes into account the surface, distance, weight carried, and beaten margins. The best (imo) way to do this is to use the package <code>dplyr</code> which takes advantage of the <code>%&gt;%</code> pipe function from <code>magrittr</code> to calculate the necessary variables. The code below processes our <code>race</code>, creating the necessary variables, finishing with a <code>diff_wgts</code> variable. It is explained in more detail below the code, the functions used from <strong>RcappeR</strong> are <code>btn_sec</code>, <code>lbs_per_sec</code> and <code>diff_at_wgts</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">race &lt;-<span class="st"> </span>race %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(fintime),
+           <span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> dist, <span class="dt">surf =</span> <span class="st">&quot;dirt&quot;</span>),
+           <span class="dt">btn_lbs =</span> scale *<span class="st"> </span>btn_sec,
+           <span class="dt">diff_wgts =</span> <span class="kw">diff_at_wgts</span>(<span class="dt">btn_lbs =</span> btn_lbs, <span class="dt">wgt_carried =</span> wgt))</code></pre>
+<ol style="list-style-type: decimal">
+<li>Use gulfstream dataset and store results back in gulfstream
+<ul>
+<li><code>gulfstream &lt;- gulfstream %&gt;%</code></li>
+</ul></li>
+<li>Group races by the unique race ids (date_race)
+<ul>
+<li><code>group_by(date_race)</code></li>
+</ul></li>
+<li>Create new variables within each group (each race)
+<ul>
+<li>calculate margins (in seconds) between horses
+<ul>
+<li><code>btn_sec = btn_sec(fintime),</code></li>
+</ul></li>
+<li>calculate lbs per second scale
+<ul>
+<li><code>scale = lbs_per_sec(dist = dist, surf = &quot;dirt&quot;),</code></li>
+</ul></li>
+<li>calculate beaten lbs
+<ul>
+<li><code>btn_lbs = scale * btn_sec,</code></li>
+</ul></li>
+<li>calculate difference at the weights (margins, and weight carried)
+<ul>
+<li><code>diff_at_wtgs(btn_lbs = btn_lbs, wgt_carried = wgt))</code></li>
+</ul></li>
+</ul></li>
+</ol>
+</div>
+<div id="handicapping-methodology" class="section level2">
+<h2>Handicapping methodology</h2>
+<p>The handicapping methodology uses a version of race standardisation first explained by Simon Rowlands, Head of Research at Timeform, specifically using Zipfs Law (hence the names of this family of functions, see also <code>?zipf_race</code> and <code>?zipf_hcp</code>).</p>
+<p>Race standardisation looks at races of similar class/type and assesses the performance of one winner, by assessing the performance of winners in the different, but similar, races. A more detailed explanation can be found in the <a href="zipf_race.html"><strong>Zipf Race</strong></a> vignette, which walks through a simple example using the <code>zipf_race</code> function, which is called by <code>zipf_init</code> (and <code>zipf_hcp</code>).</p>
+<p>The similar races we’re using in this vignette are all mdn clm, and have ratings (arbitrarily created), a quick look at the distribution of winners’ ratings, in our <strong>gulfstream</strong> dataset:</p>
+<p><img src="handicap_with_zipf_hcp_files/figure-html/unnamed-chunk-7-1.png" title="" alt="" width="672" /></p>
+</div>
+<div id="handicapping-a-race---zipf_hcp" class="section level2">
+<h2>Handicapping a Race - zipf_hcp</h2>
+<p>Now to use <code>zipf_hcp</code> and handicap our <code>race</code>. Below is a simple table explaining the various inputs to <code>zipf_hcp</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">param</th>
+<th align="left">details</th>
+<th align="left">example input</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">race</td>
+<td align="left">a dataframe of a single race</td>
+<td align="left"><code>race</code></td>
+</tr>
+<tr class="even">
+<td align="left">past_races</td>
+<td align="left">dataframe of past races to be used to handicap</td>
+<td align="left"><code>gulfstream</code></td>
+</tr>
+<tr class="odd">
+<td align="left">race_id</td>
+<td align="left">name of variable, identifying unique races in <code>past_races</code></td>
+<td align="left"><code>date_race</code></td>
+</tr>
+<tr class="even">
+<td align="left">btn_var</td>
+<td align="left">name of variable in <code>race</code> with margins between horses</td>
+<td align="left"><code>&quot;diff_wgts&quot;</code></td>
+</tr>
+<tr class="odd">
+<td align="left">rating</td>
+<td align="left">name of variable in <code>past_races</code> that contains ratings of those horses</td>
+<td align="left"><code>zipf_rtg</code></td>
+</tr>
+<tr class="even">
+<td align="left">results</td>
+<td align="left">determines output, a detailed list, or a single rating</td>
+<td align="left"><code>&quot;detail&quot;</code> (default value)</td>
+</tr>
+<tr class="odd">
+<td align="left">.progress</td>
+<td align="left">plyr’s progress bar, useful when <code>past_races</code> is a large dataset</td>
+<td align="left"><code>&quot;none&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>So:</p>
+<pre class="sourceCode r"><code class="sourceCode r">our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_hcp</span>(<span class="dt">race =</span> race, <span class="dt">past_races =</span> gulfstream, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>, <span class="dt">rating =</span> <span class="st">&quot;zipf_rtg&quot;</span>, <span class="dt">.progress =</span> <span class="st">&quot;text&quot;</span>)</code></pre>
+<p>This small example, handicapping a single race using 127 took 0.0380251 seconds.</p>
+<p>The output of <code>zipf_hcp</code> is a list (of class “rcapper_zipf_hcp”), there are print an summary methods for this class of object (though both do the same):</p>
+<pre class="sourceCode r"><code class="sourceCode r">our_hcp</code></pre>
+<pre><code>## 
+## No. of races used:    127
+## Mean Rating:                          92.41
+## Std. Dev:                                         1.15</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(our_hcp)</code></pre>
+<pre><code>## 
+## No. of races used:    127
+## Mean Rating:                          92.41
+## Std. Dev:                                         1.15</code></pre>
+<p>There is also a plot method, perhaps the most useful, which plots the distribution of ratings for the winner of <code>race</code>. It includes the mean rating in the title of the plot, as well as a vertical line in the plot.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(our_hcp)</code></pre>
+<p><img src="handicap_with_zipf_hcp_files/figure-html/unnamed-chunk-11-1.png" title="" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>From this point, decisions by the handicapper can be made, the various elements of the list can be accessed for further analysis, for example, a dataset of possible ratings for the winner of <code>race</code> can be accessed:</p>
+<pre class="sourceCode r"><code class="sourceCode r">possible_rtgs &lt;-<span class="st"> </span>our_hcp$ratings
+<span class="kw">head</span>(possible_rtgs)</code></pre>
+<pre><code>##     date_race zipf_rtg
+## 1  01/02/13_2    90.90
+## 2 01/03/13_10    92.22
+## 3  01/03/13_6    92.96
+## 4  01/03/13_7    93.19
+## 5  01/12/13_4    90.92
+## 6  01/12/13_6    92.51</code></pre>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>

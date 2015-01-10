@@ -1,19 +1,11 @@
 ---
-title: "index"
+title: "RcappeR"
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+A collection of tools to aid the analysis and handicapping of Thoroughbred Horse Racing.  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+The package includes various functions to help with the cleaning and preparation of racing data, such as cleaning times, converting and calculating margins between horses.  See [Functions](functions.html) for a list of functions and links to their pages, and the vignettes [Data Cleaning](data_cleaning.html) and [Data Preparation](data_prep.html) that show a number of these functions being applied.  
 
-```{r}
-summary(cars)
-```
+Those functions help prepare data for the handicapping of a collection of races, for which there are a number of functions, such as calculating a lbs per second scale, difference at the weights, before calculating ratings using race standardisation and zipf's law.  See under the heading **Handicapping** on the [Functions](functions.html) page for a list of functions, and the vignettes showing the use of [Handicapping using zipf_race](handicap_with_zipf_race.html), [Handicapping using zipf_hcp](handicap_with_zipf_hcp.html) and [Initialising a Handicap](initialise_a_handicap.html) in creating ratings.
 
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The package also contains a few datasets to show how to use the functions, though the functions should be quite flexible, performing useful tasks.  The datasets include the lengths per second scale the BHA employ in calculating margins between horses (see [bhascale](bhascale.html)), a couple of example races to show the cleaning functions (see [example\_race](example_race.html)), and a dataset of races run at Gulfstream Park in the US (see [gulfstream](gulfstream.html))
