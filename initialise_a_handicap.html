@@ -64,22 +64,16 @@
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-pre, code { color: #cccccc; background-color: #303030; }
-code > span.kw { color: #f0dfaf; }
-code > span.dt { color: #dfdfbf; }
-code > span.dv { color: #dcdccc; }
-code > span.bn { color: #dca3a3; }
-code > span.fl { color: #c0bed1; }
-code > span.ch { color: #dca3a3; }
-code > span.st { color: #cc9393; }
-code > span.co { color: #7f9f7f; }
-code > span.ot { color: #efef8f; }
-code > span.al { color: #ffcfaf; }
-code > span.fu { color: #efef8f; }
-code > span.er { color: #c3bf9f; }
+code > span.kw { color: #0000ff; }
+code > span.ch { color: #008080; }
+code > span.st { color: #008080; }
+code > span.co { color: #008000; }
+code > span.ot { color: #ff4000; }
+code > span.al { color: #ff0000; }
+code > span.er { font-weight: bold; }
 </style>
 <style type="text/css">
   pre:not([class]) {
@@ -168,7 +162,7 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 
-<p>This vignette walks through the use of <code>zipf_init</code>, which initialises a handicap using a collection of races, in this case the <strong>gulfstream</strong> dataset (used in <a href="data_preparation.html"><strong>Data Preparation</strong></a> vignettes). There are certain steps necessary ahead of using <code>zipf_init</code>, these are covered in the <strong>Data Preparation</strong> vignette, but will be covered again here.</p>
+<p>This vignette walks through the use of <code>zipf_init</code>, which initialises a handicap using a collection of races, in this case the <strong>gulfstream</strong> dataset (used in <a href="data_prep.html"><strong>Data Preparation</strong></a> vignettes). There are certain steps necessary ahead of using <code>zipf_init</code>, these are covered in the <strong>Data Preparation</strong> vignette, but will be covered again here.</p>
 <div id="gulfstream-dataset" class="section level2">
 <h2>gulfstream Dataset</h2>
 <p>Load the dataset:</p>
@@ -264,7 +258,7 @@ new_gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
 <div id="handicapping-methodology" class="section level2">
 <h2>Handicapping methodology</h2>
 <p>The handicapping methodology uses a version of race standardisation first explained by Simon Rowlands, Head of Research at Timeform, specifically using Zipfs Law (hence the names of this family of functions, see also <code>?zipf_race</code> and <code>?zipf_hcp</code>).</p>
-<p>Race standardisation looks at races of similar class/type and assesses the performance of one winner, by assessing the performance of winners in the different, but similar, races. A more detailed explanation can be found in the <a href="zipf_race.html"><strong>Zipf Race</strong></a> vignette, which walks through a simple example using the <code>zipf_race</code> function, which is called by <code>zipf_init</code> (and <code>zipf_hcp</code>).</p>
+<p>Race standardisation looks at races of similar class/type and assesses the performance of one winner, by assessing the performance of winners in the different, but similar, races. A more detailed explanation can be found in the <a href="handicap_with_zipf_race.html"><strong>Handicap with zipf_race</strong></a> vignette, which walks through a simple example using the <code>zipf_race</code> function, which is called by <code>zipf_init</code> (and <code>zipf_hcp</code>).</p>
 </div>
 <div id="initialising-a-handicap---zipf_init" class="section level2">
 <h2>Initialising a handicap - zipf_init</h2>
@@ -308,7 +302,7 @@ new_gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
 </table>
 <p>So:</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_init</span>(<span class="dt">races =</span> new_gulfstream, <span class="dt">group_by =</span> <span class="st">&quot;race_type&quot;</span>, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>, <span class="dt">.progress =</span> <span class="st">&quot;text&quot;</span>)</code></pre>
-<p>This small example, handicapping 324 races, split into 2 different race types (mdn clm, clm), took 13.3568552 seconds.</p>
+<p>This small example, handicapping 324 races, split into 2 different race types (mdn clm, clm), took 20.5466239 seconds.</p>
 <p>The output from <code>zipf_init</code> is a list (of class “rcapper_zipf_init”), there are print and summary methods for this class of object (though both do the same):</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp</code></pre>
 <pre><code>## 

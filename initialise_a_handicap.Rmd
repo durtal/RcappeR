@@ -6,7 +6,7 @@ title: "Initialising a Handicap"
 library(RcappeR)
 ```
 
-This vignette walks through the use of `zipf_init`, which initialises a handicap using a collection of races, in this case the **gulfstream** dataset (used in [**Data Preparation**](data_preparation.html) vignettes).  There are certain steps necessary ahead of using `zipf_init`, these are covered in the **Data Preparation** vignette, but will be covered again here.
+This vignette walks through the use of `zipf_init`, which initialises a handicap using a collection of races, in this case the **gulfstream** dataset (used in [**Data Preparation**](data_prep.html) vignettes).  There are certain steps necessary ahead of using `zipf_init`, these are covered in the **Data Preparation** vignette, but will be covered again here.
 
 ## gulfstream Dataset
 
@@ -83,7 +83,7 @@ At this stage, the **gulfstream** dataset can be entered into `zipf_init`.  Firs
 
 The handicapping methodology uses a version of race standardisation first explained by Simon Rowlands, Head of Research at Timeform, specifically using Zipfs Law (hence the names of this family of functions, see also `?zipf_race` and `?zipf_hcp`).
 
-Race standardisation looks at races of similar class/type and assesses the performance of one winner, by assessing the performance of winners in the different, but similar, races.  A more detailed explanation can be found in the [**Zipf Race**](zipf_race.html) vignette, which walks through a simple example using the `zipf_race` function, which is called by `zipf_init` (and `zipf_hcp`).
+Race standardisation looks at races of similar class/type and assesses the performance of one winner, by assessing the performance of winners in the different, but similar, races.  A more detailed explanation can be found in the [**Handicap with zipf_race**](handicap_with_zipf_race.html) vignette, which walks through a simple example using the `zipf_race` function, which is called by `zipf_init` (and `zipf_hcp`).
 
 ## Initialising a handicap - zipf_init
 

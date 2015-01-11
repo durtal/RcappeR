@@ -1,5 +1,5 @@
 ---
-title: "data_prep"
+title: "Data Preparation"
 ---
 
 ```{r, echo=FALSE}
@@ -75,7 +75,7 @@ gulfstream <- gulfstream %>%
     + calculate difference at the weights (margins, and weight carried)
         + `diff_at_wtgs(btn_lbs = btn_lbs, wgt_carried = wgt))`
         
-At this stage handicapping can begin by using the `zipf_init` function, see [**Initialising a Handicap**](initialise_handicap.html) vignette.  Ahead of using `zipf_race` and `zipf_hcp` users will perform the same steps as above, but with a dataset containing a single race (so no need for _group\_by_) that needs to be handicapped, the code shows the theoretical steps for one race.
+At this stage handicapping can begin by using the `zipf_init` function, see [**Initialising a Handicap**](initialise_a_handicap.html) vignette.  Ahead of using `zipf_race` and `zipf_hcp` users will perform the same steps as above, but with a dataset containing a single race (so no need for _group\_by_) that needs to be handicapped, the code shows the theoretical steps for one race.
 
 ```{r eval=FALSE}
 one_race <- one_race %>%

@@ -10,7 +10,7 @@
 
 
 
-<title>data_prep</title>
+<title>Data Preparation</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -64,22 +64,16 @@
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; background-color: #303030; color: #cccccc; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-pre, code { color: #cccccc; background-color: #303030; }
-code > span.kw { color: #f0dfaf; }
-code > span.dt { color: #dfdfbf; }
-code > span.dv { color: #dcdccc; }
-code > span.bn { color: #dca3a3; }
-code > span.fl { color: #c0bed1; }
-code > span.ch { color: #dca3a3; }
-code > span.st { color: #cc9393; }
-code > span.co { color: #7f9f7f; }
-code > span.ot { color: #efef8f; }
-code > span.al { color: #ffcfaf; }
-code > span.fu { color: #efef8f; }
-code > span.er { color: #c3bf9f; }
+code > span.kw { color: #0000ff; }
+code > span.ch { color: #008080; }
+code > span.st { color: #008080; }
+code > span.co { color: #008000; }
+code > span.ot { color: #ff4000; }
+code > span.al { color: #ff0000; }
+code > span.er { font-weight: bold; }
 </style>
 <style type="text/css">
   pre:not([class]) {
@@ -164,7 +158,7 @@ code > span.er { color: #c3bf9f; }
 </div>
 
 <div id="header">
-<h1 class="title">data_prep</h1>
+<h1 class="title">Data Preparation</h1>
 </div>
 
 
@@ -260,7 +254,7 @@ gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
 </ul></li>
 </ul></li>
 </ol>
-<p>At this stage handicapping can begin by using the <code>zipf_init</code> function, see <a href="initialise_handicap.html"><strong>Initialising a Handicap</strong></a> vignette. Ahead of using <code>zipf_race</code> and <code>zipf_hcp</code> users will perform the same steps as above, but with a dataset containing a single race (so no need for <em>group_by</em>) that needs to be handicapped, the code shows the theoretical steps for one race.</p>
+<p>At this stage handicapping can begin by using the <code>zipf_init</code> function, see <a href="initialise_a_handicap.html"><strong>Initialising a Handicap</strong></a> vignette. Ahead of using <code>zipf_race</code> and <code>zipf_hcp</code> users will perform the same steps as above, but with a dataset containing a single race (so no need for <em>group_by</em>) that needs to be handicapped, the code shows the theoretical steps for one race.</p>
 <pre class="sourceCode r"><code class="sourceCode r">one_race &lt;-<span class="st"> </span>one_race %&gt;%
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">btn_sec =</span> <span class="kw">btn_sec</span>(fintime),
            <span class="dt">scale =</span> <span class="kw">lbs_per_sec</span>(<span class="dt">dist =</span> dist, <span class="dt">surf =</span> <span class="st">&quot;dirt&quot;</span>),
