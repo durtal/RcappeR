@@ -1,0 +1,22 @@
+---
+title: "merge_zipf_init"
+---
+
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Takes the list returned after using [zipf_init](zipf_init.html) and the dataframe entered into the `zipf_init` function, and merges the two together, returning a dataframe with initial ratings per runner.
+
+### Usage
+```{r eval=FALSE}
+merge_zipf_init(zipf_list, races, btn_var = NULL)
+```
+
+### Arguments
+
+param | details
+------|-------
+zipf\_list | list returned by `zipf_init`
+races | dataframe of races that were entered into `zipf_init`
+btn\_var | name of variable in **races** with the margins between horses, if entered it will calculate ratings for all losers by subtracting the **btn\_var** from the winners rating

@@ -1,0 +1,31 @@
+---
+title: "mean_rating"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Helper function to be used as the statistic parameter to the `boot` function from the boot package.  The `boot` function generates replicates of a statistic using bootstrap resampling.  This function can be used when wishing to bootstrap the mean of possible ratings returned by [zipf_hcp](zipf_hcp.html).
+
+### Usage
+```{r eval=FALSE}
+mean_rating(data, index)
+```
+
+### Arguments
+
+param | details
+------|-------
+data | dataframe
+index | row indexes
+
+### Example
+
+Imagine `zipf_hcp` has been used to handicap a race, but the sample of races used is only small, this is a good time to use those races with the `mean_rating` and `boot` functions to resample them and generate a more robust mean
+
+```{r eval=FALSE}
+library(boot)
+
+hcp_out # this is the list returned by 'zipf_hcp'
+boot(data = hcp_out$ratings, statistic = mean_rating, R = 1000)
+```
