@@ -2,10 +2,18 @@ RcappeR
 ========
 
 ### Overview
-A collection of tools to aid the analysis and handicapping of Thoroughbred Horse Racing.  A number of tools help do grunt work, helping to clean and prepare data for the more complicated tools.  These cleaning tools include converting margins from lengths into seconds, converting character string times into numeric times, etc.  The more complicated tools help with handicapping the races, by using race standardisation.
+A collection of tools to aid the analysis and handicapping of Thoroughbred Horse Racing.  A number of tools help with grunt work, cleaning and preparing data for the more complicated tools.  These cleaning tools include converting margins from lengths into seconds, converting character string times into numeric times, etc.  The more complicated tools help with handicapping the races, by using race standardisation.
+
+There are help pages available, found [here](http://durtal.github.io/RcappeR).
+
+### Installation
+Within R
+```R
+devtools::install_github(repo = "durtal/RcappeR")
+```
 
 ### Vignettes
-Five vignettes walking through data cleaning and preparation, as well as explaining (hopefully) the use of the more complicated functions `zipf_race`, `zipf_hcp` and `zipf_init`.
+Five vignettes walking through data cleaning and preparation, as well as explaining (hopefully) the use of the more complicated functions `zipf_race`, `zipf_hcp` and `zipf_init`, are included in the package.  These vignettes can also be found in the help pages.
 
 ```R
 browseVignettes(package = "RcappeR")
@@ -22,3 +30,7 @@ browseVignettes(package = "RcappeR")
 4. Weight for Age dataset and function to calculate weight for age scale using the date the race
 5. More
 6. Even more
+
+### Contribute
+
+Please feel free to get in touch with suggestions, contributions, improvements, etc.
