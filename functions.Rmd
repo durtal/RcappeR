@@ -15,6 +15,7 @@ function | what's it for | help
 conv\_times | converts times in character format (such as "1m39.99") into a time in seconds | [help](conv_times.html)
 conv\_margins | converts margins between horses from lengths into seconds | [help](conv_margins.html)
 conv\_wgt | converts weights from character format of stones-lbs, or from numeric format from kg to lbs | [help](conv_wgt.html)
+conv\_len | converts lengths from character format, such as "1 3/4" or "nse", into numeric format | [help](conv_len.html)
 
 ### Preparation
 

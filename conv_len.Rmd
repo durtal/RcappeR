@@ -1,0 +1,31 @@
+---
+title: "conv_len"
+---
+```{r echo=FALSE}
+library(RcappeR)
+```
+
+Converts character vector of lengths, such as "3/4", "nse", "hd", and "1 1/2", into numeric vector.
+
+### Usage
+```{r eval=FALSE}
+conv_len(lengths)
+```
+
+### Arguments
+
+param | details
+------|-------
+lengths | character vector of lengths
+
+### Details
+
+This function makes some assumptions, so may need tweaking over time. For each string in a vector it is first split up by the spaces in it, so "1 3/4" is split into "1" "3/4", if there are no spaces then it assesses the single number/letters against a list of common length margins. If the split vector has length 2 then it assumes the first element is a whole number, and the second is a fraction (like "3/4"), it calculates the total.
+
+### Example Use
+
+```{r}
+lengths <- c("0", "nse", "hd", "1/2", "3/4", "1 1/2", "3 3/4")
+
+conv_len(lengths = lengths)
+```
