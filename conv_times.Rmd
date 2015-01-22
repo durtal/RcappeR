@@ -20,11 +20,11 @@ regex | regular expression to split times by
 
 ### Details
 
-Takes a character string representing a race time, splits it up according to the regular expression `[[:punct:]]|m|\s+`, so times like **1m39.99**, **1 39.99** or **1:39.99** are split up into **1**, **39** and **99** (ie. minutes, seconds, milliseconds).  The function the converts these into seconds and sums them up, returning a numeric time in seconds.  The `regex` paramater allows for custom regular expressions to be entered.
+Takes a character string representing a race time, splits it up according to the regular expression `[:punct:]]\\s?|\\s?[[:alpha:]]+\\s?|\\s+`, so times like **1m39.99**, **1 39.99**, **1 min 39.99** or **1:39.99** are split up into **1**, **39** and **99** (ie. minutes, seconds, milliseconds).  The function the converts these into seconds and sums them up, returning a numeric time in seconds.  The `regex` paramater allows for custom regular expressions to be entered.
 
 ### Example Use
 
 ```{r}
-times <- c("1.39.99", "1m39.99", "1m 39.99", "1:39.99")
+times <- c("1.39.99", "1m39.99", "1m 39.99", "1:39.99", "1 min 39.99")
 conv_times(times = times)
 ```
