@@ -7,7 +7,7 @@
 #'
 #' @details Takes a character string representing a race time, splits it up
 #' according to a regular expression that looks for punctuation, a space or the
-#' letter 'm' (full regex = "[[:punct:]]|m|\\s+"), so times like '1m39.99',
+#' letter 'm' (full regex = "[[:punct:]]\\s?|\\s?[[:alpha:]]\\s?|\\s+"), so times like '1m39.99',
 #' '1 39.99' or '1.39.99' are split into '1', '39' and '99', it then recombines
 #' to return a numeric time in seconds.  If there are any race times that this
 #' doesn't cater for then use the \strong{regex} param to enter a specific
@@ -27,7 +27,7 @@ conv_times <- function(times, regex = NULL) {
 
     # if no regex is included use default
     if(is.null(regex)) {
-        regex <- "[[:punct:]]\\s?|m\\s?|\\s+"
+        regex <- "[[:punct:]]\\s?|\\s?[[:alpha:]]+\\s?|\\s+"
     }
     
     # check if times are in character format
