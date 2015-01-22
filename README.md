@@ -25,11 +25,9 @@ browseVignettes(package = "RcappeR")
     * how many lbs better/worse is an average winner of a grade 1 compared to a listed winner
 2. More complete lbs per second scale
     * all runners over same distance get same lbs per second scale, regardless of speed they ran.
-3. More cleaning tools
-    * clean a character vector of lengths into numeric, ie "3/4" into 0.75 or "1 3/4" into 1.75
-4. Weight for Age dataset and function to calculate weight for age scale using the date the race
-5. More
-6. Even more
+3. Weight for Age dataset and function to calculate weight for age scale using the date the race
+4. More
+5. Even more
 
 ### Contribute
 
