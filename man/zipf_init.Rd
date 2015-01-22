@@ -24,6 +24,8 @@ between horses}
 \value{
 Returns a list consisting of:
 \itemize{
+     \item \strong{groups} contains \strong{group_by} param
+     \item \strong{race_id} contains \strong{race_id} param
      \item \strong{counts} dataframe of counts per group_by
      \item \strong{ratings} dataframe of ratings (with 3 variables,
      \emph{group_by}, \emph{race_id}, and \emph{zipf_rtg})

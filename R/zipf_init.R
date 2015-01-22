@@ -14,6 +14,8 @@
 #' 
 #' @return Returns a list consisting of:
 #' \itemize{
+#'      \item \strong{groups} contains \strong{group_by} param
+#'      \item \strong{race_id} contains \strong{race_id} param
 #'      \item \strong{counts} dataframe of counts per group_by
 #'      \item \strong{ratings} dataframe of ratings (with 3 variables, 
 #'      \emph{group_by}, \emph{race_id}, and \emph{zipf_rtg})
@@ -68,6 +70,9 @@ zipf_init <- function(races, group_by, race_id, btn_var, .progress = "none") {
     # assign a custom class to the list to allow S3 methods (see below)
     class(rcapper_output) <- "rcapper_zipf_init"
     
+    rcapper_output$groups <- group_by
+    rcapper_output$race_id <- race_id
+    
     # table showing number of races in each
     rcapper_output$counts <- counts
     
@@ -83,11 +88,18 @@ zipf_init <- function(races, group_by, race_id, btn_var, .progress = "none") {
 print.rcapper_zipf_init <- function(x, ...) {
     
     object <- x
-    n_races <- length(object$ratings$race_type)
-    groups <- toupper(paste(unique(object$ratings$race_type), collapse = ", "))
+    n_races <- length(object$ratings$zipf_rtg)
     
-    cat("\nNo of races:\t", n_races)
-    cat("\nGroups:\t\t\t\t\t\t", groups)
+    groups <- unique(object$ratings[,object$groups])
+    if(is.data.frame(groups)) {
+        groups <- as.vector(apply(groups, MARGIN = 1, paste, collapse = " - "))
+    }
+    
+    groups <- paste(groups, collapse = "\n\t\t\t")
+    
+    output <- paste("\nNo. of races: \n\t\t", n_races, "\nGroups: \n\t\t", groups)
+    
+    cat(output)
 }
 
 #' summary method for output of \link{zipf_init}
@@ -95,11 +107,18 @@ print.rcapper_zipf_init <- function(x, ...) {
 summary.rcapper_zipf_init <- function(x, ...) {
     
     object <- x
-    n_races <- length(object$ratings$race_type)
-    groups <- toupper(paste(unique(object$ratings$race_type), collapse = ", "))
+    n_races <- length(object$ratings$zipf_rtg)
     
-    cat("\nNo of races:\t", n_races)
-    cat("\nGroups:\t\t\t\t\t\t", groups)
+    groups <- unique(object$ratings[,object$groups])
+    if(is.data.frame(groups)) {
+        groups <- as.vector(apply(groups, MARGIN = 1, paste, collapse = " - "))
+    }
+    
+    groups <- paste(groups, collapse = "\n\t\t\t")
+
+    output <- paste("\nNo. of races: \n\t\t", n_races, "\nGroups: \n\t\t", groups)
+    
+    cat(output)
 }
 
 #' plot method for output of \link{zipf_init}
@@ -112,7 +131,6 @@ plot.rcapper_zipf_init <- function(x, ...) {
     # or more variables into zipf_init (param group_by) then need to facet_wrap
     # the plot by these N variables
     df <- object$ratings
-    names(df)[1] <- "race_type"
     
     # look at creating binwidths based on data
     # http://stats.stackexchange.com/questions/798/calculating-optimal-number-of-bins-in-a-histogram-for-n-where-n-ranges-from-30
@@ -123,7 +141,7 @@ plot.rcapper_zipf_init <- function(x, ...) {
                                 fill = "#d9220f", color = "#fcfcfc") +
         ggplot2::geom_density(fill = "#d8d8d8", alpha = .25) +
         ggplot2::labs(title = "zipf_init ratings") +
-        ggplot2::facet_wrap(~race_type, scales = "free") +
+        ggplot2::facet_wrap(object$groups, scales = "free") +
         theme_rcapper()
 }
 
@@ -148,8 +166,7 @@ merge_zipf_init <- function(zipf_list, races, btn_var = NULL) {
     }
     
     ratings <- zipf_list$ratings
-    names_len <- (length(names(ratings))) - 1
-    mergeby <- names(ratings)[1:names_len]
+    mergeby <- c(zipf_list$race_id, zipf_list$groups)
     tmp <- merge(x = races, y = ratings, by = mergeby)
     
     # if user enters btn_var calculate ratings
