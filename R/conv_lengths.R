@@ -21,12 +21,12 @@
 #' 
 conv_len <- function(lengths) {
     
-    lenlist <- list("0" = 0, "nse" = 0.02, "shd" = 0.05, "hd" = 0.1, "nk" = 0.2,
-                    "1/4" = 0.25, "1/2" = 0.5, "3/4" = .75)
+    lenlist <- list("0" = 0, "dh" = 0, "nse" = 0.02, "shd" = 0.05, "sh" = 0.05, 
+                    "hd" = 0.1, "nk" = 0.2, "1/4" = 0.25, "1/2" = 0.5, "3/4" = 0.75)
     
     lens <- sapply(lengths, function(x) {
         
-        x <- unlist(strsplit(x, "\\s+"))
+        x <- unlist(strsplit(x, "\\s+|-"))
         
         if(length(x) == 2) {
             frac <- x[2]
@@ -37,10 +37,19 @@ conv_len <- function(lengths) {
         }
         
         if(length(x) == 1) {
-            len <- lenlist[[x]]
-            if(is.null(len)) {
+            if(grepl(pattern = "[[:alpha:]]+", x = x)) {
+                x <- tolower(x)
+                len <- lenlist[[x]]
+                if(is.null(len)) {
+                    len <- as.numeric(x)
+                }
+            } else {
                 len <- as.numeric(x)
             }
+        }
+        
+        if(length(x) == 0) {
+            len <- as.numeric(0)
         }
         
         return(len)
