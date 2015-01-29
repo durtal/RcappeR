@@ -148,7 +148,17 @@ code > span.er { font-weight: bold; }
 							</li>
     						<li>
 								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
-							</li>                            
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="blog" class="dropdown-toggle" data-toggle="dropdown">
+							Blog <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="wild_data_example.html">Wild Horse Racing Data</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -193,7 +203,11 @@ code > span.er { font-weight: bold; }
 <pre class="sourceCode r"><code class="sourceCode r">lengths &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;nse&quot;</span>, <span class="st">&quot;hd&quot;</span>, <span class="st">&quot;1/2&quot;</span>, <span class="st">&quot;3/4&quot;</span>, <span class="st">&quot;1 1/2&quot;</span>, <span class="st">&quot;3 3/4&quot;</span>)
 
 <span class="kw">conv_len</span>(<span class="dt">lengths =</span> lengths)</code></pre>
-<pre><code>## [1] 0.00 0.02 0.10 0.50 0.75 1.50 3.75</code></pre>
+<pre><code>## Warning in FUN(c(&quot;0&quot;, &quot;nse&quot;, &quot;hd&quot;, &quot;1/2&quot;, &quot;3/4&quot;, &quot;1 1/2&quot;, &quot;3 3/4&quot;)[[7L]],
+## : NAs introduced by coercion</code></pre>
+<pre><code>## Warning in FUN(c(&quot;0&quot;, &quot;nse&quot;, &quot;hd&quot;, &quot;1/2&quot;, &quot;3/4&quot;, &quot;1 1/2&quot;, &quot;3 3/4&quot;)[[7L]],
+## : NAs introduced by coercion</code></pre>
+<pre><code>## [1] 0.00 0.02 0.10   NA   NA 1.50 3.75</code></pre>
 </div>
 
 

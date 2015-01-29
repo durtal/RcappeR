@@ -248,7 +248,7 @@ df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="d
 <p>The <code>conv_times</code> function from <strong>RcappeR</strong> will clean these times, returning a time in seconds. These times are immediately more pliable and can be plotted (using the custom <strong>RcappeR</strong> ggplot theme <code>theme_rcapper()</code>).</p>
 <pre class="sourceCode r"><code class="sourceCode r">races %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">wintime =</span> <span class="kw">conv_times</span>(<span class="dt">times =</span> comptime))
 <span class="kw">head</span>(<span class="kw">unique</span>(races$wintime))</code></pre>
-<pre><code>## [1] 62.75 63.18 62.86 64.61 60.46 58.05</code></pre>
+<pre><code>## [1] 62.75 63.18 62.86 64.61 60.46 58.50</code></pre>
 <p><img src="wild_data_example_files/figure-html/unnamed-chunk-7-1.png" title="" alt="" width="480" style="display: block; margin: auto;" /></p>
 <p>The <code>place</code> variable requires cleaning, these are currently stored as strings, in order to cater for horses who were pulled up, unseated rider, etc. The letters are removed from each place string, and are converted to numeric, so those horses pulled up (“PU”), etc, are recorded as NA’s, these horses can be removed for handicapping purposes.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(races$place)</code></pre>

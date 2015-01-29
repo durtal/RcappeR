@@ -148,7 +148,17 @@ code > span.er { font-weight: bold; }
 							</li>
     						<li>
 								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
-							</li>                            
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="blog" class="dropdown-toggle" data-toggle="dropdown">
+							Blog <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="wild_data_example.html">Wild Horse Racing Data</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -303,7 +313,7 @@ gulfstream$zipf_rtg &lt;-<span class="st"> </span>gulfstream$zipf_rtg +<span cla
 </table>
 <p>So:</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_hcp</span>(<span class="dt">race =</span> race, <span class="dt">past_races =</span> gulfstream, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>, <span class="dt">rating =</span> <span class="st">&quot;zipf_rtg&quot;</span>, <span class="dt">.progress =</span> <span class="st">&quot;text&quot;</span>)</code></pre>
-<p>This small example, handicapping a single race using 127 took 0.0610399 seconds.</p>
+<p>This small example, handicapping a single race using 127 took 0.0540371 seconds.</p>
 <p>The output of <code>zipf_hcp</code> is a list (of class “rcapper_zipf_hcp”), there are print an summary methods for this class of object (though both do the same):</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp</code></pre>
 <pre><code>## 

@@ -148,7 +148,17 @@ code > span.er { font-weight: bold; }
 							</li>
     						<li>
 								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
-							</li>                            
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="blog" class="dropdown-toggle" data-toggle="dropdown">
+							Blog <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="wild_data_example.html">Wild Horse Racing Data</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -302,16 +312,22 @@ new_gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
 </table>
 <p>So:</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_init</span>(<span class="dt">races =</span> new_gulfstream, <span class="dt">group_by =</span> <span class="st">&quot;race_type&quot;</span>, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>, <span class="dt">.progress =</span> <span class="st">&quot;text&quot;</span>)</code></pre>
-<p>This small example, handicapping 324 races, split into 2 different race types (mdn clm, clm), took 20.5466239 seconds.</p>
+<p>This small example, handicapping 324 races, split into 2 different race types (mdn clm, clm), took 16.9524748 seconds.</p>
 <p>The output from <code>zipf_init</code> is a list (of class “rcapper_zipf_init”), there are print and summary methods for this class of object (though both do the same):</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp</code></pre>
 <pre><code>## 
-## No of races:  324
-## Groups:                       CLM, MDN CLM</code></pre>
+## No. of races: 
+##       324 
+## Groups: 
+##       clm
+##          mdn clm</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(our_hcp)</code></pre>
 <pre><code>## 
-## No of races:  324
-## Groups:                       CLM, MDN CLM</code></pre>
+## No. of races: 
+##       324 
+## Groups: 
+##       clm
+##          mdn clm</code></pre>
 <p>There is also a plot method, perhaps the most useful, which plots the distribution of ratings for each group, as we can see below the small samples in a couple of the race types shows the need for more races, or at least making sure groups are of a decent size.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(our_hcp)</code></pre>
 <p><img src="initialise_a_handicap_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="672" style="display: block; margin: auto;" /></p>
@@ -324,37 +340,37 @@ initial_hcp %&gt;%
 <span class="st">    </span><span class="kw">select</span>(race_type, date_race, pos, fintime, btn_sec:zipf_rtg) %&gt;%
 <span class="st">    </span><span class="kw">head</span>(<span class="dv">15</span>)</code></pre>
 <pre><code>##    race_type  date_race pos fintime btn_sec scale  btn_lbs diff_wgts
-## 1        clm 01/02/13_1   1   98.72    0.00 11.76   0.0000    0.0000
-## 2        clm 01/02/13_1   2   98.75    0.03 11.76   0.3528    0.3528
-## 3        clm 01/02/13_1   3  100.30    1.58 11.76  18.5808   18.5808
-## 4        clm 01/02/13_1   4  101.08    2.36 11.76  27.7536   27.7536
-## 5        clm 01/02/13_1   5  101.28    2.56 11.76  30.1056   34.1056
-## 6        clm 01/02/13_1   6  118.72   20.00 11.76 235.2000  235.2000
-## 7        clm 01/02/13_6   1   72.75    0.00 17.00   0.0000    0.0000
-## 8        clm 01/02/13_6   2   73.78    1.03 17.00  17.5100   19.5100
-## 9        clm 01/02/13_6   3   73.86    1.11 17.00  18.8700   27.8700
-## 10       clm 01/02/13_6   4   74.24    1.49 17.00  25.3300   27.3300
-## 11       clm 01/02/13_6   5   74.26    1.51 17.00  25.6700   27.6700
-## 12       clm 01/02/13_6   6   74.35    1.60 17.00  27.2000   27.2000
-## 13       clm 01/02/13_6   7   75.20    2.45 17.00  41.6500   43.6500
-## 14       clm 01/02/13_6   8   75.81    3.06 17.00  52.0200   54.0200
-## 15       clm 01/02/13_6   9   75.87    3.12 17.00  53.0400   60.0400
+## 1    mdn clm 01/01/13_1   1   72.43    0.00 17.00   0.0000    0.0000
+## 2    mdn clm 01/01/13_1   2   74.18    1.75 17.00  29.7500   29.7500
+## 3    mdn clm 01/01/13_1   3   74.54    2.11 17.00  35.8700   35.8700
+## 4    mdn clm 01/01/13_1   4   74.65    2.22 17.00  37.7400   37.7400
+## 5    mdn clm 01/01/13_1   5   74.68    2.25 17.00  38.2500   43.2500
+## 6    mdn clm 01/01/13_1   6   75.08    2.65 17.00  45.0500   45.0500
+## 7    mdn clm 01/01/13_1   7   75.77    3.34 17.00  56.7800   63.7800
+## 8    mdn clm 01/01/13_1   8   78.60    6.17 17.00 104.8900  104.8900
+## 9        clm 01/02/13_1   1   98.72    0.00 11.76   0.0000    0.0000
+## 10       clm 01/02/13_1   2   98.75    0.03 11.76   0.3528    0.3528
+## 11       clm 01/02/13_1   3  100.30    1.58 11.76  18.5808   18.5808
+## 12       clm 01/02/13_1   4  101.08    2.36 11.76  27.7536   27.7536
+## 13       clm 01/02/13_1   5  101.28    2.56 11.76  30.1056   34.1056
+## 14       clm 01/02/13_1   6  118.72   20.00 11.76 235.2000  235.2000
+## 15   mdn clm 01/02/13_2   1   73.65    0.00 17.00   0.0000    0.0000
 ##    zipf_rtg
-## 1     15.15
-## 2     14.80
-## 3     -3.43
-## 4    -12.60
-## 5    -18.96
-## 6   -220.05
-## 7      6.49
-## 8    -13.02
-## 9    -21.38
-## 10   -20.84
-## 11   -21.18
-## 12   -20.71
-## 13   -37.16
-## 14   -47.53
-## 15   -53.55</code></pre>
+## 1     12.31
+## 2    -17.44
+## 3    -23.56
+## 4    -25.43
+## 5    -30.94
+## 6    -32.74
+## 7    -51.47
+## 8    -92.58
+## 9     15.15
+## 10    14.80
+## 11    -3.43
+## 12   -12.60
+## 13   -18.96
+## 14  -220.05
+## 15     3.56</code></pre>
 </div>
 </div>
 
