@@ -1,0 +1,269 @@
+---
+title: "wild data"
+---
+
+This lengthy vignette looks at using the `RcappeR` on some _wild_ horse racing data found in this [github repo](https://github.com/maithuvenkatesh/University-Project).  This vignette, created on `r Sys.Date()`, has emphasised that the package is in development, and the need for more functionality to aid the cleaning and preparation of racing data.  So the package will be improved on over time, but where I've bumped into an cleaning/preparation issue here I've created a quick and dirty hacks to solve them.
+
+The vignette will walk through reducing the dataset to a subset of races, cleaning a number of variables necessary for analysis and handicapping, before preparing data ahead of initialising a very simple handicap using `zipf_init` and finally showing the use of `zipf_hcp`.
+
+#### Load libraries and data
+
+```{r warning=FALSE, message=FALSE}
+library(RcappeR)
+library(dplyr)     # for speedy manipulation of dataframes
+library(magrittr)  # for %<>%
+library(stringr)   # for manipulating strings
+library(ggplot2)   # for plotting
+```
+
+Now load the csv file, and view its structure.
+
+```{r, cache=TRUE}
+# working on windows I couldn't use read.csv inside an .Rmd file, so used answer from
+# http://stackoverflow.com/questions/19890633/r-produces-unsupported-url-scheme-error-when-getting-data-from-https-sites
+
+df <- RCurl::getURL(url = "https://raw.githubusercontent.com/maithuvenkatesh/University-Project/master/Data/born98.csv",
+               ssl.verifypeer = 0L, followlocation = 1L)
+df <- read.csv(text = df, fill = TRUE, sep = "\t", stringsAsFactors = FALSE)
+str(df)
+```
+
+So the dataset consists of `r dim(df)[1]` rows and `r dim(df)[2]` columns.  From a quick inspection a number of important variables exist that will help to identify the unique races within the dataset, namely `race_date`, `race_time` and `track` (the `race_name` could be included as well, although some races could have the same name so shouldn't be used on its own).  
+
+#### Reducing dataset
+
+Ideally every unique race in the dataset will have every runner that competed in that race, a way to check this is to use the `number_of_runners` variable and a count of the number of rows that belong to a unique race.  The following code, groups races together using the aforementioned variables, creates a new variable (`n`) that counts the number of rows, and then filters those rows where `n` == `number_of_runners`.
+
+```{r}
+races <- df %>% 
+    group_by(race_date, race_time, track) %>%
+    mutate(n = n()) %>%
+    filter(n == number_of_runners)
+```
+
+The new dataset has `r dim(races)[1]` rows.  The `RcappeR` package also doesn't truly cater for National Hunt racing (see `?lbs_per_sec`), so those races need to be excluded.  It's not immediately obvious how to do this from the available variables, but the `stall` variable will suffice, horses running National Hunt races don't start in a stall, these horses begin in "stall" 0 in the dataset.  A quick look at races where horses start in stall 0, reveals they are Novice Hurdle races. 
+
+```{r}
+races %>% filter(stall == 0) %>%
+    group_by(race_date, race_time, track, race_name) %>%
+    summarise(n = n()) %>%
+    select(race_name, n)
+
+races %<>% filter(stall != 0)
+```
+
+Now the dataset (should hopefully) consist of purely flat races, the task of cleaning can begin.
+
+#### Cleaning
+
+The majority of variables should be self explanatory, however they are not in the nicest formats.  For example `comptime` is the final time of the winner of a race in a character format, which is quite useless.
+
+```{r echo=FALSE}
+head(unique(races$comptime))
+```
+
+The `conv_times` function from **RcappeR** will clean these times, returning a time in seconds.  These times are immediately more pliable and can be plotted (using the custom **RcappeR** ggplot theme `theme_rcapper()`).
+
+```{r}
+races %<>% mutate(wintime = conv_times(times = comptime))
+head(unique(races$wintime))
+```
+```{r echo=FALSE, fig.align='center', fig.width=5, fig.height=4}
+races %>%
+    group_by(race_date, race_time, track) %>%
+    summarise(final_time = mean(wintime)) %>%
+    ggplot(aes(x = final_time)) + 
+        geom_histogram(binwidth = 1, fill = "#D9220F") +
+        labs(title = "Winning times") +
+        theme_rcapper()
+```
+
+The `place` variable requires cleaning, these are currently stored as strings, in order to cater for horses who were pulled up, unseated rider, etc.  The letters are removed from each place string, and are converted to numeric, so those horses pulled up ("PU"), etc, are recorded as NA's, these horses can be removed for handicapping purposes.
+
+```{r}
+table(races$place)
+
+races$place %<>% str_replace_all(pattern = "[[:alpha:]]", replacement = "") %>%
+    as.numeric()
+
+table(races$place, useNA = "ifany")
+
+races %<>% filter(!is.na(place))
+```
+
+The next variable that requires cleaning are the `distbt` and `TotalDstBt` variables, the former is lengths between runners, while the latter is cumulative lengths (so lengths behind the winner).  Both are strings that contain abbreviations such as "SH" (short head), "HD" (head), and can be converted to a numeric using the `conv_len` function.  It is not important which variable is converted, either can be used in future.
+
+```{r fig.align='center', fig.width=5, fig.height=4}
+races %<>% mutate(btn_l = conv_len(lengths = distbt),
+                  cum_btn_l = conv_len(lengths = TotalDstBt))
+
+races %>% filter(place != 1) %>%
+    ggplot(aes(x = cum_btn_l, y = ..density..)) + 
+        geom_histogram(binwidth = 1, fill = "#D9220F") +
+        labs(title = "Cumulative Beaten Lengths") +
+        theme_rcapper()
+```
+
+The `race_distance` variable is also in need of cleaning, it contains miles, half miles as Unicode characters, and furlongs.  **RcappeR** doesn't have a function to convert distances from "miles-furlongs-yards" into "furlongs" (the required unit of measure if using `lbs_per_sec`), so a quick hack has been written for this post, but a more robust `conv_dist` function should be added to the package.  The function is not show here, but can be viewed in the .Rmd [source](https://github.com/durtal/RcappeR/blob/gh-pages/wild_data_example.Rmd).
+
+```{r echo=FALSE}
+unique(races$race_distance)
+```
+
+```{r echo=FALSE}
+tmp_fun <- function(dists) {
+    
+    dists <- iconv(dists, "UTF-8", "latin1", sub = ".5")
+    dists <- sapply(dists, function(dist) {
+        
+        miles <- str_extract(dist, "[[:digit:]]+m") %>%
+            str_replace("m", "") %>%
+            as.numeric()
+        furlongs <- str_replace_all(dist, "([[:digit:]]m)?|f", "") %>%
+            as.numeric()
+        
+        total <- 0
+        if(!is.na(miles)) {
+            total <- total + (miles * 8)
+        }
+        if(!is.na(furlongs)) {
+            total <- total + furlongs
+        }
+        
+        return(total)
+    })
+}
+```
+
+```{r}
+races %<>% mutate(dist = tmp_fun(race_distance))
+unique(races$dist)
+```
+
+#### Handicapping Preparation
+
+With the cleaning done, and variables in much more workable formats, some preparation ahead of handicapping/analysis can be carried out.  As covered in the [Handicapping Preparation](http://durtal.github.io/RcappeR/data_prep.html) vignette, we have a number of important variables available to us:
+
+* unique race ids (using `race_date`, `race_time` and `track`)
+* race classes (`race_class`)
+* race distance (`dist` in furlongs)
+* final times (`wintime`, which will allow us to calculate final times for all runners using `cum_btn_l` or `btn_l`)
+* weight carried (`pounds`)
+
+The first thing to do is to calculate final times for all runners using the winning time in a race (`wintime`) and the margins between horses in lengths (either `btn_l` or `cum_btn_l`).  The BHA (British Horse-Racing Authority), under whose jurisdiction these races were run, uses a different lengths per second scale depending on race conditions (namely going and type of race - Flat or NH, see `?bhasale`).  The **RcappeR** function `conv_margins` can account for these differences, however the conditions must be an abbreviated form of the going and type of race, which I'm not going to create here - but a function will be written for **RcappeR** to convert the different goings, such as `r unique(races$going_description)[c(1,9,11)]` into the correct abbreviations.  The default lengths per second value used in the `conv_margins` function is 5, which is used here.
+
+The following code calculates final times for all runners using the `wintime` and `cum_btn_l` variables, as well as beaten seconds.  The second chunk of code uses the `btn_l` variable and the `wintime`, which requires a bit more code as runners in a race must be grouped and arranged in position order (so cumulative lengths beaten can be calculated).  The final times of all runners are then plotted, the different peaks belonging to the different race distances.
+
+```{r fig.align='center', fig.width=5, fig.height=4}
+races %<>% mutate(fintime = conv_margins(btn_l = cum_btn_l, win_time = wintime),
+                  btn_sec = conv_margins(btn_l = cum_btn_l))
+
+## if only btn_l variable existed
+# races %<>%
+#     group_by(race_date, race_time, track) %>%
+#     arrange(place) %>%
+#     mutate(fintime = conv_margins(btn_l = btn_l, cum_l = FALSE, win_time = wintime))
+
+ggplot(races, aes(x = fintime)) +
+    geom_bar(binwidth = .5, fill = "#D9220F") +
+    labs(title = "Final Times (all runners)") +
+    theme_rcapper()
+```
+
+The next step in handicapping process is to calculate the lbs between runners using the `lbs_per_sec` function, which accounts for race distance and surface, for this simple example I will elimate all All-Weather races using the `going_description`, removing "Standard" and "Slow" goings.  The code that follows calculates a lbs per second scale (`scale`), and uses that to calculate beaten lbs (`btn_lbs`).  (the `lbs_per_sec` function will eventually be improved to account for the speed at which a horse ran it's race.)
+
+```{r}
+races %<>% filter(!grepl("Standard|Slow", going_description, ignore.case = TRUE))
+
+races %<>% mutate(scale = lbs_per_sec(dist = dist, surf = "turf"),
+                  btn_lbs = scale * btn_sec)
+```
+
+A difference at the weights calculation is next, which sums the beaten margin in lbs and the difference in weight carried (`pounds` in the dataset).  To use this function the dataset should be grouped into individual races (it already has been when the dataset was first reduced), and arranged by finishing position (`place` variable in the dataset).  A quick look to check everything looks grouped and in order.
+
+```{r}
+races %>% 
+    arrange(place) %>%
+    select(race_date, race_time, track, place, horse_name, fintime, btn_lbs)
+
+races %<>% 
+    arrange(place) %>%
+    mutate(diff_wgts = diff_at_wgts(btn_lbs = btn_lbs, wgt_carried = pounds))
+```
+
+#### Initialising a Handicap
+
+With the differance at the weights calculated, I will show the use of **RcappeR**'s `zipf_init` and `zipf_hcp` with a subset of races that belong to Class 1 or 2 (`race_class` variable).  I will also extract one race from this subset that will be used to show `zipf_hcp`.
+
+```{r}
+subset_races <- races %>% 
+    filter(race_class %in% c("Class 1", "Class 2")) %>%
+    ungroup()
+
+# the race to be extracted is the Zetland Stakes
+zetland_stakes <- subset_races %>% filter(grepl("Zetland Stakes", race_name, ignore.case = TRUE))
+# it is also removed from the subsetted races
+subset_races %<>% filter(!grepl("Zetland Stakes", race_name, ignore.case = TRUE))
+```
+
+First to initialise a handicap using `zipf_init`, which requires a dataset of unique races that have been prepared as above, ie. culminating in a difference at the weights calculation.  The `zipf_init` function takes 4 parameters, the first param is our `subset_races`, the second is how to group the races so each group contains races of a similar type or class (ie `race_class`), the third is a way to identify the unique races (ie `race_date`, `race_time` and `track`), the final param is the difference at the weights value (`diff_wgts`).  An optional fifth param is for `plyr`'s progress bar (not entered here).
+
+```{r}
+hcp <- zipf_init(races = subset_races, group_by = "race_class", race_id = c("race_date", "race_time", "track"), btn_var = "diff_wgts")
+```
+
+The `zipf_init` function returns a list of class `r class(hcp)` which has print, summary, and plot S3 methods (although print and summary produce the same output, which could be improved).
+
+```{r fig.align='center', fig.width=5, fig.height=4}
+summary(hcp)
+
+plot(hcp)
+```
+
+The plot shows a zipf\_rtg for winners per group, for a full explanation about how a rating is calculated see the [zipf_race](http://durtal.github.io/RcappeR/handicap_with_zipf_race.html) vignette.  
+
+In short those winners who have beaten their rivals by larger difference at the weights will be awarded a higher zipf\_rtg than those who narrowly beat rivals.  Each race in a group is assessed using the other races in the same group, so a race in Class 1 was assessed using the other _N_ races in the group, which produces a difference between the winner of one race and the winners of the others.  The average will always be zero (or very close to zero).  
+
+The use of `zipf_init` only serves as an example here, the second parameter, which groups races together according to a variable the user enters, is very important.  Ideally each group should contain horses of a similar ability, so in the UK Class 1 races are contested by better horses than Class 2 races, however, within each class there are likely to be further differences.  Class 1 races in this dataset also include Group 1, 2, 3 and Listed races (see the `major` variable), which are contested by horses of differing abilities.  Experience and domain-expertise can help establish rough groups, but unless the number of races is large, then splitting the races into smaller and smaller groups isn't wise.
+
+`zipf_init`, as it's name suggests, only initialises a handicap, within each group.  The next step is to establish the differences between these groups, ie. the difference between an average winner of a Class 1 race vs a Class 2 race, or the difference between an average Group 1 winner and an average Group 2 winner.  A possible solution could be to use existing ratings, in this dataset there is the `official_rating` variable which is the ratings assigned by the BHA, which could be used as a guide to establish the differences between Class 1 and Class 2, eg:
+
+
+```{r}
+# copy races dataframe so we can work on it
+tmpdf <- races
+# as the dataset contains a lot of 2yo's a lot of horses have an official_rating of 0, where NA is more appropriate
+tmpdf$official_rating[which(tmpdf$official_rating == 0)] <- NA
+
+# now group the races according to race_class and calculate the average official_rating
+tmpdf %>% 
+    group_by(race_class) %>%
+    summarise(avg_rating = mean(official_rating, na.rm = TRUE))
+```
+
+The difference in `race_class` is clear and could be used (temporarily at least) to establish the difference between one group and another.  Establishing the differences is a challenge, and the **RcappeR** package can't offer a solution (at the moment at least).
+
+These ratings found in the `hcp` list can be merged with the `subset_races` via the **RcappeR** function `merge_zipf_init`, which is done now, the function can calculate ratings for all runners by entering the `diff_wgts` variable into the `btn_var` param.  The average ratings per `race_class` established above will be used as an example, average Class 1 race winner will be awarded 97, while average Class 2 winner 86.
+
+The code below also subsets Class 1 races that will be used to handicap the Listed race extracted earlier, the Zetland Stakes.
+
+```{r}
+# merge list returned by zipf_init and subset_races
+subset_races <- merge_zipf_init(zipf_list = hcp, races = subset_races, btn_var = "diff_wgts")
+
+# use average ratings per group
+subset_races$zipf_rtg[which(subset_races$race_class == "Class 1")] <- 97 + subset_races$zipf_rtg[which(subset_races$race_class == "Class 1")]
+subset_races$zipf_rtg[which(subset_races$race_class == "Class 2")] <- 86 + subset_races$zipf_rtg[which(subset_races$race_class == "Class 2")]
+
+class1_races <- subset_races %>% filter(race_class == "Class 1")
+```
+
+Now to show `zipf_hcp`, we have a group of races that have been handicapped and ratings calculated, `class1_races`, and we have a race that requires handicapping `zetland_stakes`.  The `zipf_hcp` function uses a collection of similar races and their ratings, to calculate potential ratings for the winner of a new, un-rated race.
+
+```{r fig.align='center', fig.width=5, fig.height=4}
+hcp <- zipf_hcp(race = zetland_stakes, past_races = class1_races, race_id = c("race_date", "race_time", "track"), btn_var = "diff_wgts", rating = "zipf_rtg")
+
+plot(hcp)
+```
+
+The plot shows a distribution of potential ratings for the winner of the Zetland Stakes, these potential ratings are calculated using each of the races in `class1_races`, the average rating, `r hcp$mean_rtg` is also shown.  As the plot suggests, using more races would likely strengthen the confidence in a rating.
