@@ -55,15 +55,13 @@ mmss_ss <- function(time) {
 
     # if length is 3 then assumes it's in minutes:seconds:milliseconds
     if(len == 3) {
-        # convert from character to numeric
-        time <- as.numeric(time)
         # convert minutes to seconds (*60) and milliseconds to seconds (/100)
-        mins <- time[1] * 60
-        seconds <- time[2]
+        mins <- as.numeric(time[1]) * 60
+        seconds <- as.numeric(time[2])
         if(nchar(time[3]) == 1) {
-            milliseconds <- (time[3] * 10) / 100
+            milliseconds <- (as.numeric(time[3]) * 10) / 100
         } else {
-            milliseconds <- time[3] / 100
+            milliseconds <- as.numeric(time[3]) / 100
         }
         time <- mins + seconds + milliseconds
     }
