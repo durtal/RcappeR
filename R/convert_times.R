@@ -29,12 +29,12 @@ conv_times <- function(times, regex = NULL) {
     if(is.null(regex)) {
         regex <- "[[:punct:]]\\s?|\\s?[[:alpha:]]+\\s?|\\s+"
     }
-    
+
     # check if times are in character format
     if(is.factor(times)) {
         times <- as.character(times)
     }
-    
+
     # split times according to regex
     split_times <- strsplit(times, regex)
 
@@ -58,7 +58,14 @@ mmss_ss <- function(time) {
         # convert from character to numeric
         time <- as.numeric(time)
         # convert minutes to seconds (*60) and milliseconds to seconds (/100)
-        time <- (time[1]*60) + (time[2]) + (time[3]/100)
+        mins <- time[1] * 60
+        seconds <- time[2]
+        if(nchar(time[3]) == 1) {
+            milliseconds <- (time[3] * 10) / 100
+        } else {
+            milliseconds <- time[3] / 100
+        }
+        time <- mins + seconds + milliseconds
     }
     # if length is 2 then assumes it's in seconds:milliseconds
     if(len == 2) {
