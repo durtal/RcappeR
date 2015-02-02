@@ -58,11 +58,10 @@ mmss_ss <- function(time) {
         # convert minutes to seconds (*60) and milliseconds to seconds (/100)
         mins <- as.numeric(time[1]) * 60
         seconds <- as.numeric(time[2])
-        if(nchar(time[3]) == 1) {
-            milliseconds <- (as.numeric(time[3]) * 10) / 100
-        } else {
-            milliseconds <- as.numeric(time[3]) / 100
-        }
+        
+        milliseconds <- substring(time[3], 1, 2)
+        milliseconds <- as.numeric(milliseconds) / 100
+        
         time <- mins + seconds + milliseconds
     }
     # if length is 2 then assumes it's in seconds:milliseconds
