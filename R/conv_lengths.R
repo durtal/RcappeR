@@ -44,7 +44,8 @@ conv_len <- function(lengths) {
                     len <- as.numeric(x)
                 }
             } else {
-                len <- as.numeric(x)
+                len <- lenlist[[x]]
+                len <- as.numeric(len)
             }
         }
         
