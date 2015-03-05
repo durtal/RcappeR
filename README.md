@@ -10,14 +10,10 @@ There are help pages available, found [here](http://durtal.github.io/RcappeR).
 Within R
 ```R
 devtools::install_github(repo = "durtal/RcappeR")
-
-# to build the package vignettes, supply the build_vignettes parameter to install_github
-devtools::install_github(repo = "durtal/RcappeR", build_vignettes = TRUE)
 ```
 
 ### Vignettes
-
-Five vignettes walking through data cleaning and preparation, as well as explaining (hopefully) the use of the more complicated functions `zipf_race`, `zipf_hcp` and `zipf_init`, are included in the package.  These vignettes can also be found in the [help pages](http://durtal.github.io/RcappeR).  They must be built when the package is first installed (see above).
+Five vignettes walking through data cleaning and preparation, as well as explaining (hopefully) the use of the more complicated functions `zipf_race`, `zipf_hcp` and `zipf_init`, are included in the package.  These vignettes can also be found in the help pages.
 
 ```R
 browseVignettes(package = "RcappeR")
@@ -29,8 +25,7 @@ browseVignettes(package = "RcappeR")
     * how many lbs better/worse is an average winner of a grade 1 compared to a listed winner
 2. More complete lbs per second scale
     * all runners over same distance get same lbs per second scale, regardless of speed they ran.
-3. Weight for Age dataset and function to calculate weight for age scale using the date the race.
-4. A method to convert the different going descriptions found in UK racing into the abbreviated codes to be used in `conv_margins`
+3. Weight for Age dataset and function to calculate weight for age scale using the date the race
 4. More
 5. Even more
 
