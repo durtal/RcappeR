@@ -10,10 +10,13 @@ There are help pages available, found [here](http://durtal.github.io/RcappeR).
 Within R
 ```R
 devtools::install_github(repo = "durtal/RcappeR")
+
+# to build the package vignettes, supply the build_vignettes param to install_github
+devtools::install_github(repo = "durtal/RcappeR", build_vignettes = TRUE)
 ```
 
 ### Vignettes
-Five vignettes walking through data cleaning and preparation, as well as explaining (hopefully) the use of the more complicated functions `zipf_race`, `zipf_hcp` and `zipf_init`, are included in the package.  These vignettes can also be found in the help pages.
+Five vignettes walking through data cleaning and preparation, as well as explaining (hopefully) the use of the more complicated functions `zipf_race`, `zipf_hcp` and `zipf_init`, are included in the package.  To view them from within R they must be built on installation (see above), these vignettes can also be found in the help pages.
 
 ```R
 browseVignettes(package = "RcappeR")
