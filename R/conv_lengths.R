@@ -23,7 +23,9 @@
 #' }
 conv_len <- function(lengths) {
 
-    lens <- sapply(lengths, helper_len)
+    lens <- sapply(lengths, function(x) {
+        helper_len(x)
+    })
     lens <- as.vector(lens)
 
     return(lens)
@@ -36,27 +38,37 @@ helper_len <- function(length) {
 
     lenlist <- list("0" = 0, "dh" = 0, "nse" = 0.02, "shd" = 0.05, "sh" = 0.05,
                     "hd" = 0.1, "nk" = 0.2, "1/4" = 0.25, "1/2" = 0.5, "3/4" = 0.75)
-
-    x <- unlist(strsplit(length, "\\s+|-"))
-
-    if(length(x) == 2) {
-        frac <- x[2]
-        frac <- as.numeric(unlist(strsplit(frac, "/")))
-        frac <- frac[1] / frac[2]
-
-        len <- as.numeric(x[1]) + frac
-    } else if(length(x) == 1) {
-        if(grepl("[[:alpha:]]+", x)) {
-            x <- tolower(x)
-            len <- lenlist[[x]]
+    
+    if(nchar(length) == 0) {
+        len <- 0
+        return(len)
+    }
+    
+    if(grepl(pattern = "[[:alpha:]]", length)) {
+        len <- tolower(length)
+        len <- lenlist[[len]]
+        return(len)
+    }
+    
+    if(grepl(pattern = "[[:digit:]]/[[:digit:]]", x = length)) {
+        if(grepl(pattern = "\\s+|-", length)) {
+            x <- unlist(strsplit(x = length, split = "\\s+|-"))
+            frac <- x[2]
+            frac <- lenlist[[frac]]
+            
+            len <- as.numeric(x[1]) + frac
+            return(len)
         } else {
-            if(grepl("/", x)) {
-                frac <- as.numeric(unlist(strsplit(x, "/")))
-                len <- frac[1] / frac[2]
-            } else {
-                len <- as.numeric(x)
-            }
+            len <- lenlist[[length]]
+            return(len)
         }
     }
+    
+    if(grepl(pattern = "[[:digit:]]+(\\.[[:digit:]]+)?", x = length)) {
+        len <- as.numeric(length)
+        return(len)
+    }
+    
+    len <- NA
     return(len)
 }
