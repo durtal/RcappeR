@@ -183,82 +183,13 @@ img {
 		</div>
 	</div>
 </nav>
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<button class="btn btn-navbar" type="button" data-toggle="collapse" data-target=".nav-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a href="http://durtal.github.io" class="brand">durtal.github.io</a>
-			<div class="nav-collapse collapse">
-				<ul class="nav">
-					<li>
-						<a href="index.html">RcappeR home</a>
-					</li>
-					<li>
-						<a href="functions.html">Functions</a>
-					</li>
-					<li class="dropdown">
-						<a href="datasets" class="dropdown-toggle" data-toggle="dropdown">
-							Datasets <b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="gulfstream.html">gulfstream</a>
-							</li>
-							<li>
-								<a href="bhascale.html">bhascale</a>
-							</li>
-							<li>
-								<a href="example_race.html">example_race</a>
-							</li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="vignettes" class="dropdown-toggle" data-toggle="dropdown">
-							Vignettes <b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="data_cleaning.html">Data Cleaning</a>
-							</li>
-							<li>
-								<a href="data_prep.html">Data Preparation</a>
-							</li>
-							<li>
-								<a href="handicap_with_zipf_race.html">(zipf_race)</a>
-							</li>
-    						<li>
-								<a href="handicap_with_zipf_hcp.html">Handicapping (zipf_hcp)</a>
-							</li>
-    						<li>
-								<a href="initialise_a_handicap.html">Initialise Handicap (zipf_init)</a>
-							</li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="blog" class="dropdown-toggle" data-toggle="dropdown">
-							Blog <b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="wild_data_example.html">Wild Horse Racing Data</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div id="header">
 <h1 class="title">zipf_init</h1>
 </div>
 
 
+<pre><code>## Warning: package &#39;RcappeR&#39; was built under R version 3.1.3</code></pre>
 <p>Initialises a handicap by splitting a dataframe of races into groups of similar class/type, then for each race in the group it calculates a rating using the remaining races in the group. The result is a skeleton handicap from which further handicapping/analysis can be performed. See the <a href="handicap_with_zipf_race.html">Handicapping using zipf_race</a> vignette for a detailed explanation of the use of Zipfs Law, and also <a href="initialise_a_handicap.html">Initialising a Handicap</a> to see <strong>zipf_hcp</strong> in use.</p>
 <div id="usage" class="section level3">
 <h3>Usage</h3>
