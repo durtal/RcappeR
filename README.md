@@ -7,7 +7,7 @@ To clone just this branch (ignoring the RcappeR package source, and gh-pages) ru
 
 `git clone -b saratoga --single-branch https://github.com/durtal/RcappeR.git RcappeR-saratoga`
 
-*** Data folder
+### Data folder
 
 file | contains
 -----|---------
