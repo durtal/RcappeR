@@ -34,7 +34,7 @@ variable | what is it | format | examples
 `pos` | finishing position | numeric ||
 `horse` | horses name (hopefully match across dataframes) | character ||
 
-<sup>1</sup> the `race_type` variable will contain a number of stakes races, but these names will contain added detail, such as what grade the race was (such as Grade 1, which are races contested by the best horses).  Other race types, like Claiming races, put conditions on their runners, I'll try collect this data and add it over time.
+<sup>1</sup> <small>the `race_type` variable will contain a number of stakes races, but these names will contain added detail, such as what grade the race was (such as Grade 1, which are races contested by the best horses).  Other race types, like Claiming races, put conditions on their runners, I'll try collect this data and add it over time.</small>
 
 ##### `saratoga_2014_sects`
 
