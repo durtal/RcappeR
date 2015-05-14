@@ -17,7 +17,7 @@ The two dataframes included in `saratoga_2014.RData` contain data about the race
 
 ##### `saratoga_2014_races`
 
-This dataframe contains race conditions, as well as some data about the horses.
+This dataframe contains race conditions, as well as some data about the horses.  Will unfortunately contain a few NA values for variables such as `horse`, `pgm_id`, `wgt`, `jockey`.
 
 variable | what is it | format | examples
 ---------|------------|--------|------
