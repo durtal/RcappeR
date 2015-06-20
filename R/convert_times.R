@@ -60,6 +60,7 @@ mmss_ss <- function(time) {
         seconds <- as.numeric(time[2])
         
         milliseconds <- substring(time[3], 1, 2)
+        if(nchar(milliseconds) == 1) milliseconds <- paste0(milliseconds, "0")
         milliseconds <- as.numeric(milliseconds) / 100
         
         time <- mins + seconds + milliseconds
