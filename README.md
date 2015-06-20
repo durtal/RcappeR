@@ -1,4 +1,4 @@
-RcappeR
+RcappeR 0.2.0
 ========
 
 ### Overview
