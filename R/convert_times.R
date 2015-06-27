@@ -13,8 +13,8 @@
 #' doesn't cater for then use the \strong{regex} param to enter a specific
 #' regular expression to split the times by.
 #'
-#' @param \strong{times} times to be converted
-#' @param \strong{regex} specific regular expression to split times by (if
+#' @param times times to be converted
+#' @param regex specific regular expression to split times by (if
 #' function doesn't cater for the times entered)
 #'
 #' @export
@@ -58,11 +58,11 @@ mmss_ss <- function(time) {
         # convert minutes to seconds (*60) and milliseconds to seconds (/100)
         mins <- as.numeric(time[1]) * 60
         seconds <- as.numeric(time[2])
-        
+
         milliseconds <- substring(time[3], 1, 2)
         if(nchar(milliseconds) == 1) milliseconds <- paste0(milliseconds, "0")
         milliseconds <- as.numeric(milliseconds) / 100
-        
+
         time <- mins + seconds + milliseconds
     }
     # if length is 2 then assumes it's in seconds:milliseconds

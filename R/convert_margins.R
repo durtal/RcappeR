@@ -9,12 +9,12 @@
 #' the lengths per second scale employed by the BHA.  See also \link{bha_ls} and
 #' \link{bhascale}.
 #'
-#' @param \strong{btn_l} beaten lengths
-#' @param \strong{cum_l} default \code{TRUE}, indicates whether \strong{btn_l}
+#' @param btn_l beaten lengths
+#' @param cum_l default \code{TRUE}, indicates whether \strong{btn_l}
 #' is cumulative or not
-#' @param \strong{win_time} winners time, optional param, entering will mean
+#' @param win_time winners time, optional param, entering will mean
 #' the function returns an individual race time for each runner
-#' @param \strong{conditions} default \code{NULL}, enter race conditions if BHA
+#' @param conditions default \code{NULL}, enter race conditions if BHA
 #' lengths per second scale is desired, or enter a scale manually
 #'
 #' @return \strong{margins}, in seconds, if \strong{win_time} is entered then
@@ -29,7 +29,7 @@
 #' conv_margins(btn_l = btn_l, cum_l = FALSE)
 #' conv_margins(btn_l = btn_l, win_time = 59)
 #' conv_margins(btn_l = btn_l, win_time = 59, conditions = "f-ggf")
-#' } 
+#' }
 conv_margins <- function(btn_l, cum_l = TRUE, win_time = NULL,
                          conditions = NULL) {
 

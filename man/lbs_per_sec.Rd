@@ -7,9 +7,9 @@
 lbs_per_sec(dist, surf = "turf")
 }
 \arguments{
-\item{\strong{dist}}{race distance}
+\item{dist}{race distance}
 
-\item{\strong{surf}}{race surface, default is "turf", other option "dirt", if
+\item{surf}{race surface, default is "turf", other option "dirt", if
 race is on fibresand, use the dirt option, if all-weather use turf}
 }
 \value{

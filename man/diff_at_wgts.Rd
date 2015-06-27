@@ -7,11 +7,11 @@
 diff_at_wgts(btn_lbs, wgt_carried)
 }
 \arguments{
-\item{\strong{btn_lbs}}{beaten lbs between runners}
+\item{btn_lbs}{beaten lbs between runners}
 
-\item{\strong{wgt_carried}}{weight carried (in lbs)}
+\item{wgt_carried}{weight carried (in lbs)}
 
-\item{\strong{pos}}{position vector}
+\item{pos}{position vector}
 }
 \description{
 Calculates the difference at the weights, taking into account the number of

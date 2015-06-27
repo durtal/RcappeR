@@ -7,7 +7,7 @@
 conv_len(lengths)
 }
 \arguments{
-\item{\strong{lengths}}{character vector of lengths}
+\item{lengths}{character vector of lengths}
 }
 \description{
 Convert lengths from character vector, containing values like "3/4" and "hd"

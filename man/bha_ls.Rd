@@ -7,7 +7,7 @@
 bha_ls(conditions = NULL)
 }
 \arguments{
-\item{\strong{conditions}}{abbreviated concatenation of race conditions, ie.
+\item{conditions}{abbreviated concatenation of race conditions, ie.
 the type of race (flat or national hunt), and the official going.  To view
 the dataset leave conditions blank.}
 }

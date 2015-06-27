@@ -7,15 +7,15 @@
 conv_margins(btn_l, cum_l = TRUE, win_time = NULL, conditions = NULL)
 }
 \arguments{
-\item{\strong{btn_l}}{beaten lengths}
+\item{btn_l}{beaten lengths}
 
-\item{\strong{cum_l}}{default \code{TRUE}, indicates whether \strong{btn_l}
+\item{cum_l}{default \code{TRUE}, indicates whether \strong{btn_l}
 is cumulative or not}
 
-\item{\strong{win_time}}{winners time, optional param, entering will mean
+\item{win_time}{winners time, optional param, entering will mean
 the function returns an individual race time for each runner}
 
-\item{\strong{conditions}}{default \code{NULL}, enter race conditions if BHA
+\item{conditions}{default \code{NULL}, enter race conditions if BHA
 lengths per second scale is desired, or enter a scale manually}
 }
 \value{

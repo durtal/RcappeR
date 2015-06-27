@@ -22,17 +22,17 @@
 #'      \emph{zipf_rtg})
 #' }
 #'
-#' @param \strong{race} dataframe of race to handicap
-#' @param \strong{past_races} dataframe of past races used to handicap
-#' @param \strong{race_id} name of variable to split \strong{past_races} up by
+#' @param race dataframe of race to handicap
+#' @param past_races dataframe of past races used to handicap
+#' @param race_id name of variable to split \strong{past_races} up by
 #' so each split is one race
-#' @param \strong{btn_var} name of variable in \strong{race} with margins
+#' @param btn_var name of variable in \strong{race} with margins
 #' between horses
-#' @param \strong{rating} name of variable (if applicable) in
+#' @param rating name of variable (if applicable) in
 #' \strong{past_races} that contains the ratings of those runners
-#' @param \strong{results} default \strong{detail}, determines the output, other
+#' @param results default \strong{detail}, determines the output, other
 #' option is \strong{simple}, which will return the mean rating.
-#' @param \strong{.progress} plyr's progress bar (default = "none", options inc.
+#' @param .progress plyr's progress bar (default = "none", options inc.
 #' "text", "time", "tk" or "win")
 #'
 #' @export
@@ -84,7 +84,7 @@ zipf_hcp <- function(race, past_races, race_id, btn_var, rating = NULL,
 #' print method for detailed return of \link{zipf_hcp}
 #' @export
 print.rcapper_zipf_hcp <- function(x, ...) {
-    
+
     object <- x
     n_races <- object$n_races
     mean_rtg <- round(object$mean_rtg, 2)
@@ -99,12 +99,12 @@ print.rcapper_zipf_hcp <- function(x, ...) {
 #' summary method for detailed return of \link{zipf_hcp}
 #' @export
 summary.rcapper_zipf_hcp <- function(x, ...) {
-    
+
     object <- x
     n_races <- object$n_races
     mean_rtg <- round(object$mean_rtg, 2)
     sd_rtg <- round(sd(object$ratings$zipf_rtg, na.rm = TRUE), 2)
-    
+
     cat("\nNo. of races used:\t", n_races)
     cat("\nMean Rating:\t\t\t\t\t\t\t", mean_rtg)
     cat("\nStd. Dev:\t\t\t\t\t\t\t\t\t\t", sd_rtg)

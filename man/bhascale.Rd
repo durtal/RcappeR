@@ -13,10 +13,10 @@ Dataset containing the lengths per second scale employed by the BHA
 \section{Variables}{
 
 \itemize{
-     \item \strong{race_type} type of race, flat (f) or national hunt (nh)
-     \item \strong{going} official going
-     \item \strong{scale} lengths per second scale
-     \item \strong{conditions} abbreviated concatenation of \strong{race_type}
+     \item race_type type of race, flat (f) or national hunt (nh)
+     \item going official going
+     \item scale lengths per second scale
+     \item conditions abbreviated concatenation of \strong{race_type}
      and \strong{going}
 }
 }

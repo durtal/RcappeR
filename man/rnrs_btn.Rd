@@ -7,7 +7,7 @@
 rnrs_btn(pos)
 }
 \arguments{
-\item{\strong{pos}}{finishing position}
+\item{pos}{finishing position}
 }
 \description{
 Calculates the percentage of runners beaten.

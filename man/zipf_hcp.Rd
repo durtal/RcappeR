@@ -8,23 +8,23 @@ zipf_hcp(race, past_races, race_id, btn_var, rating = NULL,
   results = "detail", .progress = "none")
 }
 \arguments{
-\item{\strong{race}}{dataframe of race to handicap}
+\item{race}{dataframe of race to handicap}
 
-\item{\strong{past_races}}{dataframe of past races used to handicap}
+\item{past_races}{dataframe of past races used to handicap}
 
-\item{\strong{race_id}}{name of variable to split \strong{past_races} up by
+\item{race_id}{name of variable to split \strong{past_races} up by
 so each split is one race}
 
-\item{\strong{btn_var}}{name of variable in \strong{race} with margins
+\item{btn_var}{name of variable in \strong{race} with margins
 between horses}
 
-\item{\strong{rating}}{name of variable (if applicable) in
+\item{rating}{name of variable (if applicable) in
 \strong{past_races} that contains the ratings of those runners}
 
-\item{\strong{results}}{default \strong{detail}, determines the output, other
+\item{results}{default \strong{detail}, determines the output, other
 option is \strong{simple}, which will return the mean rating.}
 
-\item{\strong{.progress}}{plyr's progress bar (default = "none", options inc.
+\item{.progress}{plyr's progress bar (default = "none", options inc.
 "text", "time", "tk" or "win")}
 }
 \value{

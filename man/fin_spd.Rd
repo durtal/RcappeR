@@ -13,13 +13,13 @@ Speeds (and sectionals):
 fin_spd(fin_time, dist, sect_time, sect_dist)
 }
 \arguments{
-\item{\strong{fin_time}}{final time}
+\item{fin_time}{final time}
 
-\item{\strong{dist}}{race distance}
+\item{dist}{race distance}
 
-\item{\strong{sect_time}}{closing sectional time}
+\item{sect_time}{closing sectional time}
 
-\item{\strong{sect_dist}}{closing sectional distance}
+\item{sect_dist}{closing sectional distance}
 }
 \description{
 Calculates finishing speed percentages, another innovation by Simon Rowlands

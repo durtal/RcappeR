@@ -13,10 +13,10 @@
 #' \href{https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_1}{Sectional Timing Part 1}
 #' \href{https://www.timeform.com/Racing/Articles/An_introduction_to_Sectional_Timing_Part_2}{Sectional Timing Part 2}
 #'
-#' @param \strong{fin_time} final time
-#' @param \strong{dist} race distance
-#' @param \strong{sect_time} closing sectional time
-#' @param \strong{sect_dist} closing sectional distance
+#' @param fin_time final time
+#' @param dist race distance
+#' @param sect_time closing sectional time
+#' @param sect_dist closing sectional distance
 #'
 #' @export
 #'

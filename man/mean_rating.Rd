@@ -7,9 +7,9 @@
 mean_rating(data, index)
 }
 \arguments{
-\item{\strong{data}}{dataframe}
+\item{data}{dataframe}
 
-\item{\strong{index}}{indexes}
+\item{index}{indexes}
 }
 \description{
 To be used as a parameter inside \link{boot::boot}, which 'generates

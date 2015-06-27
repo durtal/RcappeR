@@ -4,10 +4,10 @@
 #' lengths beaten.  Use it convert the lengths back into seconds, see
 #' \link{bhascale}
 #'
-#' @param \strong{conditions} abbreviated concatenation of race conditions, ie.
+#' @param conditions abbreviated concatenation of race conditions, ie.
 #' the type of race (flat or national hunt), and the official going.  To view
 #' the dataset leave conditions blank.
-#' 
+#'
 #' @section Race Type abbreviations:
 #' \itemize{
 #'      \item \strong{f}-[going] flat

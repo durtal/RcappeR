@@ -13,24 +13,24 @@ Dataset containing actual races from Gulfstream Park run in 2013 over 6 and
 \section{Variables}{
 
 \itemize{
-     \item \strong{date} race date
-     \item \strong{race} race number
-     \item \strong{race_type} type of race, or class of race ("clm",
+     \item date race date
+     \item race race number
+     \item race_type type of race, or class of race ("clm",
      "mdn clm")
-     \item \strong{dist} race distance (furlongs)
-     \item \strong{surf} surface (all dirt in this case)
-     \item \strong{value} race value (or purse)
-     \item \strong{going} official going
-     \item \strong{trainer} horse trainer
-     \item \strong{jockey} horse jockey
-     \item \strong{j_clm} jockey claim (any weight, in lbs, taken off horse)
-     \item \strong{age} horse's age
-     \item \strong{wgt} weight carried
-     \item \strong{gate} starting gate
-     \item \strong{pos} finishing position
-     \item \strong{horse} horse
-     \item \strong{fintime} final time
-     \item \strong{sect_4f} time recorded over first 4 furlongs
+     \item dist race distance (furlongs)
+     \item surf surface (all dirt in this case)
+     \item value race value (or purse)
+     \item going official going
+     \item trainer horse trainer
+     \item jockey horse jockey
+     \item j_clm jockey claim (any weight, in lbs, taken off horse)
+     \item age horse's age
+     \item wgt weight carried
+     \item gate starting gate
+     \item pos finishing position
+     \item horse horse
+     \item fintime final time
+     \item sect_4f time recorded over first 4 furlongs
 }
 }
 \keyword{dataset}

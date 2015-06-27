@@ -10,15 +10,15 @@ Dataset of two fictional races, to highlight use of a few functions
 \section{Variables}{
 
 \itemize{
-     \item \strong{date} race date
-     \item \strong{time} race start time
-     \item \strong{pos} finishing position
-     \item \strong{horse} horse name
-     \item \strong{wintime} winners final time
-     \item \strong{going} official going
-     \item \strong{code} race code, flat or national hunt race
-     \item \strong{btn_l} beaten lengths
-     \item \strong{dist} race distance
+     \item date race date
+     \item time race start time
+     \item pos finishing position
+     \item horse horse name
+     \item wintime winners final time
+     \item going official going
+     \item code race code, flat or national hunt race
+     \item btn_l beaten lengths
+     \item dist race distance
 }
 }
 \keyword{dataset}

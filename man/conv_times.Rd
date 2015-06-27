@@ -7,9 +7,9 @@
 conv_times(times, regex = NULL)
 }
 \arguments{
-\item{\strong{times}}{times to be converted}
+\item{times}{times to be converted}
 
-\item{\strong{regex}}{specific regular expression to split times by (if
+\item{regex}{specific regular expression to split times by (if
 function doesn't cater for the times entered)}
 }
 \description{

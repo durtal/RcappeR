@@ -7,14 +7,14 @@
 conv_wgt(wgt, regex = NULL, from = "st", round = 0)
 }
 \arguments{
-\item{\strong{wgt}}{vector of weights to be converted, see examples.}
+\item{wgt}{vector of weights to be converted, see examples.}
 
-\item{\strong{regex}}{specific regular expression to split wgt by (if wgt is
+\item{regex}{specific regular expression to split wgt by (if wgt is
 a character string representing stones and lbs)}
 
-\item{\strong{from}}{convert from "kg" to lbs, if wgt is numeric}
+\item{from}{convert from "kg" to lbs, if wgt is numeric}
 
-\item{\strong{round}}{round weight to nearest}
+\item{round}{round weight to nearest}
 }
 \description{
 Convert weight from different formats/measurements into lbs

@@ -13,7 +13,7 @@
 #' the function was harder to write than initially thought, and will likely need
 #' improvements as edge cases are encountered
 #'
-#' @param \strong{lengths} character vector of lengths
+#' @param lengths character vector of lengths
 #'
 #' @export
 #' @examples
@@ -38,24 +38,24 @@ helper_len <- function(length) {
 
     lenlist <- list("0" = 0, "dh" = 0, "nse" = 0.02, "shd" = 0.05, "sh" = 0.05,
                     "hd" = 0.1, "nk" = 0.2, "1/4" = 0.25, "1/2" = 0.5, "3/4" = 0.75)
-    
+
     if(nchar(length) == 0) {
         len <- 0
         return(len)
     }
-    
+
     if(grepl(pattern = "[[:alpha:]]", length)) {
         len <- tolower(length)
         len <- lenlist[[len]]
         return(len)
     }
-    
+
     if(grepl(pattern = "[[:digit:]]/[[:digit:]]", x = length)) {
         if(grepl(pattern = "\\s+|-", length)) {
             x <- unlist(strsplit(x = length, split = "\\s+|-"))
             frac <- x[2]
             frac <- lenlist[[frac]]
-            
+
             len <- as.numeric(x[1]) + frac
             return(len)
         } else {
@@ -63,12 +63,12 @@ helper_len <- function(length) {
             return(len)
         }
     }
-    
+
     if(grepl(pattern = "[[:digit:]]+(\\.[[:digit:]]+)?", x = length)) {
         len <- as.numeric(length)
         return(len)
     }
-    
+
     len <- NA
     return(len)
 }

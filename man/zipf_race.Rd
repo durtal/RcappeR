@@ -12,15 +12,15 @@ Article by Simon Rowlands explaining use of Zipf's Law:
 zipf_race(race, btn_var, race_2, rating = NULL)
 }
 \arguments{
-\item{\strong{race}}{dataframe of race to handicap}
+\item{race}{dataframe of race to handicap}
 
-\item{\strong{btn_var}}{name of variable which contains the margins between
+\item{btn_var}{name of variable which contains the margins between
 the horses}
 
-\item{\strong{race_2}}{dataframe of a race to be used to handicap
+\item{race_2}{dataframe of a race to be used to handicap
 \strong{race}}
 
-\item{\strong{rating}}{name of ratings variable (if applicable) in
+\item{rating}{name of ratings variable (if applicable) in
 \strong{race_2}}
 }
 \description{

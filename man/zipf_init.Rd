@@ -7,28 +7,28 @@
 zipf_init(races, group_by, race_id, btn_var, .progress = "none")
 }
 \arguments{
-\item{\strong{races}}{dataframe of races}
+\item{races}{dataframe of races}
 
-\item{\strong{group_by}}{name of variable(s) to group races found in
+\item{group_by}{name of variable(s) to group races found in
 \strong{races}, eg. US races you wouldn't group claiming races and Stakes
 races together, in UK you wouldn't group Class 4 and Listed races.}
 
-\item{\strong{race_id}}{name of variable to split \strong{races} up by
+\item{race_id}{name of variable to split \strong{races} up by
 so each split is one race}
 
-\item{\strong{btn_var}}{name of variable in \strong{races} with margins
+\item{btn_var}{name of variable in \strong{races} with margins
 between horses}
 
-\item{\strong{.progress}}{plyr's progress bar (default = "none", options inc.
+\item{.progress}{plyr's progress bar (default = "none", options inc.
 "text", "time", "tk" or "win")}
 }
 \value{
 Returns a list consisting of:
 \itemize{
-     \item \strong{groups} contains \strong{group_by} param
-     \item \strong{race_id} contains \strong{race_id} param
-     \item \strong{counts} dataframe of counts per group_by
-     \item \strong{ratings} dataframe of ratings (with 3 variables,
+     \item groups contains \strong{group_by} param
+     \item race_id contains \strong{race_id} param
+     \item counts dataframe of counts per group_by
+     \item ratings dataframe of ratings (with 3 variables,
      \emph{group_by}, \emph{race_id}, and \emph{zipf_rtg})
 }
 }
