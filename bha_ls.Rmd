@@ -1,7 +1,7 @@
 ---
 title: "bha_ls"
 ---
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 

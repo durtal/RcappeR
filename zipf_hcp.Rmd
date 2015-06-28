@@ -1,7 +1,7 @@
 ---
 title: "zipf_hcp"
 ---
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 

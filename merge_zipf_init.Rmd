@@ -2,7 +2,7 @@
 title: "merge_zipf_init"
 ---
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 

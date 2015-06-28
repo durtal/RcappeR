@@ -1,7 +1,7 @@
 ---
 title: "conv_times"
 ---
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 Most Horse Racing times are recorded as 'minutes:seconds:milliseconds', data will typically be in character format, the `conv_times` function converts these times into a time in 'seconds.milliseconds'.
