@@ -329,22 +329,36 @@ new_gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
 </table>
 <p>So:</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_init</span>(<span class="dt">races =</span> new_gulfstream, <span class="dt">group_by =</span> <span class="st">&quot;race_type&quot;</span>, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>, <span class="dt">.progress =</span> <span class="st">&quot;text&quot;</span>)</code></pre>
-<p>This small example, handicapping 324 races, split into 2 different race types (mdn clm, clm), took 15.0029459 seconds.</p>
+<p>This small example, handicapping 324 races, split into 2 different race types (mdn clm, clm), took 14.1683948 seconds.</p>
 <p>The output from <code>zipf_init</code> is a list (of class “rcapper_zipf_init”), there are print and summary methods for this class of object (though both do the same):</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp</code></pre>
-<pre><code>## 
-## No. of races: 
-##       324 
-## Groups: 
-##       clm
-##          mdn clm</code></pre>
+<pre><code>## Initial handicap using zipf_init:
+## 
+## No. of races:
+##   324 
+## Race Groups:
+##   clm, mdn clm 
+## Counts:
+##     clm mdn clm 
+##     196     128 
+## 
+## Ratings Summary:
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -14.8700  -5.3490  -0.7219   0.0000   4.0890  26.5300</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(our_hcp)</code></pre>
-<pre><code>## 
-## No. of races: 
-##       324 
-## Groups: 
-##       clm
-##          mdn clm</code></pre>
+<pre><code>## Initial handicap using zipf_init:
+## 
+## No. of races:
+##   324 
+## Race Groups:
+##   clm, mdn clm 
+## Counts:
+##     clm mdn clm 
+##     196     128 
+## 
+## Ratings Summary:
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -14.8700  -5.3490  -0.7219   0.0000   4.0890  26.5300</code></pre>
 <p>There is also a plot method, perhaps the most useful, which plots the distribution of ratings for each group, as we can see below the small samples in a couple of the race types shows the need for more races, or at least making sure groups are of a decent size.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(our_hcp)</code></pre>
 <p><img src="initialise_a_handicap_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="672" style="display: block; margin: auto;" /></p>

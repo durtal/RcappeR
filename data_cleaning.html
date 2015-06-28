@@ -291,8 +291,8 @@ df$new_time</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 df &lt;-<span class="st"> </span>df %&gt;%
 <span class="st">    </span><span class="kw">group_by</span>(race_id) %&gt;%
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">ind_times =</span> <span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l, 
-                                      <span class="dt">cum_l =</span> <span class="ot">FALSE</span>, 
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">ind_times =</span> <span class="kw">conv_margins</span>(<span class="dt">btn_l =</span> btn_l,
+                                      <span class="dt">cum_l =</span> <span class="ot">FALSE</span>,
                                       <span class="dt">win_time =</span> new_time))
 
 <span class="kw">select</span>(df, race_id, pos, wintime, new_time, btn_l, ind_times)</code></pre>
@@ -333,7 +333,7 @@ df &lt;-<span class="st"> </span>df %&gt;%
                                       <span class="dt">cum_l =</span> <span class="ot">FALSE</span>,
                                       <span class="dt">win_time =</span> new_time,
                                       <span class="dt">conditions =</span> <span class="st">&quot;f-gq&quot;</span>)) %&gt;%
-<span class="st">    </span><span class="kw">select</span>(race_id, pos, horse, wintime, new_time, btn_l, new_margins)    </code></pre>
+<span class="st">    </span><span class="kw">select</span>(race_id, pos, horse, wintime, new_time, btn_l, new_margins)</code></pre>
 <pre><code>## Source: local data frame [13 x 9]
 ## Groups: date, time
 ## 

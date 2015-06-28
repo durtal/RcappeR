@@ -307,9 +307,9 @@ gulfstream &lt;-<span class="st"> </span>gulfstream %&gt;%
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate the closing sectional time</span>
 gulfstream$sect_time &lt;-<span class="st"> </span>gulfstream$fintime -<span class="st"> </span>gulfstream$sect_4f
 <span class="co"># using the new sect_time variable and other data in the dataset</span>
-gulfstream$fin_spd &lt;-<span class="st"> </span><span class="kw">fin_spd</span>(<span class="dt">fin_time =</span> gulfstream$fintime, 
-                              <span class="dt">dist =</span> gulfstream$dist, 
-                              <span class="dt">sect_time =</span> gulfstream$sect_time, 
+gulfstream$fin_spd &lt;-<span class="st"> </span><span class="kw">fin_spd</span>(<span class="dt">fin_time =</span> gulfstream$fintime,
+                              <span class="dt">dist =</span> gulfstream$dist,
+                              <span class="dt">sect_time =</span> gulfstream$sect_time,
                               <span class="dt">sect_dist =</span> gulfstream$dist -<span class="st"> </span><span class="dv">4</span>)</code></pre>
 <p>The following plot shows our newly created finishing speed variable plotted on the y axis against the times horses recorded over the opening 4f. Horses over the 8f dirt course finish their closing sectional (4 furlongs) faster than horses running the 6f dirt course do their closing sectional (2 furlongs).</p>
 <p><img src="data_prep_files/figure-html/unnamed-chunk-9-1.png" title="" alt="" width="672" style="display: block; margin: auto;" /></p>

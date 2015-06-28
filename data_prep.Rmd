@@ -2,7 +2,7 @@
 title: "Data Preparation"
 ---
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 
@@ -74,7 +74,7 @@ gulfstream <- gulfstream %>%
         + `btn_lbs = scale * btn_sec,`
     + calculate difference at the weights (margins, and weight carried)
         + `diff_at_wtgs(btn_lbs = btn_lbs, wgt_carried = wgt))`
-        
+
 At this stage handicapping can begin by using the `zipf_init` function, see [**Initialising a Handicap**](initialise_a_handicap.html) vignette.  Ahead of using `zipf_race` and `zipf_hcp` users will perform the same steps as above, but with a dataset containing a single race (so no need for _group\_by_) that needs to be handicapped, the code shows the theoretical steps for one race.
 
 ```{r eval=FALSE}
@@ -114,9 +114,9 @@ In the dataset there are individual times for all horses after 4 furlongs in the
 # calculate the closing sectional time
 gulfstream$sect_time <- gulfstream$fintime - gulfstream$sect_4f
 # using the new sect_time variable and other data in the dataset
-gulfstream$fin_spd <- fin_spd(fin_time = gulfstream$fintime, 
-                              dist = gulfstream$dist, 
-                              sect_time = gulfstream$sect_time, 
+gulfstream$fin_spd <- fin_spd(fin_time = gulfstream$fintime,
+                              dist = gulfstream$dist,
+                              sect_time = gulfstream$sect_time,
                               sect_dist = gulfstream$dist - 4)
 ```
 

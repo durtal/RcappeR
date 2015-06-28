@@ -189,7 +189,7 @@ img {
 </div>
 
 
-<p>This lengthy vignette looks at using the <code>RcappeR</code> on some <em>wild</em> horse racing data found in this <a href="https://github.com/maithuvenkatesh/University-Project">github repo</a>. This vignette, created on 2015-06-27, has emphasised that the package is in development, and the need for more functionality to aid the cleaning and preparation of racing data. So the package will be improved on over time, but where I’ve bumped into an cleaning/preparation issue here I’ve created a quick and dirty hacks to solve them.</p>
+<p>This lengthy vignette looks at using the <code>RcappeR</code> on some <em>wild</em> horse racing data found in this <a href="https://github.com/maithuvenkatesh/University-Project">github repo</a>. This vignette, created on 2015-06-28, has emphasised that the package is in development, and the need for more functionality to aid the cleaning and preparation of racing data. So the package will be improved on over time, but where I’ve bumped into an cleaning/preparation issue here I’ve created a quick and dirty hacks to solve them.</p>
 <p>The vignette will walk through reducing the dataset to a subset of races, cleaning a number of variables necessary for analysis and handicapping, before preparing data ahead of initialising a very simple handicap using <code>zipf_init</code> and finally showing the use of <code>zipf_hcp</code>.</p>
 <div id="load-libraries-and-data" class="section level4">
 <h4>Load libraries and data</h4>
@@ -377,12 +377,19 @@ subset_races %&lt;&gt;%<span class="st"> </span><span class="kw">filter</span>(!
 <pre class="sourceCode r"><code class="sourceCode r">hcp &lt;-<span class="st"> </span><span class="kw">zipf_init</span>(<span class="dt">races =</span> subset_races, <span class="dt">group_by =</span> <span class="st">&quot;race_class&quot;</span>, <span class="dt">race_id =</span> <span class="kw">c</span>(<span class="st">&quot;race_date&quot;</span>, <span class="st">&quot;race_time&quot;</span>, <span class="st">&quot;track&quot;</span>), <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>)</code></pre>
 <p>The <code>zipf_init</code> function returns a list of class rcapper_zipf_init which has print, summary, and plot S3 methods (although print and summary produce the same output, which could be improved).</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(hcp)</code></pre>
-<pre><code>## 
-## No. of races: 
-##       120 
-## Groups: 
-##       Class 1
-##          Class 2</code></pre>
+<pre><code>## Initial handicap using zipf_init:
+## 
+## No. of races:
+##   120 
+## Race Groups:
+##   Class 1, Class 2 
+## Counts:
+## Class 1 Class 2 
+##      64      56 
+## 
+## Ratings Summary:
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -11.5800  -4.9040  -0.6394   0.0000   2.4760  25.2000</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(hcp)</code></pre>
 <p><img src="wild_data_example_files/figure-html/unnamed-chunk-18-1.png" title="" alt="" width="480" style="display: block; margin: auto;" /></p>
 <p>The plot shows a zipf_rtg for winners per group, for a full explanation about how a rating is calculated see the <a href="http://durtal.github.io/RcappeR/handicap_with_zipf_race.html">zipf_race</a> vignette.</p>

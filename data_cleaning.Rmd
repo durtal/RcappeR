@@ -2,7 +2,7 @@
 title: "Data Cleaning"
 ---
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 
@@ -82,8 +82,8 @@ Finally, if margins between horses aren't cumulative, but are the lengths betwee
 library(dplyr)
 df <- df %>%
     group_by(race_id) %>%
-    mutate(ind_times = conv_margins(btn_l = btn_l, 
-                                      cum_l = FALSE, 
+    mutate(ind_times = conv_margins(btn_l = btn_l,
+                                      cum_l = FALSE,
                                       win_time = new_time))
 
 select(df, race_id, pos, wintime, new_time, btn_l, ind_times)
@@ -112,5 +112,5 @@ example_race %>%
                                       cum_l = FALSE,
                                       win_time = new_time,
                                       conditions = "f-gq")) %>%
-    select(race_id, pos, horse, wintime, new_time, btn_l, new_margins)    
+    select(race_id, pos, horse, wintime, new_time, btn_l, new_margins)
 ```

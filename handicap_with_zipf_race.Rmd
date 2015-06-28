@@ -2,7 +2,7 @@
 title: "Handicapping using zipf_race"
 ---
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 

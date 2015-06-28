@@ -2,7 +2,7 @@
 title: "Handicapping using zipf_hcp"
 ---
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 
@@ -89,7 +89,7 @@ race <- race %>%
         + `btn_lbs = scale * btn_sec,`
     + calculate difference at the weights (margins, and weight carried)
         + `diff_at_wtgs(btn_lbs = btn_lbs, wgt_carried = wgt))`
-        
+
 ## Handicapping methodology
 
 The handicapping methodology uses a version of race standardisation first explained by Simon Rowlands, Head of Research at Timeform, specifically using Zipfs Law (hence the names of this family of functions, see also `?zipf_race` and `?zipf_hcp`).
@@ -101,7 +101,7 @@ The similar races we're using in this vignette are all `r unique(gulfstream$race
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 suppressPackageStartupMessages(library(ggplot2))
 
-ggplot(subset(gulfstream, pos == 1), aes(x = zipf_rtg)) + 
+ggplot(subset(gulfstream, pos == 1), aes(x = zipf_rtg)) +
     geom_histogram(aes(y = ..density..), fill = "#d9220f", binwidth = 2, color = "#fcfcfc") +
     geom_density() +
     theme_rcapper()

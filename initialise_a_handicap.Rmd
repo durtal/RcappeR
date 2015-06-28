@@ -2,7 +2,7 @@
 title: "Initialising a Handicap"
 ---
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(RcappeR)
 ```
 
