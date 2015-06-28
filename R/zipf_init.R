@@ -88,18 +88,21 @@ zipf_init <- function(races, group_by, race_id, btn_var, .progress = "none") {
 print.rcapper_zipf_init <- function(x, ...) {
 
     object <- x
-    n_races <- length(object$ratings$zipf_rtg)
-
-    groups <- unique(object$ratings[,object$groups])
-    if(is.data.frame(groups)) {
-        groups <- as.vector(apply(groups, MARGIN = 1, paste, collapse = " - "))
-    }
-
-    groups <- paste(groups, collapse = "\n\t\t\t")
-
-    output <- paste("\nNo. of races: \n\t\t", n_races, "\nGroups: \n\t\t", groups)
-
-    cat(output)
+    n_races <- sum(object$counts$n)
+    n_races <- paste("No. of races:\n\t", n_races, "\n")
+    
+    groups <- as.vector(object$counts[[object$groups]])
+    groups <- paste(groups, collapse = ", ")
+    groups <- paste("Race Groups:\n\t", groups, "\nCounts:")
+    
+    counts <- table(object$ratings[[object$groups]])
+    
+    cat("Initial handicap using zipf_init:\n\n")
+    cat(n_races)
+    cat(groups)
+    print(counts)
+    cat("\nRatings Summary:\n")
+    print(summary(object$ratings$zipf_rtg))
 }
 
 #' summary method for output of \link{zipf_init}
@@ -107,18 +110,21 @@ print.rcapper_zipf_init <- function(x, ...) {
 summary.rcapper_zipf_init <- function(x, ...) {
 
     object <- x
-    n_races <- length(object$ratings$zipf_rtg)
-
-    groups <- unique(object$ratings[,object$groups])
-    if(is.data.frame(groups)) {
-        groups <- as.vector(apply(groups, MARGIN = 1, paste, collapse = " - "))
-    }
-
-    groups <- paste(groups, collapse = "\n\t\t\t")
-
-    output <- paste("\nNo. of races: \n\t\t", n_races, "\nGroups: \n\t\t", groups)
-
-    cat(output)
+    n_races <- sum(object$counts$n)
+    n_races <- paste("No. of races:\n\t", n_races, "\n")
+    
+    groups <- as.vector(object$counts[[object$groups]])
+    groups <- paste(groups, collapse = ", ")
+    groups <- paste("Race Groups:\n\t", groups, "\nCounts:")
+    
+    counts <- table(object$ratings[[object$groups]])
+    
+    cat("Initial handicap using zipf_init:\n\n")
+    cat(n_races)
+    cat(groups)
+    print(counts)
+    cat("\nRatings Summary:\n")
+    print(summary(object$ratings$zipf_rtg))
 }
 
 #' plot method for output of \link{zipf_init}

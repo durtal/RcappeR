@@ -75,7 +75,13 @@ zipf_hcp <- function(race, past_races, race_id, btn_var, rating = NULL,
     # add dataframe with ratings and the race they were derived from
     rcapper_output$ratings <- wnrs_ratings
 
-    # add
+    # add summary of past races
+    if(!is.null(rating)) {
+        var <- rating
+    } else {
+        var <- btn_var
+    }
+    rcapper_output$past_races <- summary(past_races[[var]])
 
     return(rcapper_output)
 }
@@ -87,27 +93,38 @@ print.rcapper_zipf_hcp <- function(x, ...) {
 
     object <- x
     n_races <- object$n_races
-    mean_rtg <- round(object$mean_rtg, 2)
-    sd_rtg <- round(sd(object$ratings$zipf_rtg, na.rm = TRUE), 2)
-
-    cat("\nNo. of races used:\t", n_races)
-    cat("\nMean Rating:\t\t\t\t\t\t\t", mean_rtg)
-    cat("\nStd. Dev:\t\t\t\t\t\t\t\t\t\t", sd_rtg)
+    n_races <- paste("No. of races used:\n\t", n_races, "\n")
+    
+    mean_rating <- round(object$mean_rtg, 2)
+    mean_rating <- paste("\nMean Rating:\n\t", mean_rating, "\n")
+    
+    cat("Handicapping race using zipf_hcp:\n\n")
+    cat(n_races)
+    cat("Past Races Summary:\n")
+    print(object$past_races)
+    cat(mean_rating)
+    cat("Rating Summary:\n")
+    print(object$summary)
 }
-
 
 #' summary method for detailed return of \link{zipf_hcp}
 #' @export
 summary.rcapper_zipf_hcp <- function(x, ...) {
-
+    
     object <- x
     n_races <- object$n_races
-    mean_rtg <- round(object$mean_rtg, 2)
-    sd_rtg <- round(sd(object$ratings$zipf_rtg, na.rm = TRUE), 2)
-
-    cat("\nNo. of races used:\t", n_races)
-    cat("\nMean Rating:\t\t\t\t\t\t\t", mean_rtg)
-    cat("\nStd. Dev:\t\t\t\t\t\t\t\t\t\t", sd_rtg)
+    n_races <- paste("No. of races used:\n\t", n_races, "\n")
+    
+    mean_rating <- round(object$mean_rtg, 2)
+    mean_rating <- paste("\nMean Rating:\n\t", mean_rating, "\n")
+    
+    cat("Handicapping race using zipf_hcp:\n\n")
+    cat(n_races)
+    cat("Past Races Summary:\n")
+    print(object$past_races)
+    cat(mean_rating)
+    cat("Rating Summary:\n")
+    print(object$summary)
 }
 
 
