@@ -35,7 +35,6 @@ fin_spd <- function(fin_time, dist, sect_time, sect_dist) {
     }
 
     f_spd <- (fin_time * sect_dist * 100) / (dist * sect_time)
-    f_spd <- round(f_spd, 2)
 
     return(f_spd)
 }
