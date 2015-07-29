@@ -39,7 +39,7 @@
 bha_ls <- function(conditions = NULL) {
 
     # load bhascale dataset inside scope of function
-    data(bhascale, envir = environment())
+    data(bhascale, envir = environment(), package = "RcappeR")
 
     # if conditions are left blank, return dataset
     if(is.null(conditions)) {
