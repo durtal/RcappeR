@@ -88,6 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -120,7 +121,7 @@ img {
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a href="http://durtal.github.io" class="navbar-brand">durtal.github.io</a>
+			<a href="https://github.com/durtal" class="navbar-brand">durtal@github</a>
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
@@ -332,7 +333,7 @@ gulfstream$zipf_rtg &lt;-<span class="st"> </span>gulfstream$zipf_rtg +<span cla
 </table>
 <p>So:</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp &lt;-<span class="st"> </span><span class="kw">zipf_hcp</span>(<span class="dt">race =</span> race, <span class="dt">past_races =</span> gulfstream, <span class="dt">race_id =</span> <span class="st">&quot;date_race&quot;</span>, <span class="dt">btn_var =</span> <span class="st">&quot;diff_wgts&quot;</span>, <span class="dt">rating =</span> <span class="st">&quot;zipf_rtg&quot;</span>, <span class="dt">.progress =</span> <span class="st">&quot;text&quot;</span>)</code></pre>
-<p>This small example, handicapping a single race using 127 took 0.0520351 seconds.</p>
+<p>This small example, handicapping a single race using 127 took 0.048034 seconds.</p>
 <p>The output of <code>zipf_hcp</code> is a list (of class “rcapper_zipf_hcp”), there are print an summary methods for this class of object (though both do the same):</p>
 <pre class="sourceCode r"><code class="sourceCode r">our_hcp</code></pre>
 <pre><code>## Handicapping race using zipf_hcp:
