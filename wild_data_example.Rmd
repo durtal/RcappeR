@@ -35,13 +35,13 @@ So the dataset consists of `r dim(df)[1]` rows and `r dim(df)[2]` columns.  From
 Ideally every unique race in the dataset will have every runner that competed in that race, a way to check this is to use the `number_of_runners` variable and a count of the number of rows that belong to a unique race.  The following code, groups races together using the aforementioned variables, creates a new variable (`n`) that counts the number of rows, and then filters those rows where `n` == `number_of_runners`.
 
 ```{r}
-races <- df %>% 
+races <- df %>%
     group_by(race_date, race_time, track) %>%
     mutate(n = n()) %>%
     filter(n == number_of_runners)
 ```
 
-The new dataset has `r dim(races)[1]` rows.  The `RcappeR` package also doesn't truly cater for National Hunt racing (see `?lbs_per_sec`), so those races need to be excluded.  It's not immediately obvious how to do this from the available variables, but the `stall` variable will suffice, horses running National Hunt races don't start in a stall, these horses begin in "stall" 0 in the dataset.  A quick look at races where horses start in stall 0, reveals they are Novice Hurdle races. 
+The new dataset has `r dim(races)[1]` rows.  The `RcappeR` package also doesn't truly cater for National Hunt racing (see `?lbs_per_sec`), so those races need to be excluded.  It's not immediately obvious how to do this from the available variables, but the `stall` variable will suffice, horses running National Hunt races don't start in a stall, these horses begin in "stall" 0 in the dataset.  A quick look at races where horses start in stall 0, reveals they are Novice Hurdle races.
 
 ```{r}
 races %>% filter(stall == 0) %>%
@@ -72,7 +72,7 @@ head(unique(races$wintime))
 races %>%
     group_by(race_date, race_time, track) %>%
     summarise(final_time = mean(wintime)) %>%
-    ggplot(aes(x = final_time)) + 
+    ggplot(aes(x = final_time)) +
         geom_histogram(binwidth = 1, fill = "#D9220F") +
         labs(title = "Winning times") +
         theme_rcapper()
@@ -98,7 +98,7 @@ races %<>% mutate(btn_l = conv_len(lengths = distbt),
                   cum_btn_l = conv_len(lengths = TotalDstBt))
 
 races %>% filter(place != 1) %>%
-    ggplot(aes(x = cum_btn_l, y = ..density..)) + 
+    ggplot(aes(x = cum_btn_l, y = ..density..)) +
         geom_histogram(binwidth = 1, fill = "#D9220F") +
         labs(title = "Cumulative Beaten Lengths") +
         theme_rcapper()
@@ -112,17 +112,17 @@ unique(races$race_distance)
 
 ```{r echo=FALSE}
 tmp_fun <- function(dists) {
-    
+
     dists <- iconv(dists, "UTF-8", "latin1", sub = ".5")
     dists <- sapply(dists, function(dist) {
-        
+
         miles <- str_extract(dist, "[[:digit:]]+m") %>%
             str_replace("m", "") %>%
             as.numeric()
-        furlongs <- str_extract(dist, "m?([[:digit:]]?\\.?[[:digit:]])f") %>% 
+        furlongs <- str_extract(dist, "m?([[:digit:]]?\\.?[[:digit:]])f") %>%
             str_replace_all("[[:alpha:]]","") %>%
             as.numeric()
-        
+
         total <- 0
         if(!is.na(miles)) {
             total <- total + (miles * 8)
@@ -130,7 +130,7 @@ tmp_fun <- function(dists) {
         if(!is.na(furlongs)) {
             total <- total + furlongs
         }
-        
+
         return(total)
     })
     return(dists)
@@ -184,11 +184,11 @@ races %<>% mutate(scale = lbs_per_sec(dist = dist, surf = "turf"),
 A difference at the weights calculation is next, which sums the beaten margin in lbs and the difference in weight carried (`pounds` in the dataset).  To use this function the dataset should be grouped into individual races (it already has been when the dataset was first reduced), and arranged by finishing position (`place` variable in the dataset).  A quick look to check everything looks grouped and in order.
 
 ```{r}
-races %>% 
+races %>%
     arrange(place) %>%
     select(race_date, race_time, track, place, horse_name, fintime, btn_lbs)
 
-races %<>% 
+races %<>%
     arrange(place) %>%
     mutate(diff_wgts = diff_at_wgts(btn_lbs = btn_lbs, wgt_carried = pounds))
 ```
@@ -198,7 +198,7 @@ races %<>%
 With the differance at the weights calculated, I will show the use of **RcappeR**'s `zipf_init` and `zipf_hcp` with a subset of races that belong to Class 1 or 2 (`race_class` variable).  I will also extract one race from this subset that will be used to show `zipf_hcp`.
 
 ```{r}
-subset_races <- races %>% 
+subset_races <- races %>%
     filter(race_class %in% c("Class 1", "Class 2")) %>%
     ungroup()
 
@@ -238,7 +238,7 @@ tmpdf <- races
 tmpdf$official_rating[which(tmpdf$official_rating == 0)] <- NA
 
 # now group the races according to race_class and calculate the average official_rating
-tmpdf %>% 
+tmpdf %>%
     group_by(race_class) %>%
     summarise(avg_rating = mean(official_rating, na.rm = TRUE))
 ```
@@ -269,3 +269,5 @@ plot(hcp)
 ```
 
 The plot shows a distribution of potential ratings for the winner of the Zetland Stakes, these potential ratings are calculated using each of the races in `class1_races`, the average rating, `r hcp$mean_rtg` is also shown.  As the plot suggests, using more races would likely strengthen the confidence in a rating.
+
+<a href="https://github.com/durtal/RcappeR" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#d9230f; color:#fcfcfc; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
