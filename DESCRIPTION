@@ -20,3 +20,4 @@ Suggests:
     boot,
     knitr
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1
