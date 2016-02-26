@@ -86,18 +86,16 @@ zipf_hcp <- function(race, past_races, race_id, btn_var, rating = NULL,
     return(rcapper_output)
 }
 
-
-#' print method for detailed return of \link{zipf_hcp}
 #' @export
 print.rcapper_zipf_hcp <- function(x, ...) {
 
     object <- x
     n_races <- object$n_races
     n_races <- paste("No. of races used:\n\t", n_races, "\n")
-    
+
     mean_rating <- round(object$mean_rtg, 2)
     mean_rating <- paste("\nMean Rating:\n\t", mean_rating, "\n")
-    
+
     cat("Handicapping race using zipf_hcp:\n\n")
     cat(n_races)
     cat("Past Races Summary:\n")
@@ -107,17 +105,15 @@ print.rcapper_zipf_hcp <- function(x, ...) {
     print(object$summary)
 }
 
-#' summary method for detailed return of \link{zipf_hcp}
 #' @export
-summary.rcapper_zipf_hcp <- function(x, ...) {
-    
-    object <- x
+summary.rcapper_zipf_hcp <- function(object, ...) {
+
     n_races <- object$n_races
     n_races <- paste("No. of races used:\n\t", n_races, "\n")
-    
+
     mean_rating <- round(object$mean_rtg, 2)
     mean_rating <- paste("\nMean Rating:\n\t", mean_rating, "\n")
-    
+
     cat("Handicapping race using zipf_hcp:\n\n")
     cat(n_races)
     cat("Past Races Summary:\n")
@@ -127,8 +123,6 @@ summary.rcapper_zipf_hcp <- function(x, ...) {
     print(object$summary)
 }
 
-
-#' plot method for detailed return of \link{zipf_hcp}
 #' @export
 plot.rcapper_zipf_hcp <- function(x, ...) {
 

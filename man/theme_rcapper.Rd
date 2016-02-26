@@ -4,7 +4,12 @@
 \alias{theme_rcapper}
 \title{Custom RcappeR ggplot2 theme}
 \usage{
-theme_rcapper(base_size = 10, base_family = "", ...)
+theme_rcapper(base_size = 10, base_family = "")
+}
+\arguments{
+\item{base_size}{font size}
+
+\item{base_family}{font family}
 }
 \description{
 A custom theme to help generate smart and identifiable plots

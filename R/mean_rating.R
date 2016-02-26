@@ -1,6 +1,6 @@
 #' Bootstrap helper function
 #'
-#' To be used as a parameter inside \link{boot::boot}, which 'generates
+#' To be used as a parameter inside \code{boot::boot}, which 'generates
 #' bootstrap replicates of a statistic', the statistic in this case is the mean
 #' zipf_rtg in the dataframe of ratings returned by \link{zipf_hcp}.
 #'

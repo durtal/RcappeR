@@ -13,7 +13,6 @@ Description: A collection of tools to aid the analysis and handicapping of
     help with handicapping the races, by using race standardisation.
 License: GPL-2
 Imports:
-    dplyr,
     ggplot2,
     plyr
 Suggests:

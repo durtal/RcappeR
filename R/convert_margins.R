@@ -77,7 +77,7 @@ conv_margins <- function(btn_l, cum_l = TRUE, win_time = NULL,
 #' Calculates the margins (in seconds) between the winner of a race and horses
 #' who finished behind
 #'
-#' @param \strong{times} time recorded by each runner
+#' @param times time recorded by each runner
 #'
 #' @export
 #'

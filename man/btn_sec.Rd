@@ -7,7 +7,7 @@
 btn_sec(times)
 }
 \arguments{
-\item{\strong{times}}{time recorded by each runner}
+\item{times}{time recorded by each runner}
 }
 \description{
 Calculates the margins (in seconds) between the winner of a race and horses

@@ -46,7 +46,7 @@ conv_times <- function(times, regex = NULL) {
 
 #' convert time in mm.ss.00 to ss.00
 #'
-#' @param \strong{time} list of length 1 with character vector of length 2 or 3,
+#' @param time list of length 1 with character vector of length 2 or 3,
 #' which represent minutes, seconds, and milliseconds
 mmss_ss <- function(time) {
 

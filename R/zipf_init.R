@@ -82,21 +82,19 @@ zipf_init <- function(races, group_by, race_id, btn_var, .progress = "none") {
     return(rcapper_output)
 }
 
-
-#' print method for output of \link{zipf_init}
 #' @export
 print.rcapper_zipf_init <- function(x, ...) {
 
     object <- x
     n_races <- sum(object$counts$n)
     n_races <- paste("No. of races:\n\t", n_races, "\n")
-    
+
     groups <- as.vector(object$counts[[object$groups]])
     groups <- paste(groups, collapse = ", ")
     groups <- paste("Race Groups:\n\t", groups, "\nCounts:")
-    
+
     counts <- table(object$ratings[[object$groups]])
-    
+
     cat("Initial handicap using zipf_init:\n\n")
     cat(n_races)
     cat(groups)
@@ -105,20 +103,18 @@ print.rcapper_zipf_init <- function(x, ...) {
     print(summary(object$ratings$zipf_rtg))
 }
 
-#' summary method for output of \link{zipf_init}
 #' @export
-summary.rcapper_zipf_init <- function(x, ...) {
+summary.rcapper_zipf_init <- function(object, ...) {
 
-    object <- x
     n_races <- sum(object$counts$n)
     n_races <- paste("No. of races:\n\t", n_races, "\n")
-    
+
     groups <- as.vector(object$counts[[object$groups]])
     groups <- paste(groups, collapse = ", ")
     groups <- paste("Race Groups:\n\t", groups, "\nCounts:")
-    
+
     counts <- table(object$ratings[[object$groups]])
-    
+
     cat("Initial handicap using zipf_init:\n\n")
     cat(n_races)
     cat(groups)
@@ -127,7 +123,6 @@ summary.rcapper_zipf_init <- function(x, ...) {
     print(summary(object$ratings$zipf_rtg))
 }
 
-#' plot method for output of \link{zipf_init}
 #' @export
 plot.rcapper_zipf_init <- function(x, ...) {
 
@@ -142,7 +137,7 @@ plot.rcapper_zipf_init <- function(x, ...) {
     # http://stats.stackexchange.com/questions/798/calculating-optimal-number-of-bins-in-a-histogram-for-n-where-n-ranges-from-30
     # bw <- diff(range(x)) / (2 * IQR(x) / length(x)^(1/3)))
 
-    ggplot2::ggplot(df, ggplot2::aes(x = zipf_rtg)) +
+    ggplot2::ggplot(df, ggplot2::aes(x = df$zipf_rtg)) +
         ggplot2::geom_histogram(ggplot2::aes(y = ..density..), binwidth = 1,
                                 fill = "#d9220f", color = "#fcfcfc") +
         ggplot2::geom_density(fill = "#d8d8d8", alpha = .25) +
@@ -158,9 +153,9 @@ plot.rcapper_zipf_init <- function(x, ...) {
 #' entered into the \link{zipf_init} function, and merge them together,
 #' returning a dataframe with ratings per runner.
 #'
-#' @param \strong{zipf_list} list returned by \link{zipf_init}
-#' @param \strong{races} dataframe of races
-#' @param \strong{btn_var} name of variable in \strong{races} with margins
+#' @param zipf_list list returned by \link{zipf_init}
+#' @param races dataframe of races
+#' @param btn_var name of variable in \strong{races} with margins
 #' between horses, if entered it will calculate ratings for all losers using the
 #' winners rating and subtracting \strong{btn_var}
 #'

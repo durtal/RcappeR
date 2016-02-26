@@ -7,7 +7,7 @@
 mmss_ss(time)
 }
 \arguments{
-\item{\strong{time}}{list of length 1 with character vector of length 2 or 3,
+\item{time}{list of length 1 with character vector of length 2 or 3,
 which represent minutes, seconds, and milliseconds}
 }
 \description{

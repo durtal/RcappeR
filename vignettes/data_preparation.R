@@ -46,7 +46,11 @@ gulfstream$fin_spd <- fin_spd(fin_time = gulfstream$fintime,
 suppressPackageStartupMessages(library(ggplot2))
 ggplot(gulfstream, aes(x = sect_4f, y = fin_spd)) +
     geom_point(alpha=.5, color = "#D8D8D8") +
-    geom_point(data = subset(gulfstream, pos == 1), aes(x = sect_4f, y = fin_spd), col="#D9220F", alpha = .65) +
+    geom_point(data = subset(gulfstream, pos == 1), 
+               aes(x = sect_4f, 
+                   y = fin_spd), 
+               col="#D9220F", 
+               alpha = .65) +
     theme_rcapper() +
     facet_wrap(~dist)
 

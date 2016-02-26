@@ -6,7 +6,6 @@
 #'
 #' @param btn_lbs beaten lbs between runners
 #' @param wgt_carried weight carried (in lbs)
-#' @param pos position vector
 #'
 #' @export
 diff_at_wgts <- function(btn_lbs, wgt_carried) {

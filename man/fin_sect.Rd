@@ -7,13 +7,13 @@
 fin_sect(fin_time, dist, fin_spd, sect_dist)
 }
 \arguments{
-\item{\strong{fin_time}}{final time}
+\item{fin_time}{final time}
 
-\item{\strong{dist}}{distance}
+\item{dist}{distance}
 
-\item{\strong{fin_spd}}{finishin speed percentage}
+\item{fin_spd}{finishing speed percentage}
 
-\item{\strong{sect_dist}}{closing sectional distance}
+\item{sect_dist}{closing sectional distance}
 }
 \description{
 Calculates the finishing sectional, reverse engineers a Finishing Speed

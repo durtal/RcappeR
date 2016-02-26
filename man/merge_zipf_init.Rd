@@ -7,11 +7,11 @@
 merge_zipf_init(zipf_list, races, btn_var = NULL)
 }
 \arguments{
-\item{\strong{zipf_list}}{list returned by \link{zipf_init}}
+\item{zipf_list}{list returned by \link{zipf_init}}
 
-\item{\strong{races}}{dataframe of races}
+\item{races}{dataframe of races}
 
-\item{\strong{btn_var}}{name of variable in \strong{races} with margins
+\item{btn_var}{name of variable in \strong{races} with margins
 between horses, if entered it will calculate ratings for all losers using the
 winners rating and subtracting \strong{btn_var}}
 }

@@ -49,10 +49,10 @@ fin_spd <- function(fin_time, dist, sect_time, sect_dist) {
 #' the \strong{fin_time} parameter should be in seconds, and the \strong{fin_spd}
 #' should be a number around 100.
 #'
-#' @param \strong{fin_time} final time
-#' @param \strong{dist} distance
-#' @param \strong{fin_spd} finishin speed percentage
-#' @param \strong{sect_dist} closing sectional distance
+#' @param fin_time final time
+#' @param dist distance
+#' @param fin_spd finishing speed percentage
+#' @param sect_dist closing sectional distance
 #'
 #' @export
 #'

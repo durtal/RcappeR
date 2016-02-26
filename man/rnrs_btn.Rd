@@ -13,7 +13,7 @@ rnrs_btn(pos)
 Calculates the percentage of runners beaten.
 }
 \details{
-It is best used with the power of the \link{dplyr} package, to
+It is best used with the power of the \code{dplyr} package, to
 calculate the percentage of runners beaten across numerous races
 in the same dataframe (see examples)
 }
